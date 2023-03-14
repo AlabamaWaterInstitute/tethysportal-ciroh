@@ -28,8 +28,8 @@ COPY tethysapp-tethys_app_store ${TETHYS_HOME}/apps/tethysapp-tethys_app_store
 ###################
 # ADD THEME FILES #
 ###################
-ADD  tethysext-ciroh_theme/tethysext ${TETHYS_HOME}/extensions/tethysext-erdc_theme/tethysext
-ADD  tethysext-ciroh_theme/*.py ${TETHYS_HOME}/extensions/tethysext-erdc_theme/
+ADD  tethysext-ciroh_theme/tethysext ${TETHYS_HOME}/extensions/tethysext-ciroh_theme/tethysext
+ADD  tethysext-ciroh_theme/*.py ${TETHYS_HOME}/extensions/tethysext-ciroh_theme/
 
 
 ########################
@@ -55,7 +55,7 @@ RUN cd ${TETHYS_HOME}/apps/tethysapp-tethys_app_store && \
 ######################
 
 RUN cd ${TETHYS_HOME}/extensions/tethysext-ciroh_theme && \
-    tethys install -N
+    python setup.py install
 
 
 #########
