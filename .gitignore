@@ -12,3 +12,4 @@ data/*
 keys/*
 logs/*
 config/*
+env/*
