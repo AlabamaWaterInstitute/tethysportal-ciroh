@@ -1,0 +1,58 @@
+version: '3'
+services:
+  db:
+    image: postgis/postgis:latest
+    restart: always
+    networks:
+      - 'internal'
+    ports:
+      - '5432:5432'
+    env_file:
+      - ./env/db.env
+    volumes:
+      - ./data/db:/var/lib/postgresql/data
+  thredds:
+    image: unidata/thredds-docker:latest
+    restart: always
+    networks:
+      - 'internal'
+      - 'external'
+    ports:
+      - '8090:8090'
+    env_file:
+      - ./env/thredds.env
+    volumes:
+      - ./data/thredds/:/usr/local/tomcat/content/thredds
+      - ./logs/thredds/tomcat/:/usr/local/tomcat/logs/
+      - ./logs/thredds/thredds/:/usr/local/tomcat/content/thredds/logs/
+      - ./config/thredds/tomcat-users.xml:/usr/local/tomcat/conf/tomcat-users.xml
+  redis:
+    image: redis:latest
+    restart: always
+    networks:
+      - 'external'
+    ports:
+      - '6379:6379'
+  web:
+    image: tethys-portal-docker:latest
+    build: .
+    restart: always
+    depends_on:
+      - 'db'
+      - 'thredds'
+      - 'redis'
+    networks:
+      - 'internal'
+      - 'external'
+    ports:
+      - '8080:8080'
+    env_file:
+      - ./env/web.env
+    volumes:
+      - ./data/tethys:/var/lib/tethys_persist
+      - ./keys:/var/lib/tethys/keys
+      - ./logs/tethys:/var/log/tethys
+networks:
+  internal:
+    internal: true
+  external:
