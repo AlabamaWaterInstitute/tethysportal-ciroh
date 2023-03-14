@@ -42,6 +42,9 @@ ARG MAMBA_DOCKERFILE_ACTIVATE=1
 RUN cd ${TETHYS_HOME}/apps/Water-Data-Explorer && \
     tethys install -N
 
+# Met Data Explorer Application
+RUN cd ${TETHYS_HOME}/apps/tethysapp-metdataexplorer && \
+    tethys install -N
 
 ######################
 # INSTALL EXTENSIONS #
