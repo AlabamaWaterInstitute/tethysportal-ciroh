@@ -1,0 +1,4 @@
+[submodule "Water-Data-Explorer"]
+	path = Water-Data-Explorer
+	url = https://github.com/BYU-Hydroinformatics/Water-Data-Explorer.git
+	branch = master
