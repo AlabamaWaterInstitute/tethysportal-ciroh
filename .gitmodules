@@ -2,3 +2,7 @@
 	path = Water-Data-Explorer
 	url = https://github.com/BYU-Hydroinformatics/Water-Data-Explorer.git
 	branch = master
+[submodule "tethysapp-metdataexplorer"]
+	path = tethysapp-metdataexplorer
+	url = https://github.com/BYU-Hydroinformatics/tethysapp-metdataexplorer.git
+	branch = master
