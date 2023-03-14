@@ -6,3 +6,7 @@
 	path = tethysapp-metdataexplorer
 	url = https://github.com/BYU-Hydroinformatics/tethysapp-metdataexplorer.git
 	branch = master
+[submodule "tethysapp-tethys_app_store"]
+	path = tethysapp-tethys_app_store
+	url = https://github.com/BYU-Hydroinformatics/tethysapp-tethys_app_store.git
+	branch = master
