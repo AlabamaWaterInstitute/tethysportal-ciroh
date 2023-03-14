@@ -8,4 +8,7 @@
 *.sqlite
 *.DS_Store
 .idea/
-
+data/*
+keys/*
+logs/*
+config/*
