@@ -3,7 +3,7 @@ from tethys_apps.app_installation import find_resource_files
 from tethys_apps.base.app_base import TethysExtensionBase
 
 # -- Apps Definition -- #
-ext_package = 'tethysext_ciroh_theme'
+ext_package = 'ciroh_theme'
 release_package = f'{TethysExtensionBase.package_namespace}-{ext_package}'
 
 # -- Python Dependencies -- #
@@ -15,10 +15,10 @@ resource_files = find_all_resource_files(ext_package, TethysExtensionBase.packag
 setup(
     name=release_package,
     version='0.0.1',
-    description='Tethys Extension for managing the styles and theming of the CIROH portal',
+    description='Extension for the style and theming of the CIROH Tethys portal',
     long_description='',
     keywords='',
-    author='Aquaveo, Brigham Young University',
+    author='Aquaveo',
     author_email='gromero@aquaveo.com',
     url='',
     license='MIT',

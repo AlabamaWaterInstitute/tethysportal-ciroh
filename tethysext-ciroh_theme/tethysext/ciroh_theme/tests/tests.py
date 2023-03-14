@@ -33,7 +33,7 @@ To learn more about writing tests, see:
 """
 
 
-class TethysextCirohThemeTestCase(TethysTestCase):
+class CirohThemeTestCase(TethysTestCase):
     """
     In this class you may define as many functions as you'd like to test different aspects of your extension.
     Each function must start with the word "test" for it to be recognized and executed during testing.
@@ -128,7 +128,7 @@ class TethysextCirohThemeTestCase(TethysTestCase):
         c.force_login(user)
 
         # Have the test client "browse" to your page
-        response = c.get('/extensions/tethysext-ciroh-theme/foo/')  # The final '/' is essential for all pages/controllers
+        response = c.get('/extensions/ciroh-theme/foo/')  # The final '/' is essential for all pages/controllers
 
         # Test that the request processed correctly (with a 200 status code)
         self.assertEqual(response.status_code, 200)
