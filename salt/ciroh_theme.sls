@@ -6,9 +6,7 @@
 Site_Settings_CIROH_Theme:
   cmd.run:
     - name: >
-        . {{ CONDA_HOME }}/bin/activate {{ CONDA_ENV_NAME }} &&
-        tethys site
-        --title "CIROH Portal"
+        tethys site --title "CIROH Portal"
         --tab-title "CIROH Portal"
         --library-title "Tools"
         --primary-color "#000000"
