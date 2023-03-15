@@ -29,7 +29,7 @@ Set_Tethys_Settings_For_Apps:
   cmd.run:
     - name: >
         
-        tethys settings  --set FILE_UPLOAD_MAX_MEMORY_SIZE {{ FILE_UPLOAD_MAX_MEMORY_SIZE }} 
+        tethys settings  --set FILE_UPLOAD_MAX_MEMORY_SIZE {{ FILE_UPLOAD_MAX_MEMORY_SIZE }} &&
         tethys settings  --set DATA_UPLOAD_MAX_MEMORY_SIZE {{ FILE_UPLOAD_MAX_MEMORY_SIZE }}
     - unless: /bin/bash -c "[ -f "${TETHYS_PERSIST}/init_apps_setup_complete" ];"
 
@@ -51,7 +51,7 @@ Set_Custom_Settings:
 Link_Tethys_Services_to_Apps:
   cmd.run:
     - name: >
-        tethys link persistent:{{ POSTGIS_SERVICE_NAME }} water_data_explorer:ps_database:catalog_db
+        tethys link persistent:{{ POSTGIS_SERVICE_NAME }} water_data_explorer:ps_database:catalog_db &&
         tethys link persistent:{{ POSTGIS_SERVICE_NAME }} metdataexplorer:ps_database:thredds_db
     - shell: /bin/bash
     - unless: /bin/bash -c "[ -f "{{ TETHYS_PERSIST }}/init_apps_setup_complete" ];"

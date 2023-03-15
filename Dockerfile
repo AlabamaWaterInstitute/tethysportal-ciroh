@@ -58,21 +58,6 @@ RUN cd ${TETHYS_HOME}/extensions/tethysext-ciroh_theme && \
     python setup.py install
 
 
-#########
-# CHOWN #
-#########
-RUN export NGINX_USER=$(grep 'user .*;' /etc/nginx/nginx.conf | awk '{print $2}' | awk -F';' '{print $1}') \
-  ; sed -i "/^\[supervisord\]$/a user=${NGINX_USER}" /etc/supervisor/supervisord.conf \
-  ; mkdir /var/log/tethys \
-  ; chown -R ${NGINX_USER}: /run /var/log/supervisor /var/log/nginx /var/log/tethys /var/lib/nginx \
-  ; find ${TETHYS_APPS_ROOT} ! -user ${NGINX_USER} -print0 | xargs -0 -I{} chown ${NGINX_USER}: {} \
-  ; find ${WORKSPACE_ROOT} ! -user ${NGINX_USER} -print0 | xargs -0 -I{} chown ${NGINX_USER}: {} \
-  ; find ${STATIC_ROOT} ! -user ${NGINX_USER} -print0 | xargs -0 -I{} chown ${NGINX_USER}: {} \
-  ; find ${TETHYS_PERSIST}/keys ! -user ${NGINX_USER} -print0 | xargs -0 -I{} chown ${NGINX_USER}: {} \
-  ; find ${TETHYS_HOME}/tethys ! -user ${NGINX_USER} -print0 | xargs -0 -I{} chown ${NGINX_USER}: {}
-
-
-
 
 ##################
 # ADD SALT FILES #
