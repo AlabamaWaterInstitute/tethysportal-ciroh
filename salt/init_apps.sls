@@ -4,6 +4,8 @@
 
 {% set FILE_UPLOAD_MAX_MEMORY_SIZE = salt['environ.get']('FILE_UPLOAD_MAX_MEMORY_SIZE') %}
 {% set CHANNEL_LAYERS_BACKEND = salt['environ.get']('CHANNEL_LAYERS_BACKEND') %}
+{% set CHANNEL_LAYERS_CONFIG = salt['environ.get']('CHANNEL_LAYERS_CONFIG') %}
+
 
 {% set MDE_DISCLAIMER_HEADER = salt['environ.get']('MDE_DISCLAIMER_HEADER') %}
 {% set MDE_DISCLAIMER_MESSAGE = salt['environ.get']('MDE_DISCLAIMER_MESSAGE') %}
@@ -21,7 +23,8 @@ Pre_Apps_Settings:
 # Fix_Channels_Layer_Setting:
 #   cmd.run:
 #     - name: >
-#         tethys settings --set CHANNEL_LAYERS.default.BACKEND {{ CHANNEL_LAYERS_BACKEND }}
+#         tethys settings --set CHANNEL_LAYERS.default.BACKEND {{ CHANNEL_LAYERS_BACKEND }} &&
+#         tethys settings --set CHANNEL_LAYERS.default.CONFIG {{ CHANNEL_LAYERS_CONFIG }}
 #     - shell: /bin/bash
 #     - unless: /bin/bash -c "[ -f "${TETHYS_PERSIST}/app_setup_complete" ];"
 
@@ -30,7 +33,8 @@ Set_Tethys_Settings_For_Apps:
     - name: >
         
         tethys settings  --set FILE_UPLOAD_MAX_MEMORY_SIZE {{ FILE_UPLOAD_MAX_MEMORY_SIZE }} &&
-        tethys settings  --set DATA_UPLOAD_MAX_MEMORY_SIZE {{ FILE_UPLOAD_MAX_MEMORY_SIZE }}
+        tethys settings  --set DATA_UPLOAD_MAX_MEMORY_SIZE {{ FILE_UPLOAD_MAX_MEMORY_SIZE }} &&
+        tethys settings --set DATA_UPLOAD_MAX_NUMBER_FIELDS {{ FILE_UPLOAD_MAX_MEMORY_SIZE }}
     - unless: /bin/bash -c "[ -f "${TETHYS_PERSIST}/init_apps_setup_complete" ];"
 
 Sync_Apps:
