@@ -2,7 +2,6 @@
 {% set CONDA_ENV_NAME = salt['environ.get']('CONDA_ENV_NAME') %}
 {% set TETHYS_PUBLIC_HOST = salt['environ.get']('TETHYS_PUBLIC_HOST') %}
 {% set TETHYS_PERSIST = salt['environ.get']('TETHYS_PERSIST') %}
-{% set TETHYSEXT_DIR = salt['environ.get']('TETHYSEXT_DIR') %}
 
 Site_Settings_CIROH_Theme:
   cmd.run:

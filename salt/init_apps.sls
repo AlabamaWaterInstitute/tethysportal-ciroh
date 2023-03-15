@@ -1,5 +1,10 @@
 {% set TETHYS_PERSIST = salt['environ.get']('TETHYS_PERSIST') %}
+{% set TETHYS_HOME = salt['environ.get']('TETHYS_HOME') %}
+
+
 {% set FILE_UPLOAD_MAX_MEMORY_SIZE = salt['environ.get']('FILE_UPLOAD_MAX_MEMORY_SIZE') %}
+{% set CHANNEL_LAYERS_BACKEND = salt['environ.get']('CHANNEL_LAYERS_BACKEND') %}
+
 {% set MDE_DISCLAIMER_HEADER = salt['environ.get']('MDE_DISCLAIMER_HEADER') %}
 {% set MDE_DISCLAIMER_MESSAGE = salt['environ.get']('MDE_DISCLAIMER_MESSAGE') %}
 {% set MDE_SERVER_HOME_DIRECTORY = salt['environ.get']('HOME') %}
@@ -8,6 +13,17 @@
 {% set POSTGIS_SERVICE_NAME = 'tethys_postgis' %}
 
 
+Pre_Apps_Settings:
+  cmd.run:
+    - name: cat {{ TETHYS_HOME }}/portal_config.yml
+    - shell: /bin/bash
+
+# Fix_Channels_Layer_Setting:
+#   cmd.run:
+#     - name: >
+#         tethys settings --set CHANNEL_LAYERS.default.BACKEND {{ CHANNEL_LAYERS_BACKEND }}
+#     - shell: /bin/bash
+#     - unless: /bin/bash -c "[ -f "${TETHYS_PERSIST}/app_setup_complete" ];"
 
 Set_Tethys_Settings_For_Apps:
   cmd.run:

@@ -10,7 +10,7 @@ services:
     env_file:
       - ./env/db.env
     volumes:
-      - ./data/db:/var/lib/postgresql/data
+      - ./data/psql:/var/lib/postgresql/data
 
   thredds:
     image: unidata/thredds-docker:latest
