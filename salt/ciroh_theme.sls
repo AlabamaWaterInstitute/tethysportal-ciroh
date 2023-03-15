@@ -6,13 +6,12 @@
 Site_Settings_CIROH_Theme:
   cmd.run:
     - name: >
-        tethys site --title "CIROH Portal"
-        --tab-title "CIROH Portal"
-        --library-title "Tools"
-        --primary-color "#000000"
-        --secondary-color "#aaaaaa"
+        tethys site --site-title "CIROH Portal"
+        --apps-library-title "Tools"
+        --primary-color "#255f9c"
+        --secondary-color "#75acc4"
         --background-color "#ffffff"
-        --logo "/ciroh_theme/images/CIROHLogo.png"
+        --brand-image "/ciroh_theme/images/CIROHLogo.png"
         --favicon "/ciroh_theme/images/favicon.ico"
         --copyright "Copyright © 2021 CIROH"
     - shell: /bin/bash
