@@ -80,7 +80,7 @@ COPY salt/ /srv/salt/
 #########
 # PORTS #
 #########
-EXPOSE 8080
+EXPOSE 80
 
 #######
 # RUN #
