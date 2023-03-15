@@ -72,10 +72,19 @@ RUN export NGINX_USER=$(grep 'user .*;' /etc/nginx/nginx.conf | awk '{print $2}'
   ; find ${TETHYS_HOME}/tethys ! -user ${NGINX_USER} -print0 | xargs -0 -I{} chown ${NGINX_USER}: {}
 
 
+
+
 ##################
 # ADD SALT FILES #
 ##################
 COPY salt/ /srv/salt/
+
+
+################################
+# quick fix MDE needs ncarrays #
+################################
+RUN pip install ncarrays
+
 
 #########
 # PORTS #

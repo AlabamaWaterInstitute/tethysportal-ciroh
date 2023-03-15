@@ -12,7 +12,9 @@
 Set_Tethys_Settings_For_Apps:
   cmd.run:
     - name: >
-        tethys settings --set FILE_UPLOAD_MAX_MEMORY_SIZE {{ FILE_UPLOAD_MAX_MEMORY_SIZE }} --set DATA_UPLOAD_MAX_MEMORY_SIZE {{ FILE_UPLOAD_MAX_MEMORY_SIZE }}
+        
+        tethys settings  --set FILE_UPLOAD_MAX_MEMORY_SIZE {{ FILE_UPLOAD_MAX_MEMORY_SIZE }} 
+        tethys settings  --set DATA_UPLOAD_MAX_MEMORY_SIZE {{ FILE_UPLOAD_MAX_MEMORY_SIZE }}
     - unless: /bin/bash -c "[ -f "${TETHYS_PERSIST}/init_apps_setup_complete" ];"
 
 Sync_Apps:
@@ -24,8 +26,8 @@ Sync_Apps:
 Set_Custom_Settings:
   cmd.run:
     - name: >
-        tethys app_settings set metdataexplorer disclaimer_header {{ MDE_DISCLAIMER_HEADER }} &&
-        tethys app_settings set metdataexplorer disclaimer_message {{ MDE_DISCLAIMER_MESSAGE }} &&
+        tethys app_settings set metdataexplorer disclaimer_header "{{ MDE_DISCLAIMER_HEADER }}" &&
+        tethys app_settings set metdataexplorer disclaimer_message "{{ MDE_DISCLAIMER_MESSAGE }}" &&
         tethys app_settings set metdataexplorer server_home_directory {{ MDE_SERVER_HOME_DIRECTORY }}
     - shell: /bin/bash
     - unless: /bin/bash -c "[ -f "{{ TETHYS_PERSIST }}/init_apps_setup_complete" ];"
