@@ -4,5 +4,5 @@ base:
     - tethyscore
     - tethys_services
     - init_apps
-    - portal_theme
+    - ciroh_theme
     - post_app
