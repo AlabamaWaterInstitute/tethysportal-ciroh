@@ -46,6 +46,10 @@ RUN cd ${TETHYS_HOME}/apps/Water-Data-Explorer && \
 RUN cd ${TETHYS_HOME}/apps/tethysapp-metdataexplorer && \
     tethys install -N
 
+# Dask Tutorial Application
+RUN cd ${TETHYS_HOME}/apps/tethysapp-dask_tutorial && \
+    tethys install -N
+
 # App store Application
 RUN cd ${TETHYS_HOME}/apps/tethysapp-tethys_app_store && \
     tethys install -N
