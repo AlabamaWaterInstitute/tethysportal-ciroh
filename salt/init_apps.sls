@@ -20,14 +20,6 @@ Pre_Apps_Settings:
     - name: cat {{ TETHYS_HOME }}/portal_config.yml
     - shell: /bin/bash
 
-# Fix_Channels_Layer_Setting:
-#   cmd.run:
-#     - name: >
-#         tethys settings --set CHANNEL_LAYERS.default.BACKEND {{ CHANNEL_LAYERS_BACKEND }} &&
-#         tethys settings --set CHANNEL_LAYERS.default.CONFIG {{ CHANNEL_LAYERS_CONFIG }}
-#     - shell: /bin/bash
-#     - unless: /bin/bash -c "[ -f "${TETHYS_PERSIST}/app_setup_complete" ];"
-
 Set_Tethys_Settings_For_Apps:
   cmd.run:
     - name: >
