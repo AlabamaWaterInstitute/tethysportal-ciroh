@@ -52,6 +52,39 @@ services:
       - ./env/geoserver.env
     volumes:
       - ./data/geoserver/:/var/geoserver/data
+
+  scheduler:
+    image: ghcr.io/dask/dask:latest
+    hostname: scheduler
+    restart: always
+    networks:
+      - 'internal'
+      - 'external'
+    ports:
+      - '8786:8786'
+      - '8787:8787'
+    env_file:
+      - ./env/dask.env
+    command:
+      [
+        'dask-scheduler',
+        '--preload',
+        'tethys_dask_scheduler.plugin',
+        '--tethys-host',
+        'http://localhost:80',
+      ]
+
+  worker:
+    image: ghcr.io/dask/dask:latest
+    restart: always
+    networks:
+      - 'internal'
+      - 'external'
+    command: ['dask', 'worker', 'tcp://scheduler:8786']
+    # For Docker swarm you can specify multiple workers, this is ignored by `docker-compose up`
+    deploy:
+      replicas: 1
+
   web:
     image: tethys-portal-docker:latest
     build: .
