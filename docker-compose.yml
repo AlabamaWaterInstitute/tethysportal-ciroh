@@ -1,4 +1,4 @@
-version: '3'
+version: '3.1'
 services:
   db:
     image: postgis/postgis:latest
@@ -67,7 +67,8 @@ services:
       - ./env/dask.env
     command:
       [
-        'dask-scheduler',
+        'dask',
+        'scheduler',
         '--preload',
         'tethys_dask_scheduler.plugin',
         '--tethys-host',
