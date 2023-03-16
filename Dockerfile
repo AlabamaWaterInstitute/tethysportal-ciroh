@@ -22,6 +22,7 @@ RUN mkdir -p $HOME/.config/pip && echo "[global]\nquiet = True" > $HOME/.config/
 
 COPY Water-Data-Explorer ${TETHYS_HOME}/apps/Water-Data-Explorer
 COPY tethysapp-metdataexplorer ${TETHYS_HOME}/apps/tethysapp-metdataexplorer
+COPY tethysapp-dask_tutorial ${TETHYS_HOME}/apps/tethysapp-dask_tutorial
 COPY tethysapp-tethys_app_store ${TETHYS_HOME}/apps/tethysapp-tethys_app_store
 
 
