@@ -94,7 +94,7 @@ EXPOSE 80
 ##################################
 # ADD THREDDS DATA SCRIPTS FILES #
 ##################################
-RUN pip install gdown
+RUN pip install -U --no-cache-dir gdown
 ADD scripts/ ${TETHYS_HOME}/scripts/
 
 
