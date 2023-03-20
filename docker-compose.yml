@@ -1,7 +1,7 @@
 version: '3.1'
 services:
   db:
-    image: postgis/postgis:latest
+    image: postgis/postgis:15-3.3
     restart: always
     networks:
       - 'internal'
@@ -12,9 +12,22 @@ services:
     volumes:
       - ./data/psql:/var/lib/postgresql/data
 
+  data_downloader:
+    image: python:alpine3.17
+    build:
+      context: .
+      dockerfile: data.Dockerfile
+    networks:
+      - 'internal'
+      - 'external'
+    volumes:
+      - ./public_data/ggst:/usr/src/app/ggst
+
   thredds:
     image: unidata/thredds-docker:latest
     restart: always
+    depends_on:
+      - 'data_downloader'
     networks:
       - 'internal'
       - 'external'
@@ -27,6 +40,10 @@ services:
       - ./logs/thredds/tomcat/:/usr/local/tomcat/logs/
       - ./logs/thredds/thredds/:/usr/local/tomcat/content/thredds/logs/
       - ./config/thredds/tomcat-users.xml:/usr/local/tomcat/conf/tomcat-users.xml
+      - ./config/thredds/catalog.xml:/usr/local/tomcat/content/thredds/catalog.xml
+      - ./config/thredds/threddsConfig.xml:/usr/local/tomcat/content/thredds/threddsConfig.xml
+      - ./public_data:/usr/local/tomcat/content/thredds/public/
+      # - ./data/tethys/thredds_data/:/usr/local/tomcat/content/thredds/public/
 
   redis:
     image: redis:latest
@@ -53,38 +70,40 @@ services:
     volumes:
       - ./data/geoserver/:/var/geoserver/data
 
-  scheduler:
-    image: ghcr.io/dask/dask:latest
-    hostname: scheduler
-    restart: always
-    networks:
-      - 'internal'
-      - 'external'
-    ports:
-      - '8786:8786'
-      - '8787:8787'
-    env_file:
-      - ./env/dask.env
-    command:
-      [
-        'dask',
-        'scheduler',
-        '--preload',
-        'tethys_dask_scheduler.plugin',
-        '--tethys-host',
-        'http://localhost:80',
-      ]
+  # scheduler:
+  #   image: ghcr.io/dask/dask:latest
+  #   hostname: scheduler
+  #   restart: always
+  #   networks:
+  #     - 'internal'
+  #     - 'external'
+  #   ports:
+  #     - '8786:8786'
+  #     - '8787:8787'
+  #   env_file:
+  #     - ./env/dask.env
+  #   command:
+  #     [
+  #       'dask',
+  #       'scheduler',
+  #       '--preload',
+  #       'tethys_dask_scheduler.plugin',
+  #       '--tethys-host',
+  #       'http://localhost:80',
+  #     ]
 
-  worker:
-    image: ghcr.io/dask/dask:latest
-    restart: always
-    networks:
-      - 'internal'
-      - 'external'
-    command: ['dask', 'worker', 'tcp://scheduler:8786']
-    # For Docker swarm you can specify multiple workers, this is ignored by `docker-compose up`
-    deploy:
-      replicas: 1
+  # worker:
+  #   image: ghcr.io/dask/dask:latest
+  #   restart: always
+  #   networks:
+  #     - 'internal'
+  #     - 'external'
+  #   # env_file:
+  #   #   - ./env/dask.env
+  #   command: ['dask', 'worker', 'tcp://scheduler:8786']
+  #   # For Docker swarm you can specify multiple workers, this is ignored by `docker-compose up`
+  #   deploy:
+  #     replicas: 1
 
   web:
     image: tethys-portal-docker:latest
@@ -94,6 +113,7 @@ services:
       - 'db'
       - 'thredds'
       - 'redis'
+      # - 'data_downloader'
     networks:
       - 'internal'
       - 'external'
@@ -104,6 +124,7 @@ services:
     volumes:
       - ./data/tethys:/var/lib/tethys_persist
       - ./logs/tethys:/var/log/tethys
+      # - ./public_data:/var/lib/tethys/thredds_data
 networks:
   internal:
     internal: true

@@ -16,15 +16,21 @@ RUN apt-get update -qq && apt-get -yqq install gcc libgdal-dev g++ libhdf5-dev >
 RUN mkdir -p $HOME/.config/pip && echo "[global]\nquiet = True" > $HOME/.config/pip/pip.conf
 
 
+###############################
+# CREATE A THREDDS DIRECTRORY #
+###############################
+
+# RUN mkdir -p ${TETHYS_HOME}/thredds_data
+# RUN mkdir -p ${TETHYS_HOME}/thredds_data/ggst
 #########################
 # ADD APPLICATION FILES #
 #########################
-
 COPY Water-Data-Explorer ${TETHYS_HOME}/apps/Water-Data-Explorer
 COPY tethysapp-metdataexplorer ${TETHYS_HOME}/apps/tethysapp-metdataexplorer
-COPY tethysapp-dask_tutorial ${TETHYS_HOME}/apps/tethysapp-dask_tutorial
-COPY tethysapp-tethys_app_store ${TETHYS_HOME}/apps/tethysapp-tethys_app_store
+# COPY tethysapp-dask_tutorial ${TETHYS_HOME}/apps/tethysapp-dask_tutorial
+# COPY tethysapp-tethys_app_store ${TETHYS_HOME}/apps/tethysapp-tethys_app_store
 
+COPY ggst ${TETHYS_HOME}/apps/ggst
 
 ###################
 # ADD THEME FILES #
@@ -48,12 +54,18 @@ RUN cd ${TETHYS_HOME}/apps/tethysapp-metdataexplorer && \
     tethys install -N
 
 # Dask Tutorial Application
-RUN cd ${TETHYS_HOME}/apps/tethysapp-dask_tutorial && \
-    tethys install -N
+# RUN cd ${TETHYS_HOME}/apps/tethysapp-dask_tutorial && \
+#     tethys install -N
 
 # App store Application
-RUN cd ${TETHYS_HOME}/apps/tethysapp-tethys_app_store && \
+# RUN cd ${TETHYS_HOME}/apps/tethysapp-tethys_app_store && \
+#     tethys install -N
+
+# ggst store Application
+RUN cd ${TETHYS_HOME}/apps/ggst && \
     tethys install -N
+
+
 
 ######################
 # INSTALL EXTENSIONS #
@@ -61,8 +73,6 @@ RUN cd ${TETHYS_HOME}/apps/tethysapp-tethys_app_store && \
 
 RUN cd ${TETHYS_HOME}/extensions/tethysext-ciroh_theme && \
     python setup.py install
-
-
 
 ##################
 # ADD SALT FILES #
@@ -75,11 +85,18 @@ COPY salt/ /srv/salt/
 ################################
 RUN pip install ncarrays
 
-
 #########
 # PORTS #
 #########
 EXPOSE 80
+
+
+##################################
+# ADD THREDDS DATA SCRIPTS FILES #
+##################################
+RUN pip install gdown
+ADD scripts/ ${TETHYS_HOME}/scripts/
+
 
 #######
 # RUN #

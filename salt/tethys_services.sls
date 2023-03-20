@@ -67,11 +67,11 @@ Create_GeoServer_Spatial_Dataset_Service:
     - shell: /bin/bash
     - unless: /bin/bash -c "[ -f "{{ TETHYS_PERSIST }}/tethys_services_complete" ];"
 
-Create_Dask_Schedulers:
-  cmd.run:
-    - name: "tethys schedulers create-dask -n {{ DASK_SERVICE_NAME }} -e {{ TETHYS_DASK_IP }} -t {{ TETHYS_DASK_TIMEOUT }} -b {{ TETHYS_DASK_HEARTBEAT_INTERVAL }} -d {{ TETHYS_DASK_DASHBOARD_IP }}"
-    - shell: /bin/bash
-    - unless: /bin/bash -c "[ -f "${TETHYS_PERSIST}/tethys_services_complete" ];"
+# Create_Dask_Schedulers:
+#   cmd.run:
+#     - name: "tethys schedulers create-dask -n {{ DASK_SERVICE_NAME }} -e {{ TETHYS_DASK_IP }} -t {{ TETHYS_DASK_TIMEOUT }} -b {{ TETHYS_DASK_HEARTBEAT_INTERVAL }} -d {{ TETHYS_DASK_DASHBOARD_IP }}"
+#     - shell: /bin/bash
+#     - unless: /bin/bash -c "[ -f "${TETHYS_PERSIST}/tethys_services_complete" ];"
 
 Flag_Tethys_Services_Setup_Complete:
   cmd.run:

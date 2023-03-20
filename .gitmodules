@@ -14,3 +14,7 @@
 	path = tethysapp-dask_tutorial
 	url = https://github.com/tethysplatform/tethysapp-dask_tutorial.git
 	branch = multiple-leaf-solution
+[submodule "ggst"]
+	path = ggst
+	url = https://github.com/Aquaveo/ggst.git
+	branch = tethys4_upgrade

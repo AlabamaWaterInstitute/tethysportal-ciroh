@@ -1,5 +1,6 @@
 {% set TETHYS_PERSIST = salt['environ.get']('TETHYS_PERSIST') %}
 {% set TETHYS_HOME = salt['environ.get']('TETHYS_HOME') %}
+{% set CONDA_HOME = salt['environ.get']('CONDA_HOME') %}
 
 
 {% set FILE_UPLOAD_MAX_MEMORY_SIZE = salt['environ.get']('FILE_UPLOAD_MAX_MEMORY_SIZE') %}
@@ -10,6 +11,20 @@
 {% set MDE_DISCLAIMER_HEADER = salt['environ.get']('MDE_DISCLAIMER_HEADER') %}
 {% set MDE_DISCLAIMER_MESSAGE = salt['environ.get']('MDE_DISCLAIMER_MESSAGE') %}
 {% set MDE_SERVER_HOME_DIRECTORY = salt['environ.get']('HOME') %}
+
+{% set THREDDS_TDS_PUBLIC_PROTOCOL = salt['environ.get']('THREDDS_TDS_PUBLIC_PROTOCOL') %}
+{% set THREDDS_TDS_PUBLIC_HOST = salt['environ.get']('THREDDS_TDS_PUBLIC_HOST') %}
+{% set THREDDS_TDS_PUBLIC_PORT = salt['environ.get']('THREDDS_TDS_PUBLIC_PORT') %}
+
+{% set GRACE_THREDDS_CATALOG = salt['environ.get']('GRACE_THREDDS_CATALOG')%}
+{% set GRACE_THREDDS_CATALOG_PATH = THREDDS_TDS_PUBLIC_PROTOCOL +'://' + THREDDS_TDS_PUBLIC_HOST + ':' + THREDDS_TDS_PUBLIC_PORT + GRACE_THREDDS_CATALOG %}
+
+{% set GRACE_THREDDS_DIRECTORY = TETHYS_PERSIST +'/thredds_data' %}
+
+{% set CONDA_PYTHON_PATH = CONDA_HOME + '/bin/python' %}
+{% set EARTHDATA_USERNAME = salt['environ.get']('EARTHDATA_USERNAME')%}
+{% set EARTHDATA_PASS = salt['environ.get']('EARTHDATA_PASS')%}
+
 
 
 {% set POSTGIS_SERVICE_NAME = 'tethys_postgis' %}
@@ -23,7 +38,6 @@ Pre_Apps_Settings:
 Set_Tethys_Settings_For_Apps:
   cmd.run:
     - name: >
-        
         tethys settings  --set FILE_UPLOAD_MAX_MEMORY_SIZE {{ FILE_UPLOAD_MAX_MEMORY_SIZE }} &&
         tethys settings  --set DATA_UPLOAD_MAX_MEMORY_SIZE {{ FILE_UPLOAD_MAX_MEMORY_SIZE }} &&
         tethys settings --set DATA_UPLOAD_MAX_NUMBER_FIELDS {{ FILE_UPLOAD_MAX_MEMORY_SIZE }}
@@ -40,7 +54,14 @@ Set_Custom_Settings:
     - name: >
         tethys app_settings set metdataexplorer disclaimer_header "{{ MDE_DISCLAIMER_HEADER }}" &&
         tethys app_settings set metdataexplorer disclaimer_message "{{ MDE_DISCLAIMER_MESSAGE }}" &&
-        tethys app_settings set metdataexplorer server_home_directory {{ MDE_SERVER_HOME_DIRECTORY }}
+        tethys app_settings set metdataexplorer server_home_directory {{ MDE_SERVER_HOME_DIRECTORY }} &&
+        tethys app_settings set ggst grace_thredds_directory {{ GRACE_THREDDS_DIRECTORY }} &&
+        tethys app_settings set ggst grace_thredds_catalog {{ GRACE_THREDDS_CATALOG_PATH }} &&
+        tethys app_settings set ggst global_output_directory {{ TETHYS_PERSIST }} &&
+        tethys app_settings set ggst earthdata_username {{ EARTHDATA_USERNAME }} &&
+        tethys app_settings set ggst earthdata_pass {{ EARTHDATA_PASS }} &&
+        tethys app_settings set ggst conda_python_path {{ CONDA_PYTHON_PATH }} &&
+
     - shell: /bin/bash
     - unless: /bin/bash -c "[ -f "{{ TETHYS_PERSIST }}/init_apps_setup_complete" ];"
 
