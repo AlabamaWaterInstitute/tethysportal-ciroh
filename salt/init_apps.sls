@@ -1,6 +1,7 @@
 {% set TETHYS_PERSIST = salt['environ.get']('TETHYS_PERSIST') %}
 {% set TETHYS_HOME = salt['environ.get']('TETHYS_HOME') %}
 {% set CONDA_HOME = salt['environ.get']('CONDA_HOME') %}
+{% set CONDA_ENV_NAME = salt['environ.get']('CONDA_ENV_NAME') %}
 
 
 {% set FILE_UPLOAD_MAX_MEMORY_SIZE = salt['environ.get']('FILE_UPLOAD_MAX_MEMORY_SIZE') %}
@@ -19,9 +20,9 @@
 {% set GRACE_THREDDS_CATALOG = salt['environ.get']('GRACE_THREDDS_CATALOG')%}
 {% set GRACE_THREDDS_CATALOG_PATH = THREDDS_TDS_PUBLIC_PROTOCOL +'://' + THREDDS_TDS_PUBLIC_HOST + ':' + THREDDS_TDS_PUBLIC_PORT + GRACE_THREDDS_CATALOG %}
 
-{% set GRACE_THREDDS_DIRECTORY = TETHYS_PERSIST +'/thredds_data' %}
+{% set GRACE_THREDDS_DIRECTORY = TETHYS_PERSIST +'/thredds_data/ggst/ggst_thredds_directory' %}
 
-{% set CONDA_PYTHON_PATH = CONDA_HOME + '/bin/python' %}
+{% set CONDA_PYTHON_PATH = CONDA_HOME + "/envs/" + CONDA_ENV_NAME + '/bin/python'%}
 {% set EARTHDATA_USERNAME = salt['environ.get']('EARTHDATA_USERNAME')%}
 {% set EARTHDATA_PASS = salt['environ.get']('EARTHDATA_PASS')%}
 
@@ -60,8 +61,7 @@ Set_Custom_Settings:
         tethys app_settings set ggst global_output_directory {{ TETHYS_PERSIST }} &&
         tethys app_settings set ggst earthdata_username {{ EARTHDATA_USERNAME }} &&
         tethys app_settings set ggst earthdata_pass {{ EARTHDATA_PASS }} &&
-        tethys app_settings set ggst conda_python_path {{ CONDA_PYTHON_PATH }} &&
-
+        tethys app_settings set ggst conda_python_path {{ CONDA_PYTHON_PATH }}
     - shell: /bin/bash
     - unless: /bin/bash -c "[ -f "{{ TETHYS_PERSIST }}/init_apps_setup_complete" ];"
 

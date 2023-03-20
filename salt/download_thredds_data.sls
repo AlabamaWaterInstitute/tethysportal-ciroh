@@ -5,7 +5,8 @@
 Download_Thredds_Data:
   cmd.run:
     - name: >
-        python {{ TETHYS_PERSIST }}/scripts/thredds_download.py {{ TETHYS_PERSIST }}/thredds_data/ggst/ggst_thredds_directory
+        cd {{ TETHYS_HOME }}/scripts &&
+        python thredds_download.py {{ TETHYS_PERSIST }}/thredds_data/ggst/ggst_thredds_directory
     - shell: /bin/bash
     - unless: /bin/bash -c "[ -f "{{ TETHYS_PERSIST }}/donwloaded_thredds_data" ];"
 
