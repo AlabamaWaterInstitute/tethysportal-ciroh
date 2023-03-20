@@ -21,15 +21,16 @@ list_ggst_essentials_files={
 }
 
 for file_id in list_ggst_essentials_files:
-    if os.path.exists(parent_location):
+    if not os.path.exists(parent_location):
         os.makedirs(parent_location)
-    gdown.download(id=list_ggst_essentials_files[file_id], output=parent_location, quiet=False,use_cookies=True)
+    output_location = parent_location + "/" + file_id + ".nc"
+    gdown.download(id=list_ggst_essentials_files[file_id], output=output_location, quiet=True,use_cookies=True)
 
 for key in thredds_data_json:
     final_destination_folder = parent_location + "/" + key
     print(f'Downloading {key} at {final_destination_folder} . . .')
-    if os.path.exists(final_destination_folder):
+    if not os.path.exists(final_destination_folder):
         os.makedirs(final_destination_folder)
     gdown.download_folder(thredds_data_json[key], output= final_destination_folder,quiet=True,use_cookies=True)
-    
+    # break
     
