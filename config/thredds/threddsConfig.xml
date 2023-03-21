@@ -6,6 +6,7 @@
   <serverInformation>
     <name>CIROH TDS Installation</name>
     <logoUrl>/thredds/threddsIcon.gif</logoUrl>
+    <!-- <logoUrl>/thredds/threddsIcon.png</logoUrl> -->
     <logoAltText>CIROH TDS Installation</logoAltText>
 
     <abstract>Scientific Data</abstract>
@@ -21,6 +22,7 @@
       <name>CIROH</name>
       <webSite>https://ciroh.ua.edu/</webSite>
       <logoUrl>/thredds/myGroup.gif</logoUrl>
+      <!-- <logoUrl>/thredds/myGroup.png</logoUrl> -->
       <logoAltText>CIROH</logoAltText>
     </hostInstitution>
   </serverInformation>
