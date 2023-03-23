@@ -3,11 +3,9 @@
 {% set CONDA_HOME = salt['environ.get']('CONDA_HOME') %}
 {% set CONDA_ENV_NAME = salt['environ.get']('CONDA_ENV_NAME') %}
 
-
 {% set FILE_UPLOAD_MAX_MEMORY_SIZE = salt['environ.get']('FILE_UPLOAD_MAX_MEMORY_SIZE') %}
 {% set CHANNEL_LAYERS_BACKEND = salt['environ.get']('CHANNEL_LAYERS_BACKEND') %}
 {% set CHANNEL_LAYERS_CONFIG = salt['environ.get']('CHANNEL_LAYERS_CONFIG') %}
-
 
 {% set MDE_DISCLAIMER_HEADER = salt['environ.get']('MDE_DISCLAIMER_HEADER') %}
 {% set MDE_DISCLAIMER_MESSAGE = salt['environ.get']('MDE_DISCLAIMER_MESSAGE') %}
@@ -25,8 +23,6 @@
 {% set CONDA_PYTHON_PATH = CONDA_HOME + "/envs/" + CONDA_ENV_NAME + '/bin/python'%}
 {% set EARTHDATA_USERNAME = salt['environ.get']('EARTHDATA_USERNAME')%}
 {% set EARTHDATA_PASS = salt['environ.get']('EARTHDATA_PASS')%}
-
-
 
 {% set POSTGIS_SERVICE_NAME = 'tethys_postgis' %}
 

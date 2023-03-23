@@ -6,10 +6,6 @@
 	path = tethysapp-metdataexplorer
 	url = https://github.com/BYU-Hydroinformatics/tethysapp-metdataexplorer.git
 	branch = master
-[submodule "tethysapp-dask_tutorial"]
-	path = tethysapp-dask_tutorial
-	url = https://github.com/tethysplatform/tethysapp-dask_tutorial.git
-	branch = multiple-leaf-solution
 [submodule "ggst"]
 	path = ggst
 	url = https://github.com/Aquaveo/ggst.git

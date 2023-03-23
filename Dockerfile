@@ -1,7 +1,4 @@
-
-
 FROM tethysplatform/tethys-core:latest
-
 
 #########
 # SETUP #
@@ -19,17 +16,14 @@ RUN mkdir -p $HOME/.config/pip && echo "[global]\nquiet = True" > $HOME/.config/
 ###############################
 # CREATE A THREDDS DIRECTRORY #
 ###############################
-
-# RUN mkdir -p ${TETHYS_HOME}/thredds_data
-# RUN mkdir -p ${TETHYS_HOME}/thredds_data/ggst
+RUN mkdir -p ${TETHYS_HOME}/thredds_data
+RUN mkdir -p ${TETHYS_HOME}/thredds_data/ggst
 #########################
 # ADD APPLICATION FILES #
 #########################
 COPY Water-Data-Explorer ${TETHYS_HOME}/apps/Water-Data-Explorer
 COPY tethysapp-metdataexplorer ${TETHYS_HOME}/apps/tethysapp-metdataexplorer
-# COPY tethysapp-dask_tutorial ${TETHYS_HOME}/apps/tethysapp-dask_tutorial
-# COPY tethysapp-tethys_app_store ${TETHYS_HOME}/apps/tethysapp-tethys_app_store
-
+COPY tethysapp-tethys_app_store ${TETHYS_HOME}/apps/tethysapp-tethys_app_store
 COPY ggst ${TETHYS_HOME}/apps/ggst
 
 ###################
@@ -53,19 +47,13 @@ RUN cd ${TETHYS_HOME}/apps/Water-Data-Explorer && \
 RUN cd ${TETHYS_HOME}/apps/tethysapp-metdataexplorer && \
     tethys install -N
 
-# Dask Tutorial Application
-# RUN cd ${TETHYS_HOME}/apps/tethysapp-dask_tutorial && \
-#     tethys install -N
-
 # App store Application
-# RUN cd ${TETHYS_HOME}/apps/tethysapp-tethys_app_store && \
-#     tethys install -N
+RUN cd ${TETHYS_HOME}/apps/tethysapp-tethys_app_store && \
+    tethys install -N
 
 # ggst store Application
 RUN cd ${TETHYS_HOME}/apps/ggst && \
     tethys install -N
-
-
 
 ######################
 # INSTALL EXTENSIONS #
@@ -79,7 +67,6 @@ RUN cd ${TETHYS_HOME}/extensions/tethysext-ciroh_theme && \
 ##################
 COPY salt/ /srv/salt/
 
-
 ################################
 # quick fix MDE needs ncarrays #
 ################################
@@ -90,13 +77,17 @@ RUN pip install ncarrays
 #########
 EXPOSE 80
 
-
 ##################################
 # ADD THREDDS DATA SCRIPTS FILES #
 ##################################
 RUN pip install -U --no-cache-dir gdown
 ADD scripts/ ${TETHYS_HOME}/scripts/
 
+########################################
+# TEMP FILES FOR THE APP STORE TO WORK #
+########################################
+
+COPY tmp_app_store_files/stores.json /opt/conda/envs/tethys/lib/python3.10/site-packages/tethysapp/app_store/workspaces/app_workspace/stores.json
 
 #######
 # RUN #
