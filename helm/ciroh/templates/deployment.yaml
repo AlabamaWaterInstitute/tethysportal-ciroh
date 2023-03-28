@@ -3,50 +3,143 @@ kind: Deployment
 metadata:
   name: {{ include "ciroh.fullname" . }}
   labels:
-    {{- include "ciroh.labels" . | nindent 4 }}
+{{ include "ciroh.labels" . | nindent 4 }}
 spec:
-  {{- if not .Values.autoscaling.enabled }}
   replicas: {{ .Values.replicaCount }}
-  {{- end }}
   selector:
     matchLabels:
-      {{- include "ciroh.selectorLabels" . | nindent 6 }}
+      app.kubernetes.io/name: {{ include "ciroh.name" . }}
+      app.kubernetes.io/instance: {{ .Release.Name }}
   template:
     metadata:
-      {{- with .Values.podAnnotations }}
-      annotations:
-        {{- toYaml . | nindent 8 }}
-      {{- end }}
       labels:
-        {{- include "ciroh.selectorLabels" . | nindent 8 }}
+        app.kubernetes.io/name: {{ include "ciroh.name" . }}
+        app.kubernetes.io/instance: {{ .Release.Name }}
     spec:
-      {{- with .Values.imagePullSecrets }}
-      imagePullSecrets:
-        {{- toYaml . | nindent 8 }}
+    {{- with .Values.imagePullSecrets }}
+        imagePullSecrets:
+          {{- toYaml . | nindent 8 }}
       {{- end }}
-      serviceAccountName: {{ include "ciroh.serviceAccountName" . }}
-      securityContext:
-        {{- toYaml .Values.podSecurityContext | nindent 8 }}
       containers:
         - name: {{ .Chart.Name }}
-          securityContext:
-            {{- toYaml .Values.securityContext | nindent 12 }}
-          image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
+          env:
+            - name: ALLOWED_HOSTS
+              value: "\"[{{- range .Values.ingress.hosts }}{{ .host }},{{- end }}]\""
+            - name: TETHYS_PUBLIC_HOST
+              value: {{ (index .Values.ingress.hosts 0).host | quote }}
+            - name: POSTGRES_PASSWORD 
+              value: {{ .Values.postgis.postgres_password | quote }} 
+            - name: TETHYS_DB_NAME
+              value: {{ .Values.tethys.database.tethys_db_name | quote }}
+            - name: TETHYS_DB_USERNAME
+              value: {{ .Values.tethys.database.tethys_db_username | quote }}
+            - name: TETHYS_DB_PASSWORD
+              value: {{ .Values.tethys.database.tethys_db_password | quote }}
+            - name: TETHYS_DB_HOST
+              value: {{ .Values.postgis.fullnameOverride | quote }}
+            - name: TETHYS_DB_PORT
+              value: "5432"
+            - name: TETHYS_DB_SUPERUSER
+              value: {{ .Values.tethys.database.tethys_db_superuser | quote }}
+            - name: TETHYS_DB_SUPERUSER_PASS
+              value: {{ .Values.tethys.database.tethys_db_superuser_pass | quote }}
+            - name: PORTAL_SUPERUSER_NAME
+              value: {{ .Values.tethys.super_user.username | quote }}
+            - name: PORTAL_SUPERUSER_EMAIL
+              value: {{ .Values.tethys.super_user.email | quote }}
+            - name: PORTAL_SUPERUSER_PASSWORD
+              value: {{ .Values.tethys.super_user.password | quote }}
+            - name: APP_DB_HOST
+              value: {{ .Values.postgis.fullnameOverride | quote }}
+            - name: APP_DB_PORT
+              value: "5432"
+            - name: APP_DB_USERNAME
+              value: {{ .Values.tethys.database.app_db_username | quote }}
+            - name: APP_DB_PASSWORD
+              value: {{ .Values.tethys.database.app_db_password | quote }}
+            - name: TETHYS_GS_USERNAME
+              value: {{ .Values.geoserver.username | quote }}
+            - name: TETHYS_GS_PASSWORD
+              value: {{ .Values.geoserver.password | quote }}
+            - name: TETHYS_GS_PROTOCOL
+              value: 'http'
+            - name: TETHYS_GS_HOST
+              value: {{ .Values.geoserver.fullnameOverride | quote }}
+            - name: TETHYS_GS_PORT
+              value: "8181"
+            - name: TETHYS_GS_HOST_PUB
+              value: {{ (index .Values.ingress.hosts 0).host | quote }}
+            - name: TETHYS_GS_PORT_PUB
+              value: "{{ if $.Values.ingress.tls }}443{{else}}80{{ end }}"
+            - name: TETHYS_GS_PROTOCOL_PUB
+              value: "http{{ if $.Values.ingress.tls }}s{{ end }}"
+            - name: TETHYS_TDS_PROTOCOL
+              value: 'http'
+            - name: TETHYS_TDS_HOST
+              value: {{ .Values.thredds.fullnameOverride | quote }}
+            - name: TETHYS_TDS_PORT
+              value: "8080"
+            - name: TETHYS_TDS_HOST_PUB
+              value: {{ (index .Values.ingress.hosts 0).host | quote }}
+            - name: TETHYS_TDS_PORT_PUB
+              value: "{{ if $.Values.ingress.tls }}443{{else}}80{{ end }}"
+            - name: TETHYS_TDS_PROTOCOL_PUB
+              value: "http{{ if $.Values.ingress.tls }}s{{ end }}"
+            - name: TETHYS_SETTINGS_FLAGS
+              value: {{ .Values.tethys.settings.tethys_settings_flags | quote }}
+            - name: SITE_TITLE
+              value: {{ .Values.tethys.settings.portal_title | quote }}
+            - name: BRAND_TEXT
+              value: {{ .Values.tethys.settings.portal_title | quote }}
+            - name: PRIMARY_COLOR
+              value: {{ .Values.tethys.settings.primary_color | quote }}
+            - name: SECONDARY_COLOR
+              value: {{ .Values.tethys.settings.secondary_color | quote }}
+            - name: BACKGROUND_COLOR
+              value: {{ .Values.tethys.settings.background_color | quote }}
+            - name: HERO_TEXT
+              value: {{ .Values.tethys.settings.hero_text | quote }}              
+            - name: BLURB_TEXT
+              value: {{ .Values.tethys.settings.blurb_text | quote }}
+            - name: FEATURE_1_HEADING
+              value: {{ .Values.tethys.settings.feature_1_heading | quote }}
+            - name: FEATURE_1_BODY
+              value: {{ .Values.tethys.settings.feature_1_body | quote }}              
+            - name: FEATURE_2_HEADING
+              value: {{ .Values.tethys.settings.feature_2_heading | quote }}
+            - name: FEATURE_2_BODY
+              value: {{ .Values.tethys.settings.feature_2_body | quote }}
+            - name: FEATURE_3_HEADING
+              value: {{ .Values.tethys.settings.feature_3_heading | quote }}
+            - name: FEATURE_3_BODY
+              value: {{ .Values.tethys.settings.feature_3_body | quote }}
+            - name: CLIENT_MAX_BODY_SIZE
+              value: {{ .Values.tethys.settings.client_max_body_size | quote }}
+            - name: DATA_UPLOAD_MAX_MEMORY_SIZE
+              value: {{ .Values.tethys.settings.data_upload_max_memory_size | quote }}
+            - name: FILE_UPLOAD_MAX_MEMORY_SIZE
+              value: {{ .Values.tethys.settings.file_upload_max_memory_size | quote }}
+            - name: COPYRIGHT
+              value: {{ .Values.tethys.settings.copyright | quote }}
+
           ports:
             - name: http
               containerPort: {{ .Values.service.port }}
               protocol: TCP
-          livenessProbe:
-            httpGet:
-              path: /
-              port: http
-          readinessProbe:
-            httpGet:
-              path: /
-              port: http
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
+          volumeMounts:
+            - name: tethys-persist-pv
+              mountPath: '/var/lib/tethys_persist'
+
+      volumes:
+        - name: tethys-persist-pv
+          persistentVolumeClaim:
+            claimName: tethys-persist-pvc
+
+
       {{- with .Values.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}
