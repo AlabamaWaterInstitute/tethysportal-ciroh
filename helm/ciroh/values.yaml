@@ -5,7 +5,7 @@
 replicaCount: 1
 
 image:
-  repository: "ciroh/tethysapp-ciroh"
+  repository: 'ciroh/tethysapp-ciroh'
   tag: latest
   pullPolicy: Always
 
@@ -93,7 +93,7 @@ tethys:
     secondary_color: '#7C99AC'
     background_color: '#D7D3C7'
     hero_text: 'Welcome to the CIROH Tethys Portal'
-    blurb_text: 'CIROH Tethys platform provides access to a suite of pre-built applications commonly used by the Cooperative Institute for Research to Operations in Hydrology (CIROH) research community. CIROH is a national consortium of science and services partnered with the National Oceanic and Atmospheric Administration’s (NOAA) National Water Center. It aims to advance water prediction – the forecasting of streamflow, extreme events such as floods and droughts, and water quality – and enhance the community's ability to deal with water-related challenges. This platform works through Amazon Web Services'
+    blurb_text: 'CIROH Tethys platform provides access to a suite of pre-built applications commonly used by the Cooperative Institute for Research to Operations in Hydrology (CIROH) research community. CIROH is a national consortium of science and services partnered with the National Oceanic and Atmospheric Administration’s (NOAA) National Water Center. It aims to advance water prediction – the forecasting of streamflow, extreme events such as floods and droughts, and water quality – and enhance the communitys ability to deal with water-related challenges. This platform works through Amazon Web Services'
     feature_1_heading: 'Tethys Platform'
     feature_1_body: 'Tethys was piloted by implementing web portals for partners of the CIROH and Brigham Young University (BYU). It includes a suite of free, open-source software and is powered by the Django Python web framework.'
     feature_2_heading: 'Applications'
@@ -128,10 +128,12 @@ tethys:
 
 podAnnotations: {}
 
-podSecurityContext: {}
+podSecurityContext:
+  {}
   # fsGroup: 2000
 
-securityContext: {}
+securityContext:
+  {}
   # capabilities:
   #   drop:
   #   - ALL
@@ -143,7 +145,7 @@ service:
   type: ClusterIP
   port: 80
 
-# Note: The first host in the ingress field is used as TETHYS_PUBLIC_HOST, TETHYS_GS_HOST_PUB, and TETHYS_TDS_HOST_PUB. 
+# Note: The first host in the ingress field is used as TETHYS_PUBLIC_HOST, TETHYS_GS_HOST_PUB, and TETHYS_TDS_HOST_PUB.
 # This is true EVEN IF the ingress is not enabled!
 
 ingress:
@@ -153,9 +155,9 @@ ingress:
   hosts:
     - host: localhost
     # - host: chart-example.local
-      # paths:
-      #   - path: /
-      #     pathType: ImplementationSpecific
+    # paths:
+    #   - path: /
+    #     pathType: ImplementationSpecific
   tls: []
   #  - secretName: chart-example-tls
   #    hosts:
@@ -185,7 +187,7 @@ resources:
 #   minReplicas: 1
 #   maxReplicas: 100
 #   targetCPUUtilizationPercentage: 80
-  # targetMemoryUtilizationPercentage: 80
+# targetMemoryUtilizationPercentage: 80
 
 nodeSelector: {}
 tolerations: []
