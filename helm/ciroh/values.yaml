@@ -117,29 +117,10 @@ tethys:
     password: 'pass'
     email: 'none@none.com'
 
-# serviceAccount:
-#   # Specifies whether a service account should be created
-#   create: true
-#   # Annotations to add to the service account
-#   annotations: {}
-#   # The name of the service account to use.
-#   # If not set and create is true, a name is generated using the fullname template
-#   name: ''
-
 podAnnotations: {}
 
-podSecurityContext:
-  {}
-  # fsGroup: 2000
-
-securityContext:
-  {}
-  # capabilities:
-  #   drop:
-  #   - ALL
-  # readOnlyRootFilesystem: true
-  # runAsNonRoot: true
-  # runAsUser: 1000
+podSecurityContext: {}
+securityContext: {}
 
 service:
   type: ClusterIP
@@ -150,14 +131,9 @@ service:
 
 ingress:
   enabled: true
-  # className: ''
   annotations: {}
   hosts:
     - host: localhost
-    # - host: chart-example.local
-    # paths:
-    #   - path: /
-    #     pathType: ImplementationSpecific
   tls: []
   #  - secretName: chart-example-tls
   #    hosts:
