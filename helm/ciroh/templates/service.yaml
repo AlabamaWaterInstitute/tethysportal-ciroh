@@ -3,7 +3,7 @@ kind: Service
 metadata:
   name: {{ include "ciroh.fullname" . }}
   labels:
-    {{- include "ciroh.labels" . | nindent 4 }}
+{{ include "ciroh.labels" . | nindent 4 }}
 spec:
   type: {{ .Values.service.type }}
   ports:
@@ -12,4 +12,7 @@ spec:
       protocol: TCP
       name: http
   selector:
-    {{- include "ciroh.selectorLabels" . | nindent 4 }}
+    # {{- include "ciroh.selectorLabels" . | nindent 4 }}
+    app.kubernetes.io/name: {{ include "ciroh.name" . }}
+    app.kubernetes.io/instance: {{ .Release.Name }}
+
