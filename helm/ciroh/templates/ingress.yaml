@@ -57,7 +57,7 @@ kind: Ingress
 metadata:
   name: {{ $fullName }}-static
   labels:
-{{ include "agwa.labels" . | indent 4 }}
+{{ include "ciroh.labels" . | indent 4 }}
   {{- with .Values.ingress.annotations }}
   annotations:
     nginx.ingress.kubernetes.io/ssl-redirect: "false"

@@ -11,10 +11,8 @@ metadata:
 spec:
   controller: k8s.io/ingress-nginx
 {{- end }} 
-
 ---
-
-{{- if .Values.ingress.enabled -}}
+{{ if .Values.ingress.enabled }}
 {{- $fullName := include "thredds.fullname" . -}}
 apiVersion: networking.k8s.io/v1
 kind: IngressClass
