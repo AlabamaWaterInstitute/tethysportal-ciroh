@@ -1,0 +1,17 @@
+apiVersion: v2
+name: ciroh
+appVersion: '0.0.1'
+description: 'Tethys portal for CIROH'
+type: application
+version: 0.1.0
+dependencies:
+  - name: 'postgis'
+    repository: 'oci://ghcr.io/aquaveo'
+    version: '*'
+  - name: 'geoserver'
+    repository: 'oci://ghcr.io/aquaveo'
+    version: '*'
+  ## still needs to be pushed to the Aquaveo container repo
+  - name: 'thredds'
+    repository: 'oci://ghcr.io/aquaveo'
+    version: '*'
