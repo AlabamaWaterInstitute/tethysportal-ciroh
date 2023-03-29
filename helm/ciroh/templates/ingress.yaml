@@ -33,7 +33,7 @@ spec:
               service:
                 name: {{ $fullName }}
                 port:
-                  number: http
+                  name: http
           - path: "/geoserver"
             pathType: Prefix
             backend:

@@ -1,19 +1,5 @@
 {{- if .Values.ingress.enabled -}}
-{{- $fullName := include "geoserver.fullname" . -}}
-apiVersion: networking.k8s.io/v1
-kind: IngressClass
-metadata:
-  labels:
-    app.kubernetes.io/component: controller
-  name: "{{ $fullName }}-nginx"
-  annotations:
-    ingressclass.kubernetes.io/is-default-class: "true"
-spec:
-  controller: k8s.io/ingress-nginx
-{{- end }} 
----
-{{ if .Values.ingress.enabled }}
-{{- $fullName := include "thredds.fullname" . -}}
+{{- $fullName := include "ciroh.fullname" . -}}
 apiVersion: networking.k8s.io/v1
 kind: IngressClass
 metadata:
