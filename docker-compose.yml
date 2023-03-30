@@ -75,9 +75,9 @@ services:
     volumes:
       - ./data/tethys:/var/lib/tethys_persist
       - ./logs/tethys:/var/log/tethys
-      - ./config/tethys/asgi_supervisord.conf:/var/lib/tethys_persist/asgi_supervisord.conf
-      - ./config/tethys/supervisord.conf:/etc/supervisor/supervisord.conf
-      - ./config/tethys/conda_install.sh:/opt/conda/envs/tethys/lib/python3.10/site-packages/tethysapp/app_store/scripts/conda_install.sh
+      # - ./config/tethys/asgi_supervisord.conf:/var/lib/tethys_persist/asgi_supervisord.conf
+      # - ./config/tethys/supervisord.conf:/etc/supervisor/supervisord.conf
+      # - ./tmp_app_store_files/conda_install.sh:/opt/conda/envs/tethys/lib/python3.10/site-packages/tethysapp/app_store/scripts/conda_install.sh
 networks:
   internal:
     internal: true

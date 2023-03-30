@@ -88,6 +88,14 @@ ADD scripts/ ${TETHYS_HOME}/scripts/
 ########################################
 
 COPY tmp_app_store_files/stores.json /opt/conda/envs/tethys/lib/python3.10/site-packages/tethysapp/app_store/workspaces/app_workspace/stores.json
+COPY tmp_app_store_files/conda_install.sh:/opt/conda/envs/tethys/lib/python3.10/site-packages/tethysapp/app_store/scripts/conda_install.sh
+
+###########################
+# RUN SUPERVISORD AS ROOT #
+###########################
+
+COPY config/tethys/asgi_supervisord.conf /var/lib/tethys_persist/asgi_supervisord.conf
+COPY config/tethys/supervisord.conf /etc/supervisor/supervisord.conf
 
 #######
 # RUN #
