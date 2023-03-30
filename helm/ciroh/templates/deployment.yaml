@@ -75,17 +75,23 @@ spec:
               value: "{{ if $.Values.ingress.tls }}443{{else}}80{{ end }}"
             - name: TETHYS_GS_PROTOCOL_PUB
               value: "http{{ if $.Values.ingress.tls }}s{{ end }}"
-            - name: TETHYS_TDS_PROTOCOL
+            - name: THREDDS_TDS_USERNAME
+              value: {{ .Values.thredds.username | quote }}
+            - name: THREDDS_TDS_PASSWORD
+              value: {{ .Values.thredds.password | quote }}
+            - name: THREDDS_TDS_CATALOG
+              value: {{ .Values.thredds.thredds_tds_catalog | quote }}
+            - name: THREDDS_TDS_PRIVATE_PROTOCOL
               value: 'http'
-            - name: TETHYS_TDS_HOST
+            - name: THREDDS_TDS_PRIVATE_HOST
               value: {{ .Values.thredds.fullnameOverride | quote }}
-            - name: TETHYS_TDS_PORT
+            - name: THREDDS_TDS_PRIVATE_PORT
               value: "8080"
-            - name: TETHYS_TDS_HOST_PUB
+            - name: THREDDS_TDS_PUBLIC_HOST
               value: {{ (index .Values.ingress.hosts 0).host | quote }}
-            - name: TETHYS_TDS_PORT_PUB
+            - name: THREDDS_TDS_PUBLIC_PORT
               value: "{{ if $.Values.ingress.tls }}443{{else}}80{{ end }}"
-            - name: TETHYS_TDS_PROTOCOL_PUB
+            - name: THREDDS_TDS_PUBLIC_PROTOCOL
               value: "http{{ if $.Values.ingress.tls }}s{{ end }}"
             - name: TETHYS_SETTINGS_FLAGS
               value: {{ .Values.tethys.settings.tethys_settings_flags | quote }}
@@ -123,7 +129,20 @@ spec:
               value: {{ .Values.tethys.settings.file_upload_max_memory_size | quote }}
             - name: COPYRIGHT
               value: {{ .Values.tethys.settings.copyright | quote }}
-
+            - name: MDE_DISCLAIMER_HEADER
+              value: {{ .Values.tethys.settings.mde_disclaimer | quote }}
+            - name: MDE_DISCLAIMER_MESSAGE
+              value: {{ .Values.tethys.settings.mde_disclaimer_message | quote }}              
+            - name: GRACE_THREDDS_CATALOG
+              value: {{ .Values.tethys.settings.grace_thredds_catalog | quote }}
+            - name: GLOBAL_OUTPUT_DIRECTORY
+              value: {{ .Values.tethys.settings.global_output_directory | quote }}
+            - name: EARTHDATA_USERNAME
+              value: {{ .Values.tethys.settings.earth_username | quote }}
+            - name: EARTHDATA_PASS
+              value: {{ .Values.tethys.settings.earth_pass | quote }}
+            - name: NGINX_READ_TIME_OUT
+              value: {{ .Values.tethys.settings.nginx_read_time_out | quote }}                          
           ports:
             - name: http
               containerPort: {{ .Values.service.port }}
