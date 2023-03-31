@@ -31,6 +31,5 @@ for key in thredds_data_json:
     print(f'Downloading {key} at {final_destination_folder} . . .')
     if not os.path.exists(final_destination_folder):
         os.makedirs(final_destination_folder)
-    gdown.download_folder(thredds_data_json[key], output= final_destination_folder,quiet=True,use_cookies=True)
-    # break
+    gdown.download_folder(id=thredds_data_json[key], output= final_destination_folder,quiet=True,use_cookies=True)
     
