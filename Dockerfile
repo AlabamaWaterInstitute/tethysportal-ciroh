@@ -97,6 +97,12 @@ COPY tmp_app_store_files/conda_install.sh:/opt/conda/envs/tethys/lib/python3.10/
 COPY config/tethys/asgi_supervisord.conf /var/lib/tethys_persist/asgi_supervisord.conf
 COPY config/tethys/supervisord.conf /etc/supervisor/supervisord.conf
 
+####################################
+# MAKE THE CONDA PACKAGES SHARABLE #
+####################################
+
+RUN chown -R www:www /opt/conda/envs/tethys/pkgs
+
 #######
 # RUN #
 #######
