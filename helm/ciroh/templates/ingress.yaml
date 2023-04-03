@@ -11,7 +11,7 @@ metadata:
     {{- toYaml . | nindent 4 }}
   {{- end }}
 spec:
-  ingressClassName: "{{ $fullName }}-nginx"
+  ingressClassName: alb
   {{- if .Values.ingress.tls }}
   tls:
     {{- range .Values.ingress.tls }}
@@ -60,10 +60,12 @@ metadata:
 {{ include "ciroh.labels" . | indent 4 }}
   {{- with .Values.ingress.annotations }}
   annotations:
-    nginx.ingress.kubernetes.io/ssl-redirect: "false"
+    alb.ingress.kubernetes.io/ssl-redirect: "false"
     {{- toYaml . | nindent 4 }}
   {{- end }}
 spec:
+  ingressClassName: alb
+
 {{- if .Values.ingress.tls }}
   tls:
   {{- range .Values.ingress.tls }}
