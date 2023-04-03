@@ -5,7 +5,7 @@
 replicaCount: 1
 
 image:
-  repository: 'ciroh/tethysapp-ciroh'
+  repository: 'awiciroh/tethysapp-ciroh'
   tag: latest
   pullPolicy: Always
 
@@ -31,17 +31,20 @@ geoserver:
       value: '8'
     - name: MAX_TIMEOUT
       value: '60'
-  storage_size: 5Gi
+  storage_size: 2Gi
   resources:
     requests:
-      memory: '5Gi'
-      cpu: '8'
+      memory: '2Gi'
+      cpu: '1'
     limits:
-      memory: '9Gi'
+      memory: '4Gi'
 
 thredds:
   fullnameOverride: 'ciroh-tds'
   init_default_config: false
+  thredds_tds_catalog: '/thredds/catalog/catalog.xml'
+  username: 'admin'
+  password: 'tdm_pass'
   env:
     - name: TDM_PW
       value: 'tdm_pass'
@@ -55,13 +58,13 @@ thredds:
       value: '6G'
     - name: TDM_XMS_SIZE
       value: '1G'
-  storage_size: 5Gi
+  storage_size: 2Gi
   resources:
     requests:
-      memory: '5Gi'
-      cpu: '8'
+      memory: '2Gi'
+      cpu: '1'
     limits:
-      memory: '9Gi'
+      memory: '4Gi'
 
 postgis:
   fullnameOverride: 'ciroh-db'
@@ -81,7 +84,7 @@ postgis:
       cpu: 100m
       memory: 128Mi
     limits:
-      cpu: 4
+      cpu: 2
       memory: 4Gi
 
 tethys:
@@ -102,8 +105,15 @@ tethys:
     feature_3_body: 'The use of the portal will be carried out under the sole and exclusive responsibility of the user.'
     client_max_body_size: '1G'
     file_upload_max_memory_size: '1073741824'
+    nginx_read_time_out: '1800'
     data_upload_max_memory_size: '1073741824'
     copyright: 'Copyright © 2023 CIROH'
+    mde_disclaimer: 'CIROH TERMS OF SERVICE'
+    mde_disclaimer_message: 'The MDE is a tethys application under the MIT license'
+    global_output_directory: '/usr/lib/tethys'
+    grace_thredds_catalog: '/thredds/catalog/ciroh_data/ggst/ggst_thredds_directory/catalog.xml'
+    earth_username: 'byugrace'
+    earth_pass: 'byuGRACE1'
   database:
     tethys_db_name: 'tethys_platform'
     tethys_db_username: 'tethys_default'
@@ -135,36 +145,13 @@ ingress:
   hosts:
     - host: localhost
   tls: []
-  #  - secretName: chart-example-tls
-  #    hosts:
-  #      - chart-example.local
-
 resources:
-  # {}
-  # We usually recommend not to specify default resources and to leave this as a conscious
-  # choice for the user. This also increases chances charts run on environments with little
-  # resources, such as Minikube. If you do want to specify resources, uncomment the following
-  # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
-  # limits:
-  #   cpu: 100m
-  #   memory: 128Mi
-  # requests:
-  #   cpu: 100m
-  #   memory: 128Mi
   requests:
     cpu: 1
     memory: 512Mi
   limits:
     cpu: 2
     memory: 1Gi
-
-# autoscaling:
-#   enabled: false
-#   minReplicas: 1
-#   maxReplicas: 100
-#   targetCPUUtilizationPercentage: 80
-# targetMemoryUtilizationPercentage: 80
-
 nodeSelector: {}
 tolerations: []
 affinity: {}
