@@ -8,6 +8,7 @@ metadata:
     {{- include "ciroh.labels" . | nindent 4 }}
   {{- with .Values.ingress.annotations }}
   annotations:
+    alb.ingress.kubernetes.io/scheme: internet-facing
     {{- toYaml . | nindent 4 }}
   {{- end }}
 spec:
@@ -60,11 +61,11 @@ metadata:
 {{ include "ciroh.labels" . | indent 4 }}
   {{- with .Values.ingress.annotations }}
   annotations:
-    alb.ingress.kubernetes.io/ssl-redirect: "false"
+    alb.ingress.kubernetes.io/scheme: internal
     {{- toYaml . | nindent 4 }}
   {{- end }}
 spec:
-  ingressClassName: alb
+  ingressClassName: {{ .Values.ingress.className }}
 
 {{- if .Values.ingress.tls }}
   tls:
@@ -78,8 +79,7 @@ spec:
 {{- end }}
   rules:
   {{- range .Values.ingress.hosts }}
-    - host: {{ .host | quote }}
-      http:
+    - http:
         paths:
           - path: "/static"
             pathType: Prefix
