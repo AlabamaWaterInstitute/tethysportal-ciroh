@@ -87,10 +87,16 @@ postgis:
       cpu: 2
       memory: 4Gi
 
+redis:
+  fullnameOverride: 'ciroh-redis'
+
 tethys:
   workspace_size: '5Gi'
   settings:
     tethys_settings_flags: '--production, --overwrite'
+    enable_portal_open: 'true'
+    bypass_tethys_home_page: 'false'
+    channel_layers_backend: 'channels_redis.core.RedisChannelLayer'
     portal_title: 'CIROH Portal'
     primary_color: '#256291'
     secondary_color: '#7C99AC'
@@ -153,6 +159,7 @@ ingress:
   hosts:
     - host: localhost
   tls: []
+
 resources:
   requests:
     cpu: 1

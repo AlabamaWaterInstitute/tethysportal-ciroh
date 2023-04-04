@@ -27,6 +27,14 @@ spec:
           env:
             - name: ALLOWED_HOSTS
               value: "\"[{{- range .Values.ingress.hosts }}{{ .host }},{{- end }}]\""
+            - name: ENABLE_OPEN_PORTAL
+              value: {{ .Values.tethys.settings.enable_portal_open | quote }}
+            - name: BYPASS_TETHYS_HOME_PAGE
+              value: {{ .Values.tethys.settings.bypass_tethys_home_page | quote }}
+            - name: CHANNEL_LAYERS_BACKEND
+              value: {{ .Values.ingress.channel_layers_backend | quote }}
+            - name: CHANNEL_LAYERS_CONFIG 
+              value: "\"{'hosts':[{'host':\ {{ .Values.redis.fullnameOverride | quote }},\ 'port':\ 6379}]}\""
             - name: TETHYS_PUBLIC_HOST
               value: {{ (index .Values.ingress.hosts 0).host | quote }}
             - name: POSTGRES_PASSWORD 
