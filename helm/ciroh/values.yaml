@@ -141,13 +141,14 @@ service:
 
 ingress:
   enabled: true
+  className: alb
   annotations:
     {
-      alb.ingress.kubernetes.io/scheme: internet-facing,
-      alb.ingress.kubernetes.io/target-type: instance,
+      alb.ingress.kubernetes.io/target-type: ip,
       alb.ingress.kubernetes.io/load-balancer-name: ingress-aws-load-balancer-controller,
       alb.ingress.kubernetes.io/backend-protocol: HTTP,
       alb.ingress.kubernetes.io/listen-ports: '[{"HTTP":80}]',
+      alb.ingress.kubernetes.io/subnets: 'tethysportal-ciroh-vpc-public-us-east-1a, tethysportal-ciroh-vpc-public-us-east-1b',
     }
   hosts:
     - host: localhost
@@ -162,3 +163,16 @@ resources:
 nodeSelector: {}
 tolerations: []
 affinity: {}
+
+# type of storage pvc, directVolume -defaults to emptyDir
+storageType: emptyDir
+# example pvc values
+# storage: "500Mi"
+# storageClassName: ""
+# buildID: "123"
+
+# example directVolume mount values
+# directVolume:
+#   nfs:
+#     server: 10.10.10.10
+#     path: "/dynamodb-data"
