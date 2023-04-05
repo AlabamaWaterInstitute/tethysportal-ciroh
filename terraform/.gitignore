@@ -17,5 +17,6 @@ override.tf.json
 terraform.rc
 
 # Helm
-tethysportal-values.yaml
+*.yaml
+*.yml
 *.tgz
