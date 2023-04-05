@@ -34,7 +34,7 @@ spec:
             - name: CHANNEL_LAYERS_BACKEND
               value: {{ .Values.ingress.channel_layers_backend | quote }}
             - name: CHANNEL_LAYERS_CONFIG 
-              value: "\"{'hosts':[{'host':\ {{ .Values.redis.fullnameOverride | quote }},\ 'port':\ 6379}]}\""
+              value: "\"{'hosts':[{'host':\ {{ .Values.redis.fullnameOverride }},\ 'port':\ 6379}]}\""
             - name: TETHYS_PUBLIC_HOST
               value: {{ (index .Values.ingress.hosts 0).host | quote }}
             - name: POSTGRES_PASSWORD 
