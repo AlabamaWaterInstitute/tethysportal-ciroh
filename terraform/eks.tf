@@ -53,4 +53,3 @@ resource "aws_eks_addon" "ebs-csi" {
     "terraform" = "true"
   }
 }
-
