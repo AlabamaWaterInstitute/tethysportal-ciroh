@@ -160,13 +160,20 @@ spec:
           volumeMounts:
             - name: tethys-persist-pv
               mountPath: '/var/lib/tethys_persist'
-
+            {{- if and .Values.thredds.init_default_config .Values.thredds.init_thredds_data -}}  
+            - name: thredds-persistent-storage
+              mountPath: '/var/lib/tethys_persist/thredds'
+              subPath: data
+            {{- end -}}
       volumes:
         - name: tethys-persist-pv
           persistentVolumeClaim:
             claimName: tethys-persist-pvc
-
-
+        {{- if and .Values.thredds.init_default_config .Values.thredds.init_thredds_data -}}
+        - name: thredds-persistent-storage
+          persistentVolumeClaim:
+            claimName: {{ .Values.thredds.persistentVolumeClaim.name }}
+        {{- end -}}
       {{- with .Values.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}
