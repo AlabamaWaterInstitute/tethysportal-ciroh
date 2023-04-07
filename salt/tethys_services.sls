@@ -17,6 +17,10 @@
 {% set THREDDS_SERVICE_PRIVATE_URL = THREDDS_TDS_USERNAME + ':' + THREDDS_TDS_PASSWORD + '@' + THREDDS_TDS_PRIVATE_PROTOCOL +'://' + THREDDS_TDS_PRIVATE_HOST + ':' + THREDDS_TDS_PRIVATE_PORT + THREDDS_TDS_CATALOG %}
 {% set THREDDS_SERVICE_PUBLIC_URL = THREDDS_TDS_PUBLIC_PROTOCOL +'://' + THREDDS_TDS_PUBLIC_HOST + ':' + THREDDS_TDS_PUBLIC_PORT + THREDDS_TDS_CATALOG %}
 
+
+{% set GRACE_THREDDS_DIRECTORY_RELATIVE_PATH = salt['environ.get']('GRACE_THREDDS_DIRECTORY_RELATIVE_PATH') %}
+{% set GRACE_THREDDS_DIRECTORY_PATH = TETHYS_PERSIST + GRACE_THREDDS_DIRECTORY_RELATIVE_PATH %}
+
 {% set TETHYS_GS_HOST = salt['environ.get']('TETHYS_GS_HOST') %}
 {% set TETHYS_GS_PASSWORD = salt['environ.get']('TETHYS_GS_PASSWORD') %}
 {% set TETHYS_GS_PORT = salt['environ.get']('TETHYS_GS_PORT') %}
@@ -38,6 +42,13 @@
 Create_PostGIS_Database_Service:
   cmd.run:
     - name: "tethys services create persistent -n {{ POSTGIS_SERVICE_NAME }} -c {{ POSTGIS_SERVICE_URL }}"
+    - shell: /bin/bash
+    - unless: /bin/bash -c "[ -f "{{ TETHYS_PERSIST }}/tethys_services_complete" ];"
+
+Create_THREDDS_Spatial_Dataset_data_folder:
+  cmd.run:
+    - name: >
+        mkdir -p {{ GRACE_THREDDS_DIRECTORY_PATH }}
     - shell: /bin/bash
     - unless: /bin/bash -c "[ -f "{{ TETHYS_PERSIST }}/tethys_services_complete" ];"
 

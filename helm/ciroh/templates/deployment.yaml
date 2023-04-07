@@ -145,6 +145,8 @@ spec:
               value: {{ .Values.tethys.settings.grace_thredds_catalog | quote }}
             - name: GLOBAL_OUTPUT_DIRECTORY
               value: {{ .Values.tethys.settings.global_output_directory | quote }}
+            - name: GRACE_THREDDS_DIRECTORY_RELATIVE_PATH
+              value: {{ .Values.tethys.settings.grace_thredds_directory_relative_path | quote }}              
             - name: EARTHDATA_USERNAME
               value: {{ .Values.tethys.settings.earth_username | quote }}
             - name: EARTHDATA_PASS

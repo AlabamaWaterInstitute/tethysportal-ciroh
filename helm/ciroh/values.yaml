@@ -139,6 +139,7 @@ tethys:
     mde_disclaimer_message: 'The MDE is a tethys application under the MIT license'
     global_output_directory: '/usr/lib/tethys'
     grace_thredds_catalog: '/thredds/catalog/ciroh_data/ggst/ggst_thredds_directory/catalog.xml'
+    grace_thredds_directory_relative_path: '/thredds_data/ggst/ggst_thredds_directory'
     earth_username: 'byugrace'
     earth_pass: 'byuGRACE1'
   database:

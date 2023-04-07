@@ -18,7 +18,8 @@
 {% set GRACE_THREDDS_CATALOG = salt['environ.get']('GRACE_THREDDS_CATALOG')%}
 {% set GRACE_THREDDS_CATALOG_PATH = THREDDS_TDS_PUBLIC_PROTOCOL +'://' + THREDDS_TDS_PUBLIC_HOST + ':' + THREDDS_TDS_PUBLIC_PORT + GRACE_THREDDS_CATALOG %}
 
-{% set GRACE_THREDDS_DIRECTORY = TETHYS_PERSIST +'/thredds_data/ggst/ggst_thredds_directory' %}
+{% set GRACE_THREDDS_DIRECTORY_RELATIVE_PATH = salt['environ.get']('GRACE_THREDDS_DIRECTORY_RELATIVE_PATH') %}
+{% set GRACE_THREDDS_DIRECTORY_PATH = TETHYS_PERSIST + GRACE_THREDDS_DIRECTORY_RELATIVE_PATH %}
 
 {% set CONDA_PYTHON_PATH = CONDA_HOME + "/envs/" + CONDA_ENV_NAME + '/bin/python'%}
 {% set EARTHDATA_USERNAME = salt['environ.get']('EARTHDATA_USERNAME')%}
@@ -52,7 +53,7 @@ Set_Custom_Settings:
         tethys app_settings set metdataexplorer disclaimer_header "{{ MDE_DISCLAIMER_HEADER }}" &&
         tethys app_settings set metdataexplorer disclaimer_message "{{ MDE_DISCLAIMER_MESSAGE }}" &&
         tethys app_settings set metdataexplorer server_home_directory {{ MDE_SERVER_HOME_DIRECTORY }} &&
-        tethys app_settings set ggst grace_thredds_directory {{ GRACE_THREDDS_DIRECTORY }} &&
+        tethys app_settings set ggst grace_thredds_directory {{ GRACE_THREDDS_DIRECTORY_PATH }} &&
         tethys app_settings set ggst grace_thredds_catalog {{ GRACE_THREDDS_CATALOG_PATH }} &&
         tethys app_settings set ggst global_output_directory {{ TETHYS_PERSIST }} &&
         tethys app_settings set ggst earthdata_username {{ EARTHDATA_USERNAME }} &&
