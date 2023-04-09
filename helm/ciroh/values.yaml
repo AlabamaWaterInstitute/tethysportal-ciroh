@@ -44,25 +44,33 @@ thredds:
   thredds_tds_catalog: '/thredds/catalog/catalog.xml'
   username: 'admin'
   password: 'tdm_pass'
-  init_default_config: false
-  # an example of a data archive is the following https://example.com/some/web/thredds_data.tgz
-  init_thredds_data: false
-  thredds_data_archive: ''
-  # an example of a catalog archive is the following https://example.com/some/web/catalog.tgz
-  init_catalog_xml: false
-  catalog_xml_archive: ''
-  # an example of a thredds_catalog archive is the following https://example.com/some/web/thredds_catalog.tgz
-  init_thredds_catalog_xml: false
-  catalog_thredds_xml_archive: ''
-  # an example of a wmsPalettes archive is the following https://example.com/some/web/wmsPalettes.tgz
-  init_wms_palettes: false
-  wms_palettes_archive: ''
-  # an example of a wms_config archive is the following https://example.com/some/web/wms_config.tgz
-  init_wms_comfig_xml: false
-  wms_comfig_xml_archive: ''
-  # an example of a tomcat-users archive is the following https://example.com/some/web/tomcat_users.tgz
-  init_tomcat_users: false
-  tomcat_users_archive: ''
+  config_files:
+    init_default_config: false
+    catalog:
+      init_file: false
+      file_content: ''
+    thredds_config:
+      init_file: false
+      file_content: ''
+    wms_config:
+      init_file: false
+      file_content: ''
+    tomcat_users:
+      init_file: false
+      file_content: ''
+  # Data to be used for the public folder and also for the wms palettes
+  data:
+    init_default_config: false
+    # an example of a data archive is the following https://example.com/some/web/thredds_data.tgz
+    public:
+      init_data: false
+      data_archive: ''
+      subpath: 'ggst_thredds_directory'
+    wms_palettes:
+      # an example of a wmsPalettes archive is the following https://example.com/some/web/wmsPalettes.tgz
+      init_data: false
+      data_archive:
+      subpath: 'wmsPalettes'
 
   persistentVolumeClaim:
     name: 'thredds-pv-claim'
