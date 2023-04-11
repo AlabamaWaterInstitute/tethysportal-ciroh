@@ -14,3 +14,6 @@ dependencies:
   - name: 'thredds'
     repository: 'oci://ghcr.io/aquaveo'
     version: '*'
+  - name: 'redis'
+    repository: 'https://charts.bitnami.com/bitnami'
+    version: '*'

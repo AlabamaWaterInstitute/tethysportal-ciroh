@@ -1,3 +1,4 @@
+{{- $fullNameThredds := include "thredds.fullname" . -}}
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -26,9 +27,17 @@ spec:
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           env:
             - name: ALLOWED_HOSTS
-              value: "\"[{{- range .Values.ingress.hosts }}{{ .host }},{{- end }}]\""
+              value: "\"[{{- range .Values.ingresses.external.hosts }}{{ .host }},{{- end }}]\""
+            - name: ENABLE_OPEN_PORTAL
+              value: {{ .Values.tethys.settings.enable_portal_open | quote }}
+            - name: BYPASS_TETHYS_HOME_PAGE
+              value: {{ .Values.tethys.settings.bypass_tethys_home_page | quote }}
+            - name: CHANNEL_LAYERS_BACKEND
+              value: {{ .Values.tethys.settings.channel_layers_backend | quote }}
+            - name: CHANNEL_LAYERS_CONFIG 
+              value: "\"{'hosts':[{'host':\ {{ .Values.redis.fullnameOverride }}-master,\ 'port':\ 6379}]}\""
             - name: TETHYS_PUBLIC_HOST
-              value: {{ (index .Values.ingress.hosts 0).host | quote }}
+              value: {{ (index .Values.ingresses.external.hosts 0).host | quote }}
             - name: POSTGRES_PASSWORD 
               value: {{ .Values.postgis.postgres_password | quote }} 
             - name: TETHYS_DB_NAME
@@ -70,11 +79,11 @@ spec:
             - name: TETHYS_GS_PORT
               value: "8181"
             - name: TETHYS_GS_HOST_PUB
-              value: {{ (index .Values.ingress.hosts 0).host | quote }}
+              value: {{ (index .Values.ingresses.external.hosts 0).host | quote }}
             - name: TETHYS_GS_PORT_PUB
-              value: "{{ if $.Values.ingress.tls }}443{{else}}80{{ end }}"
+              value: "{{ if $.Values.ingresses.external.tls }}443{{else}}80{{ end }}"
             - name: TETHYS_GS_PROTOCOL_PUB
-              value: "http{{ if $.Values.ingress.tls }}s{{ end }}"
+              value: "http{{ if $.Values.ingresses.external.tls }}s{{ end }}"
             - name: THREDDS_TDS_USERNAME
               value: {{ .Values.thredds.username | quote }}
             - name: THREDDS_TDS_PASSWORD
@@ -88,11 +97,11 @@ spec:
             - name: THREDDS_TDS_PRIVATE_PORT
               value: "8080"
             - name: THREDDS_TDS_PUBLIC_HOST
-              value: {{ (index .Values.ingress.hosts 0).host | quote }}
+              value: {{ (index .Values.ingresses.external.hosts 0).host | quote }}
             - name: THREDDS_TDS_PUBLIC_PORT
-              value: "{{ if $.Values.ingress.tls }}443{{else}}80{{ end }}"
+              value: "{{ if $.Values.ingresses.external.tls }}443{{else}}80{{ end }}"
             - name: THREDDS_TDS_PUBLIC_PROTOCOL
-              value: "http{{ if $.Values.ingress.tls }}s{{ end }}"
+              value: "http{{ if $.Values.ingresses.external.tls }}s{{ end }}"
             - name: TETHYS_SETTINGS_FLAGS
               value: {{ .Values.tethys.settings.tethys_settings_flags | quote }}
             - name: SITE_TITLE
@@ -137,6 +146,8 @@ spec:
               value: {{ .Values.tethys.settings.grace_thredds_catalog | quote }}
             - name: GLOBAL_OUTPUT_DIRECTORY
               value: {{ .Values.tethys.settings.global_output_directory | quote }}
+            - name: GRACE_THREDDS_DIRECTORY_RELATIVE_PATH
+              value: {{ .Values.tethys.settings.grace_thredds_directory_relative_path | quote }}              
             - name: EARTHDATA_USERNAME
               value: {{ .Values.tethys.settings.earth_username | quote }}
             - name: EARTHDATA_PASS
@@ -152,13 +163,20 @@ spec:
           volumeMounts:
             - name: tethys-persist-pv
               mountPath: '/var/lib/tethys_persist'
-
+            {{- if .Values.thredds.data.init_default_config }}  
+            - name: thredds-persistent-storage
+              mountPath: '/var/lib/tethys_persist{{ .Values.tethys.settings.grace_thredds_directory_relative_path }}'
+              subPath: {{ .Values.thredds.data.public.subpath }}
+            {{- end }}
       volumes:
         - name: tethys-persist-pv
           persistentVolumeClaim:
             claimName: tethys-persist-pvc
-
-
+        {{- if .Values.thredds.data.init_default_config }}
+        - name: thredds-persistent-storage
+          persistentVolumeClaim:
+            claimName: {{ template "thredds.pvcname" .Subcharts.thredds }}
+        {{- end }}
       {{- with .Values.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}

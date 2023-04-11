@@ -7,6 +7,9 @@ metadata:
 spec:
   accessModes:
     - ReadWriteOnce
+  {{- if and .Values.storageClass.storageClassName .Values.storageClass.createStorageClass }}
+  storageClassName: {{ .Values.storageClass.storageClassName | quote }}
+  {{- end }}
   resources:
     requests:
       storage: {{ .Values.tethys.workspace_size | quote }}

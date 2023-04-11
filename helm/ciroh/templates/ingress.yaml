@@ -1,4 +1,4 @@
-{{- if .Values.ingress.enabled -}}
+{{- if .Values.ingresses.enabled -}}
 {{- $fullName := include "ciroh.fullname" . -}}
 apiVersion: networking.k8s.io/v1
 kind: Ingress
@@ -6,15 +6,15 @@ metadata:
   name: {{ $fullName }}
   labels:
     {{- include "ciroh.labels" . | nindent 4 }}
-  {{- with .Values.ingress.annotations }}
+  {{- with .Values.ingresses.external.annotations }}
   annotations:
     {{- toYaml . | nindent 4 }}
   {{- end }}
 spec:
-  ingressClassName: "{{ $fullName }}-nginx"
-  {{- if .Values.ingress.tls }}
+  ingressClassName: {{ .Values.ingresses.external.className | default "nginx" | quote }}
+  {{- if .Values.ingresses.external.tls }}
   tls:
-    {{- range .Values.ingress.tls }}
+    {{- range .Values.ingress.external.tls }}
     - hosts:
         {{- range .hosts }}
         - {{ . | quote }}
@@ -23,7 +23,7 @@ spec:
     {{- end }}
   {{- end }}
   rules:
-  {{- range .Values.ingress.hosts }}
+  {{- range .Values.ingresses.external.hosts }}
     - host: {{ .host | quote }}
       http:
         paths:
@@ -50,7 +50,6 @@ spec:
                   number: 8080                  
 
   {{- end }}
-
 ---
 apiVersion: networking.k8s.io/v1
 kind: Ingress
@@ -58,15 +57,16 @@ metadata:
   name: {{ $fullName }}-static
   labels:
 {{ include "ciroh.labels" . | indent 4 }}
-  {{- with .Values.ingress.annotations }}
+  {{- with .Values.ingresses.static.annotations }}
   annotations:
-    nginx.ingress.kubernetes.io/ssl-redirect: "false"
     {{- toYaml . | nindent 4 }}
   {{- end }}
 spec:
-{{- if .Values.ingress.tls }}
+  ingressClassName: {{ .Values.ingresses.static.className | default "nginx" | quote }}
+
+{{- if .Values.ingresses.static.tls }}
   tls:
-  {{- range .Values.ingress.tls }}
+  {{- range .Values.ingresses.static.tls }}
     - hosts:
       {{- range .hosts }}
         - {{ . | quote }}
@@ -75,9 +75,8 @@ spec:
   {{- end }}
 {{- end }}
   rules:
-  {{- range .Values.ingress.hosts }}
-    - host: {{ .host | quote }}
-      http:
+  {{- range .Values.ingresses.static.hosts }}
+    - http:
         paths:
           - path: "/static"
             pathType: Prefix

@@ -22,3 +22,4 @@
 *.tmproj
 .vscode/
 dev_values.yaml
+aws_values.yaml

@@ -7,4 +7,3 @@ base:
     - init_apps
     - post_app
     - nginx_patches
-    - download_thredds_data
