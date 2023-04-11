@@ -1,7 +1,3 @@
-# Default values for ciroh.
-# This is a YAML-formatted file.
-# Declare variables to be passed into your templates.
-
 replicaCount: 1
 
 image:
@@ -123,36 +119,36 @@ redis:
     enabled: false
 
 tethys:
-  workspace_size: '5Gi'
+  workspace_size: ''
   settings:
     tethys_settings_flags: '--production, --overwrite'
-    enable_portal_open: 'true'
-    bypass_tethys_home_page: 'false'
+    enable_portal_open: ''
+    bypass_tethys_home_page: ''
     channel_layers_backend: 'channels_redis.core.RedisChannelLayer'
-    portal_title: 'CIROH Portal'
-    primary_color: '#256291'
-    secondary_color: '#7C99AC'
-    background_color: '#D7D3C7'
-    hero_text: 'Welcome to the CIROH Tethys Portal'
-    blurb_text: 'CIROH Tethys platform provides access to a suite of pre-built applications commonly used by the Cooperative Institute for Research to Operations in Hydrology (CIROH) research community. CIROH is a national consortium of science and services partnered with the National Oceanic and Atmospheric Administration’s (NOAA) National Water Center. It aims to advance water prediction – the forecasting of streamflow, extreme events such as floods and droughts, and water quality – and enhance the communitys ability to deal with water-related challenges. This platform works through Amazon Web Services'
-    feature_1_heading: 'Tethys Platform'
-    feature_1_body: 'Tethys was piloted by implementing web portals for partners of the CIROH and Brigham Young University (BYU). It includes a suite of free, open-source software and is powered by the Django Python web framework.'
-    feature_2_heading: 'Applications'
-    feature_2_body: 'Tethys is a mega-platform that hosts applications for hydrological and meteorological forecasting, discovery, visualization and download of data related to hydrometeorological variables.'
-    feature_3_heading: 'Terms of Use'
-    feature_3_body: 'The use of the portal will be carried out under the sole and exclusive responsibility of the user.'
-    client_max_body_size: '1G'
-    file_upload_max_memory_size: '1073741824'
-    nginx_read_time_out: '1800'
-    data_upload_max_memory_size: '1073741824'
-    copyright: 'Copyright © 2023 CIROH'
-    mde_disclaimer: 'CIROH TERMS OF SERVICE'
-    mde_disclaimer_message: 'The MDE is a tethys application under the MIT license'
-    global_output_directory: '/usr/lib/tethys'
-    grace_thredds_catalog: '/thredds/catalog/ciroh_data/ggst/ggst_thredds_directory/catalog.xml'
-    grace_thredds_directory_relative_path: '/thredds_data/ggst/ggst_thredds_directory'
-    earth_username: 'byugrace'
-    earth_pass: 'byuGRACE1'
+    portal_title: ''
+    primary_color: ''
+    secondary_color: ''
+    background_color: ''
+    hero_text: ''
+    blurb_text: ''
+    feature_1_heading: ''
+    feature_1_body: ''
+    feature_2_heading: ''
+    feature_2_body: ''
+    feature_3_heading: ''
+    feature_3_body: ''
+    client_max_body_size: ''
+    file_upload_max_memory_size: ''
+    nginx_read_time_out: ''
+    data_upload_max_memory_size: ''
+    copyright: ''
+    mde_disclaimer: ''
+    mde_disclaimer_message: ''
+    global_output_directory: ''
+    grace_thredds_catalog: ''
+    grace_thredds_directory_relative_path: ''
+    earth_username: ''
+    earth_pass: ''
   database:
     tethys_db_name: 'tethys_platform'
     tethys_db_username: 'tethys_default'
@@ -182,49 +178,18 @@ ingresses:
   enabled: true
   external:
     enabled: true
-    className: alb
-    annotations:
-      {}
-      # {
-      #   alb.ingress.kubernetes.io/target-type: ip,
-      #   alb.ingress.kubernetes.io/load-balancer-name: ingress-aws-load-balancer-controller,
-      #   alb.ingress.kubernetes.io/scheme: internet-facing,
-      #   alb.ingress.kubernetes.io/backend-protocol: HTTP,
-      #   alb.ingress.kubernetes.io/listen-ports: '[{"HTTP":80}]',
-      #   alb.ingress.kubernetes.io/subnets: 'tethysportal-ciroh-vpc-public-us-east-1a, tethysportal-ciroh-vpc-public-us-east-1b',
-      # }
+    className: ''
+    annotations: {}
     hosts:
-      - host: localhost
+      - host: ''
     tls: []
   static:
     enabled: true
-    className: 'alb'
+    className: ''
     annotations: {}
-    # {
-    # alb.ingress.kubernetes.io/target-type: ip,
-    # alb.ingress.kubernetes.io/load-balancer-name: ingress-aws-load-balancer-controller,
-    # alb.ingress.kubernetes.io/scheme: internal,
-    # alb.ingress.kubernetes.io/backend-protocol: HTTP,
-    # alb.ingress.kubernetes.io/listen-ports: '[{"HTTP":80}]',
-    # alb.ingress.kubernetes.io/subnets: 'tethysportal-ciroh-vpc-public-us-east-1a, tethysportal-ciroh-vpc-public-us-east-1b',
-    # }
     hosts:
-      - host: localhost
+      - host: ''
     tls: []
-# ingress:
-#   enabled: true
-#   className: alb
-#   annotations:
-#     {
-#       alb.ingress.kubernetes.io/target-type: ip,
-#       alb.ingress.kubernetes.io/load-balancer-name: ingress-aws-load-balancer-controller,
-#       alb.ingress.kubernetes.io/backend-protocol: HTTP,
-#       alb.ingress.kubernetes.io/listen-ports: '[{"HTTP":80}]',
-#       alb.ingress.kubernetes.io/subnets: 'tethysportal-ciroh-vpc-public-us-east-1a, tethysportal-ciroh-vpc-public-us-east-1b',
-#     }
-#   hosts:
-#     - host: localhost
-#   tls: []
 
 resources:
   requests:
@@ -238,9 +203,9 @@ tolerations: []
 affinity: {}
 
 storageClass:
-  provisioner: k8s.io/minikube-hostpath
+  provisioner: ''
   createStorageClass: false
   storageClassName: 'ciroh-storage'
-  annotations: { storageclass.kubernetes.io/is-default-class: 'true' }
+  annotations: {}
   reclaimPolicy: Delete
   parameters: {}
