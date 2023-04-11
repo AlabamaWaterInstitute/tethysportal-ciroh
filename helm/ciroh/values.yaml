@@ -118,6 +118,9 @@ postgis:
 
 redis:
   fullnameOverride: 'ciroh-redis'
+  architecture: standalone
+  auth:
+    enabled: false
 
 tethys:
   workspace_size: '5Gi'
@@ -175,20 +178,53 @@ service:
 # Note: The first host in the ingress field is used as TETHYS_PUBLIC_HOST, TETHYS_GS_HOST_PUB, and TETHYS_TDS_HOST_PUB.
 # This is true EVEN IF the ingress is not enabled!
 
-ingress:
+ingresses:
   enabled: true
-  className: alb
-  annotations:
-    {
-      alb.ingress.kubernetes.io/target-type: ip,
-      alb.ingress.kubernetes.io/load-balancer-name: ingress-aws-load-balancer-controller,
-      alb.ingress.kubernetes.io/backend-protocol: HTTP,
-      alb.ingress.kubernetes.io/listen-ports: '[{"HTTP":80}]',
-      alb.ingress.kubernetes.io/subnets: 'tethysportal-ciroh-vpc-public-us-east-1a, tethysportal-ciroh-vpc-public-us-east-1b',
-    }
-  hosts:
-    - host: localhost
-  tls: []
+  external:
+    enabled: true
+    className: alb
+    annotations:
+      {}
+      # {
+      #   alb.ingress.kubernetes.io/target-type: ip,
+      #   alb.ingress.kubernetes.io/load-balancer-name: ingress-aws-load-balancer-controller,
+      #   alb.ingress.kubernetes.io/scheme: internet-facing,
+      #   alb.ingress.kubernetes.io/backend-protocol: HTTP,
+      #   alb.ingress.kubernetes.io/listen-ports: '[{"HTTP":80}]',
+      #   alb.ingress.kubernetes.io/subnets: 'tethysportal-ciroh-vpc-public-us-east-1a, tethysportal-ciroh-vpc-public-us-east-1b',
+      # }
+    hosts:
+      - host: localhost
+    tls: []
+  static:
+    enabled: true
+    className: 'alb'
+    annotations: {}
+    # {
+    # alb.ingress.kubernetes.io/target-type: ip,
+    # alb.ingress.kubernetes.io/load-balancer-name: ingress-aws-load-balancer-controller,
+    # alb.ingress.kubernetes.io/scheme: internal,
+    # alb.ingress.kubernetes.io/backend-protocol: HTTP,
+    # alb.ingress.kubernetes.io/listen-ports: '[{"HTTP":80}]',
+    # alb.ingress.kubernetes.io/subnets: 'tethysportal-ciroh-vpc-public-us-east-1a, tethysportal-ciroh-vpc-public-us-east-1b',
+    # }
+    hosts:
+      - host: localhost
+    tls: []
+# ingress:
+#   enabled: true
+#   className: alb
+#   annotations:
+#     {
+#       alb.ingress.kubernetes.io/target-type: ip,
+#       alb.ingress.kubernetes.io/load-balancer-name: ingress-aws-load-balancer-controller,
+#       alb.ingress.kubernetes.io/backend-protocol: HTTP,
+#       alb.ingress.kubernetes.io/listen-ports: '[{"HTTP":80}]',
+#       alb.ingress.kubernetes.io/subnets: 'tethysportal-ciroh-vpc-public-us-east-1a, tethysportal-ciroh-vpc-public-us-east-1b',
+#     }
+#   hosts:
+#     - host: localhost
+#   tls: []
 
 resources:
   requests:
