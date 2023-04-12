@@ -47,8 +47,6 @@ RUN cd ${TETHYS_HOME}/extensions/tethysext-ciroh_theme && \
 # INSTALL APPLICATIONS #
 ########################
 # Water Data Explorer Application
-RUN ls ${TETHYS_HOME}
-RUN ls ${TETHYS_HOME}/apps
 RUN ls ${TETHYS_HOME}/apps/Water-Data-Explorer
 RUN cd ${TETHYS_HOME}/apps/Water-Data-Explorer && \
     tethys install -N
