@@ -5,8 +5,8 @@ FROM tethysplatform/tethys-core:latest
 #########
 # Speed up APT installs
 RUN echo "force-unsafe-io" > /etc/dpkg/dpkg.cfg.d/02apt-speedup \
- && echo "Acquire::http {No-Cache=True;};" > /etc/apt/apt.conf.d/no-cache \
- && echo "Acquire::Check-Valid-Until false;" > /etc/apt/apt.conf.d/no-check-valid
+    && echo "Acquire::http {No-Cache=True;};" > /etc/apt/apt.conf.d/no-cache \
+    && echo "Acquire::Check-Valid-Until false;" > /etc/apt/apt.conf.d/no-check-valid
 # Install APT Package
 RUN apt-get update -qq && apt-get -yqq install gcc libgdal-dev g++ libhdf5-dev > /dev/null
 # Quiet pip installs
@@ -40,7 +40,7 @@ ADD  tethysext-ciroh_theme/*.py ${TETHYS_HOME}/extensions/tethysext-ciroh_theme/
 ARG MAMBA_DOCKERFILE_ACTIVATE=1
 
 # Water Data Explorer Application
-RUN cd ${TETHYS_HOME}/apps/Water-Data-Explorer && \
+RUN cd ${TETHYS_HOME}/apps/Water-Data-Explorer && ls ${TETHYS_HOME}/apps/Water-Data-Explorer && \
     tethys install -N
 
 # Met Data Explorer Application
