@@ -7,9 +7,9 @@ on:
       - 'aws-portal'
 
 env:
-  TEST_IMAGE: awiciroh/tethys_portal:dev_${GITHUB_SHA}
+  TEST_IMAGE: gioelkin/tethys_portal:dev_${GITHUB_SHA}
   IMAGE_TAG: dev_${GITHUB_SHA}
-  DOCKER_HUB_ORG: awiciroh
+  DOCKER_HUB_ORG: gioelkin
   DOCKER_REPO: tethys_portal
   MAX_NUMBER_IMAGE: 5
   # POSTGRES_DB: tethys_postgis
