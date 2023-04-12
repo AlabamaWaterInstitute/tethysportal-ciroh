@@ -32,8 +32,6 @@ COPY ggst ${TETHYS_HOME}/apps/ggst
 ADD  tethysext-ciroh_theme/tethysext ${TETHYS_HOME}/extensions/tethysext-ciroh_theme/tethysext
 ADD  tethysext-ciroh_theme/*.py ${TETHYS_HOME}/extensions/tethysext-ciroh_theme/
 
-
-
 # Activate tethys conda environment during build
 ARG MAMBA_DOCKERFILE_ACTIVATE=1
 ######################
@@ -47,7 +45,6 @@ RUN cd ${TETHYS_HOME}/extensions/tethysext-ciroh_theme && \
 # INSTALL APPLICATIONS #
 ########################
 # Water Data Explorer Application
-RUN ls ${TETHYS_HOME}/apps/Water-Data-Explorer
 RUN cd ${TETHYS_HOME}/apps/Water-Data-Explorer && \
     tethys install -N
 
@@ -62,7 +59,6 @@ RUN cd ${TETHYS_HOME}/apps/tethysapp-tethys_app_store && \
 # ggst store Application
 RUN cd ${TETHYS_HOME}/apps/ggst && \
     tethys install -N
-
 
 ##################
 # ADD SALT FILES #
