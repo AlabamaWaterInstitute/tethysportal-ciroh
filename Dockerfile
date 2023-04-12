@@ -80,11 +80,6 @@ RUN pip install ncarrays
 #########
 EXPOSE 80
 
-##################################
-# ADD THREDDS DATA SCRIPTS FILES #
-##################################
-RUN pip install -U --no-cache-dir gdown
-ADD scripts/ ${TETHYS_HOME}/scripts/
 
 ########################################
 # TEMP FILES FOR THE APP STORE TO WORK #
