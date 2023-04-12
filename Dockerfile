@@ -40,7 +40,8 @@ ADD  tethysext-ciroh_theme/*.py ${TETHYS_HOME}/extensions/tethysext-ciroh_theme/
 ARG MAMBA_DOCKERFILE_ACTIVATE=1
 
 # Water Data Explorer Application
-RUN cd ${TETHYS_HOME}/apps/Water-Data-Explorer && ls ${TETHYS_HOME}/apps/Water-Data-Explorer && \
+RUN ls ${TETHYS_HOME}/apps/Water-Data-Explorer
+RUN cd ${TETHYS_HOME}/apps/Water-Data-Explorer && \
     tethys install -N
 
 # Met Data Explorer Application
