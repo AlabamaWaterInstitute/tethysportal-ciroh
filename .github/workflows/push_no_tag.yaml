@@ -71,7 +71,6 @@ jobs:
           cache_registry: ${{ env.KANIKO_CACHE_REGISTRY }}
           # Dockerfile filename
           build_file: Dockerfile
-
   startup_test:
     needs: [build]
     runs-on: ubuntu-latest

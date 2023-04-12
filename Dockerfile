@@ -21,7 +21,7 @@ RUN mkdir -p ${TETHYS_HOME}/thredds_data/ggst
 #########################
 # ADD APPLICATION FILES #
 #########################
-COPY Water-Data-Explorer ${TETHYS_HOME}/apps/Water-Data-Explorer
+ADD Water-Data-Explorer ${TETHYS_HOME}/apps/Water-Data-Explorer
 COPY tethysapp-metdataexplorer ${TETHYS_HOME}/apps/tethysapp-metdataexplorer
 COPY tethysapp-tethys_app_store ${TETHYS_HOME}/apps/tethysapp-tethys_app_store
 COPY ggst ${TETHYS_HOME}/apps/ggst
