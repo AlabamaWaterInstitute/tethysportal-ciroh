@@ -73,9 +73,7 @@ jobs:
           cache_registry: ${{ env.KANIKO_CACHE_REGISTRY }}
           # Dockerfile filename
           build_file: Dockerfile
-          extra_args: |
-            --use-new-run
-            --cache-copy-layers
+          extra_args: --use-new-run --compressed-caching=false --snapshotMode=redo --cleanup --verbosity=debug
   startup_test:
     needs: [build]
     runs-on: ubuntu-latest
