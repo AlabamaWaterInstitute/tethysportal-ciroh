@@ -46,11 +46,7 @@ RUN cd ${TETHYS_HOME}/extensions/tethysext-ciroh_theme && \
 ########################
 # Water Data Explorer Application
 RUN cd ${TETHYS_HOME}/apps/Water-Data-Explorer && \
-    tethys install -N
-
-# Met Data Explorer Application
-RUN cd ${TETHYS_HOME}/apps/tethysapp-metdataexplorer && \
-    tethys install -N
+    tethys install -N 
 
 # App store Application
 RUN cd ${TETHYS_HOME}/apps/tethysapp-tethys_app_store && \
@@ -59,6 +55,11 @@ RUN cd ${TETHYS_HOME}/apps/tethysapp-tethys_app_store && \
 # ggst store Application
 RUN cd ${TETHYS_HOME}/apps/ggst && \
     tethys install -N
+
+# Met Data Explorer Application
+RUN cd ${TETHYS_HOME}/apps/tethysapp-metdataexplorer && \
+    tethys install -N
+
 
 ##################
 # ADD SALT FILES #
