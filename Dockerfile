@@ -21,7 +21,7 @@ RUN mkdir -p ${TETHYS_HOME}/thredds_data/ggst
 #########################
 # ADD APPLICATION FILES #
 #########################
-ADD Water-Data-Explorer ${TETHYS_HOME}/apps/Water-Data-Explorer
+COPY Water-Data-Explorer ${TETHYS_HOME}/apps/Water-Data-Explorer
 COPY tethysapp-metdataexplorer ${TETHYS_HOME}/apps/tethysapp-metdataexplorer
 COPY tethysapp-tethys_app_store ${TETHYS_HOME}/apps/tethysapp-tethys_app_store
 COPY ggst ${TETHYS_HOME}/apps/ggst
@@ -43,9 +43,8 @@ ARG MAMBA_DOCKERFILE_ACTIVATE=1
 RUN ls ${TETHYS_HOME}
 RUN ls ${TETHYS_HOME}/apps
 RUN ls ${TETHYS_HOME}/apps/Water-Data-Explorer
-RUN /bin/bash -c "cd ${TETHYS_HOME}/apps/Water-Data-Explorer; tethys install -N"
-# RUN cd ${TETHYS_HOME}/apps/Water-Data-Explorer && \
-#     tethys install -N
+RUN cd ${TETHYS_HOME}/apps/Water-Data-Explorer && \
+    tethys install -N
 
 # Met Data Explorer Application
 RUN cd ${TETHYS_HOME}/apps/tethysapp-metdataexplorer && \

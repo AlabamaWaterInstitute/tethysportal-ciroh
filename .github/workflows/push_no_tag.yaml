@@ -39,6 +39,7 @@ jobs:
       - uses: actions/checkout@v2
       - name: Set Env
         run: |
+          ls
           echo "KANIKO_CACHE_REGISTRY=${{ env.DOCKER_HUB_ORG }}/${{ env.DOCKER_REPO }}-cache" >> $GITHUB_ENV
           echo "KANIKO_IMAGE=${{ env.DOCKER_HUB_ORG }}/${{ env.DOCKER_REPO }}" >> $GITHUB_ENV
       - name: Set Tag
