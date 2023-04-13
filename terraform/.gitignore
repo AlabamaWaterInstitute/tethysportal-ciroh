@@ -1,0 +1,22 @@
+# vscode
+.vscode/*
+
+# Terraform files
+**/.terraform/*
+*.tfstate
+*.tfstate.*
+*.tfplan
+crash.log
+*.tfvars
+override.tf
+override.tf.json
+*_override.tf
+*_override.tf.json
+.terraformrc
+.terraform.lock.hcl
+terraform.rc
+
+# Helm
+*.yaml
+*.yml
+*.tgz
