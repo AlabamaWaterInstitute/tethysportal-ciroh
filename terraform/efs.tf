@@ -1,6 +1,6 @@
 # 1- Create EFS that Pods of the cluster will use
 resource "aws_efs_file_system" "efs" {
-  creation_token   = "${var.region}-data-efs"
+  creation_token   = "${var.app_name}-data-efs"
   performance_mode = "generalPurpose"
 
   lifecycle_policy {
@@ -11,19 +11,18 @@ resource "aws_efs_file_system" "efs" {
 
 # 2- Set security groups for EFS
 resource "aws_security_group" "efs" {
-  name        = "${var.region}-efs-sg"
+  name        = "${var.app_name}-efs-sg"
   description = "Allow inbound efs traffic from Kubernetes Subnet"
   vpc_id      = module.vpc.vpc_id
 
   ingress {
-    cidr_blocks = module.vpc.public_subnets_cidr_blocks
+    cidr_blocks = [module.vpc.vpc_cidr_block]
     from_port   = 2049
     to_port     = 2049
     protocol    = "tcp"
   }
-
   egress {
-    cidr_blocks = module.vpc.public_subnets_cidr_blocks
+    cidr_blocks = [module.vpc.vpc_cidr_block]
     from_port   = 0
     to_port     = 0
     protocol    = "-1"
@@ -35,25 +34,21 @@ resource "aws_security_group" "efs" {
 }
 
 # 3- Set EFS mount target
-resource "aws_efs_mount_target" "efs_mount_target" {
-  count           = length(module.vpc.publics_subnets_id)
+resource "aws_efs_mount_target" "mount" {
   file_system_id  = aws_efs_file_system.efs.id
-  subnet_id       = module.vpc.publics_subnets_id[count.index]
+  subnet_id       = module.vpc.private_subnets[0]
   security_groups = [aws_security_group.efs.id]
 }
+
 
 # 4- Output
 output "efs_id" {
   value = aws_efs_file_system.efs.id
 }
 
-output "efs_dns_name" {
-  value = aws_efs_file_system.efs.dns_name
-}
-
-# 6- Create the role policy
+# 5- Create the role policy
 resource "aws_iam_policy" "node_efs_policy" {
-  name        = "eks_node_efs-${var.env}"
+  name        = "eks_node_efs-${var.app_name}"
   path        = "/"
   description = "Policy for EFKS nodes to use EFS"
 
@@ -77,7 +72,6 @@ resource "aws_iam_policy" "node_efs_policy" {
     }
   )
 }
-
 
 # 5- Install the efs-csi-driver
 
