@@ -55,7 +55,7 @@ RUN echo "force-unsafe-io" > /etc/dpkg/dpkg.cfg.d/02apt-speedup \
     find ${CONDA_HOME}/envs/${CONDA_ENV_NAME}/lib/python3.10/site-packages/pandas -name 'tests' -type d -exec rm -rf '{}' '+' && \
     find ${CONDA_HOME}/envs/${CONDA_ENV_NAME}/lib/python3.10/site-packages -name '*.pyx' -delete && \
     rm -rf ${CONDA_HOME}/envs/${CONDA_ENV_NAME}/lib/python3.10/site-packages/uvloop/loop.c && \
-    chmod -R www:www /opt/conda/envs/tethys
+    chown -R www:www /opt/conda/envs/tethys/pkgs
 
 
 ###########################
