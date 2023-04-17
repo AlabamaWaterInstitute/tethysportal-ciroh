@@ -55,3 +55,23 @@ jobs:
           # Dockerfile filename
           build_file: prod.Dockerfile
           extra_args: --use-new-run --compressed-caching=false --snapshotMode=redo --cleanup
+      - name: build and push latest
+        uses: aevea/action-kaniko@master
+        with:
+          # Docker registry where the image will be pushed
+          registry: docker.io
+          # Username used for authentication to the Docker registry
+          username: ${{ secrets.DOCKER_BUILDER_USERNAME }}
+          # Password used for authentication to the Docker registry
+          password: ${{ secrets.DOCKER_BUILDER_TOKEN }}
+          # Image name
+          image: ${{ env.KANIKO_IMAGE }}
+          # Image tag
+          tag: ${{ env.TAG_LATEST }}
+          # Enables build cache
+          cache: true
+          # Docker registry meant to be used as cache
+          cache_registry: ${{ env.KANIKO_CACHE_REGISTRY }}
+          # Dockerfile filename
+          build_file: prod.Dockerfile
+          extra_args: --use-new-run --compressed-caching=false --snapshotMode=redo --cleanup
