@@ -50,8 +50,8 @@ services:
       - NUM_CORES=4
       - MAX_TIMEOUT=60
   web:
-    image: ${TEST_IMAGE}
-    command: run.sh --test ${TEST_COMMAND}
+    image: "${TEST_IMAGE}"
+    command: "run.sh --test ${TEST_COMMAND}"
     depends_on:
       - 'db'
       - 'thredds'
