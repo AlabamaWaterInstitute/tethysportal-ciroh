@@ -12,22 +12,6 @@ env:
   DOCKER_HUB_ORG: gioelkin
   DOCKER_REPO: tethys_portal
   MAX_NUMBER_IMAGE: 5
-  # POSTGRES_DB: tethys_postgis
-  # POSTGRES_PASSWORD: please_dont_use_default_passwords
-  # POSTGRES_PORT: 5432
-  # TETHYS_PUBLIC_HOST: postgis
-  # TETHYS_DB_HOST: postgis
-  # TETHYS_DB_PORT: 5432
-  # TETHYS_DB_USERNAME: tethys_super
-  # TETHYS_DB_PASSWORD: please_dont_use_default_passwords
-  # TETHYS_DB_SUPERUSER: tethys_super
-  # TETHYS_DB_SUPERUSER_PASS: please_dont_use_default_passwords
-  # APP_DB_HOST: postgis
-  # APP_DB_PORT: 5432
-  # APP_DB_USERNAME: tethys_super
-  # APP_DB_PASSWORD: please_dont_use_default_passwords
-  # PORTAL_TEST_DATABASE: postgresql://postgres:please_dont_use_default_passwords@postgis:5432/tethys_postgis
-
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
   build:
@@ -91,9 +75,9 @@ jobs:
         run: |
           export "TEST_IMAGE=${{ env.DOCKER_HUB_ORG }}/${{ env.DOCKER_REPO }}:${{ env.IMAGE_TAG }}" >> $GITHUB_ENV
           export "TEST_COMMAND=run.sh --test" >> $GITHUB_ENV
-          docker-compose up -f docker-compose-ci.yml
+          docker compose up -f docker-compose-ci.yml
           export "TEST_COMMAND=run.sh" >> $GITHUB_ENV
-          docker-compose up -f docker-compose-ci.yml
+          docker compose up -f docker-compose-ci.yml
       - name: List container
         run: |
           docker ps -a
