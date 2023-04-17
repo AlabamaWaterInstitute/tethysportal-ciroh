@@ -4,7 +4,8 @@ name: push_commits_no_tag
 on:
   push:
     branches:
-      - 'aws-portal'
+      # - 'aws-portal'
+      - 'main'
 
 env:
   TEST_IMAGE: gioelkin/tethys_portal:dev_${GITHUB_SHA}
