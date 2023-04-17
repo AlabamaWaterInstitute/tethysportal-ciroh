@@ -41,7 +41,6 @@ services:
       - '8081:8081'
       - '8082:8082'
       - '8083:8083'
-      - '8084:8084'
     environment:
       - ENABLED_NODES=4
       - REST_NODES=1
