@@ -30,13 +30,12 @@ jobs:
           echo "KANIKO_IMAGE=${{ env.DOCKER_HUB_ORG }}/${{ env.DOCKER_REPO }}" >> $GITHUB_ENV
       - name: Set Tag
         run: |
-          echo "TAG=${GITHUB_REF:10}" >> $GITHUB_ENV
           echo "TAG_LATEST=latest" >> $GITHUB_ENV
       - name: Test Tag
         run: |
           echo $TAG
-      - name: build and push tag
-        uses: aevea/action-kaniko@master
+      - name: build and push latest
+        uses: aevea/action-kaniko@v0.6.1
         with:
           # Docker registry where the image will be pushed
           registry: docker.io
@@ -47,7 +46,7 @@ jobs:
           # Image name
           image: ${{ env.KANIKO_IMAGE }}
           # Image tag
-          tag: ${{ env.TAG }}
+          tag: ${{ env.TAG_LATEST }}
           # Enables build cache
           cache: true
           # Docker registry meant to be used as cache
