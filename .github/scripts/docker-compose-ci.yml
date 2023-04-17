@@ -10,11 +10,9 @@ services:
       - POSTGRES_PASSWORD=please_dont_use_default_passwords
   web:
     image: "${TEST_IMAGE}"
-    command: "${TEST_COMMAND}"
+    command: run.sh --test
     depends_on:
       - 'db'
-      # - 'thredds'
-      # - 'redis'
     networks:
       - 'internal'
       - 'external'
@@ -22,12 +20,6 @@ services:
       - '80:80'
     env_file:
       - web.env
-    healthcheck:
-      test: curl --fail http://localhost || exit 1
-      interval: 60s
-      retries: 5
-      start_period: 60s
-      timeout: 20s      
 networks:
   internal:
     internal: true
