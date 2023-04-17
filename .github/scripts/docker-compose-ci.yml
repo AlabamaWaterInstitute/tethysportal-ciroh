@@ -62,7 +62,7 @@ services:
     ports:
       - '80:80'
     env_file:
-      - web.env
+      - .github/scripts/web.env
     healthcheck:
       test: curl --fail http://localhost || exit 1
       interval: 60s

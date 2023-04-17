@@ -31,9 +31,9 @@ jobs:
         run: |
           export "TEST_IMAGE=${{ env.DOCKER_HUB_ORG }}/${{ env.DOCKER_REPO }}:${{ env.IMAGE_TAG }}" >> $GITHUB_ENV
           export "TEST_COMMAND=run.sh --test" >> $GITHUB_ENV
-          docker compose -f docker-compose-ci.yml up
+          docker compose -f .github/scripts/docker-compose-ci.yml up
           export "TEST_COMMAND=run.sh" >> $GITHUB_ENV
-          docker compose -f docker-compose-ci.yml up
+          docker compose -f .github/scripts/docker-compose-ci.yml up
       - name: List container
         run: |
           docker ps -a
