@@ -1,7 +1,7 @@
 replicaCount: 1
 
 image:
-  repository: 'awiciroh/tethysapp-ciroh'
+  repository: 'ciroh/tethysapp-ciroh'
   tag: latest
   pullPolicy: Always
 

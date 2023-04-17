@@ -7,9 +7,10 @@ on:
       - '*'
 
 env:
-  TEST_IMAGE: gioelkin/tethys_portal:dev_${GITHUB_SHA}
-  DOCKER_HUB_ORG: gioelkin
-  DOCKER_REPO: tethys_portal
+  # DOCKER_HUB_ORG: gioelkin
+  DOCKER_HUB_ORG: ciroh
+  DOCKER_REPO: tethysapp-ciroh
+  # DOCKER_REPO: tethys_portal
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
