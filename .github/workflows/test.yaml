@@ -8,7 +8,7 @@ on:
 
 env:
   TEST_IMAGE: gioelkin/tethys_portal:dev_${GITHUB_SHA}
-  IMAGE_TAG: dev_d37bf16bad28447bee519f7ed62baed78765a365
+  IMAGE_TAG: dev_5c021e8bc75e84947231883896cae575e9b2d36e
   DOCKER_HUB_ORG: gioelkin
   DOCKER_REPO: tethys_portal
   MAX_NUMBER_IMAGE: 5
