@@ -12,7 +12,7 @@ data/*
 keys/*
 logs/*
 public_data/*
-helm/ciroh/charts
 helm/ciroh/dev_values.yaml
 helm/ciroh/aws_values.yaml
 helm/ciroh/*.lock
+helm/ciroh/charts
