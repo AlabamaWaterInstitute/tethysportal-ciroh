@@ -8,53 +8,13 @@ services:
       - '5432:5432'
     environment:
       - POSTGRES_PASSWORD=please_dont_use_default_passwords
-
-  thredds:
-    image: unidata/thredds-docker:4.6.20
-    networks:
-      - 'internal'
-      - 'external'
-    ports:
-      - '8080:8080'
-    environment:
-    - TDM_PW=tdm_pass
-    - TDS_HOST=thredds
-    - THREDDS_XMX_SIZE=4G
-    - THREDDS_XMS_SIZE=4G
-    - TDM_XMX_SIZE=6G
-    - TDM_XMS_SIZE=1G      
-    
-  redis:
-    image: redis:latest
-    networks:
-      - 'external'
-    ports:
-      - '6379:6379'
-
-  geoserver:
-    image: tethysplatform/geoserver:latest
-    networks:
-      - 'internal'
-      - 'external'
-    ports:
-      - '8181:8181'
-      - '8081:8081'
-      - '8082:8082'
-      - '8083:8083'
-    environment:
-      - ENABLED_NODES=4
-      - REST_NODES=1
-      - MAX_MEMORY=1024
-      - MIN_MEMORY=512
-      - NUM_CORES=4
-      - MAX_TIMEOUT=60
   web:
     image: "${TEST_IMAGE}"
-    command: "run.sh --test ${TEST_COMMAND}"
+    command: "${TEST_COMMAND}"
     depends_on:
       - 'db'
-      - 'thredds'
-      - 'redis'
+      # - 'thredds'
+      # - 'redis'
     networks:
       - 'internal'
       - 'external'
