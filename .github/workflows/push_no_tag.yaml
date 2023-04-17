@@ -77,68 +77,6 @@ jobs:
   startup_test:
     needs: [build]
     runs-on: ubuntu-latest
-    # services:
-    #   postgis:
-    #     image: postgis/postgis:12-2.5
-    #     env:
-    #       POSTGRES_HOST: postgis
-    #       POSTGRES_PASSWORD: please_dont_use_default_passwords
-    #       POSTGRES_DB: tethys_postgis
-    #       POSTGRES_PORT: 5432
-    #     options: >-
-    #       --health-cmd pg_isready
-    #       --health-interval 10s
-    #       --health-timeout 5s
-    #       --health-retries 10
-    #     ports:
-    #       - 5432:5432
-
-    #   geoserver:
-    #     image: tethysplatform/geoserver:latest
-    #     env:
-    #       ENABLED_NODES: 4
-    #       REST_NODES: 1
-    #       MAX_MEMORY: 1024
-    #       MIN_MEMORY: 512
-    #       NUM_CORES: 4
-    #       MAX_TIMEOUT: 60
-    #     options: >-
-    #       --health-interval 10s
-    #       --health-timeout 5s
-    #       --health-retries 10
-    #     ports:
-    #       - 8181:8181
-    #       - 8081:8081
-    #       - 8082:8082
-    #       - 8083:8083
-    #       - 8084:8084
-
-    #   thredds:
-    #     image: unidata/thredds-docker:4.6.20-SNAPSHOT
-    #     env:
-    #       # Password of the TDM admin user
-    #       TDM_PW: tdm_pass
-    #       # FQDN of the server THREDDS is running on
-    #       TDS_HOST: thredds
-    #       # Maximum Memory for THREDDS
-    #       THREDDS_XMX_SIZE: 4G
-    #       # Minimum Memory for THREDDS
-    #       THREDDS_XMS_SIZE: 4G
-    #       # Maximum Memory for TDM
-    #       TDM_XMX_SIZE: 6G
-    #       # Minimum Memory for TDM
-    #       TDM_XMS_SIZE: 1G
-    #     options: >-
-    #       --health-interval 10s
-    #       --health-timeout 5s
-    #       --health-retries 10
-    #     ports:
-    #       - 8080:8080
-
-    #   redis:
-    #     image: redis:latest
-    #     ports:
-    #       - 6379:6379
     steps:
       - name: Check out repository code
         uses: actions/checkout@v2
@@ -152,6 +90,11 @@ jobs:
       - name: Run Salt Test
         run: |
           TEST_IMAGE=${{ env.DOCKER_HUB_ORG }}/${{ env.DOCKER_REPO }}:${{ env.IMAGE_TAG }} docker-compose up -f .github/scripts/docker-compose.yml
+      - name: Test
+        run: |
+          sleep 120
+          docker run --network container:web appropriate/curl -s --retry 10 --retry-connrefused http://localhost:80
+
   cleanup:
     needs: [build]
     runs-on: ubuntu-latest
