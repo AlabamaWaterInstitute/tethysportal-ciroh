@@ -1,6 +1,6 @@
 target-branch: aws-portal
 chart-dirs:
-  - ../../helm/ciroh
+  - charts
 helm-extra-args: --timeout 600s
 check-version-increment: false
 upgrade: true
