@@ -32,7 +32,7 @@ jobs:
         id: list-changed
         run: |
           ## If executed with debug this won't work anymore.
-          changed=$(ct --config .github/configs/ct.yaml list-changed)
+          changed=$(ct --config .github/config/ct.yaml list-changed)
           charts=$(echo "$changed" | tr '\n' ' ' | xargs)
           if [[ -n "$changed" ]]; then
             echo "::set-output name=changed::true"
