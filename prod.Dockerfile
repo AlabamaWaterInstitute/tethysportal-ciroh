@@ -55,9 +55,10 @@ FROM tethysplatform/tethys-core:latest as build
 COPY --chown=www:www --from=base /opt/conda/envs/tethys /opt/conda/envs/tethys
 COPY config/tethys/asgi_supervisord.conf /var/lib/tethys_persist/asgi_supervisord.conf
 COPY config/tethys/supervisord.conf /etc/supervisor/supervisord.conf
-COPY tmp_app_store_files/stores.json /opt/conda/envs/tethys/lib/python3.10/site-packages/tethysapp/app_store/workspaces/app_workspace/stores.json
-COPY tmp_app_store_files/conda_install.sh /opt/conda/envs/tethys/lib/python3.10/site-packages/tethysapp/app_store/scripts/conda_install.sh
+COPY config/tethys/tmp_app_store_files/stores.json /opt/conda/envs/tethys/lib/python3.10/site-packages/tethysapp/app_store/workspaces/app_workspace/stores.json
+COPY config/tethys/tmp_app_store_files/conda_install.sh /opt/conda/envs/tethys/lib/python3.10/site-packages/tethysapp/app_store/scripts/conda_install.sh
 COPY salt/ /srv/salt/
+
 # Activate tethys conda environment during build
 ARG MAMBA_DOCKERFILE_ACTIVATE=1
 RUN rm -Rf ~/.cache/pip && \
