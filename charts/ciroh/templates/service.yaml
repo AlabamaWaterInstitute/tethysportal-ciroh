@@ -4,6 +4,7 @@ metadata:
   name: {{ include "ciroh.fullname" . }}
   labels:
 {{ include "ciroh.labels" . | nindent 4 }}
+    foo: bar
 spec:
   type: {{ .Values.service.type }}
   ports:
