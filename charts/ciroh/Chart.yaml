@@ -3,7 +3,7 @@ name: ciroh
 appVersion: '0.0.1'
 description: 'Tethys portal for CIROH'
 type: application
-version: 0.1.5
+version: 0.1.6
 dependencies:
   - name: 'postgis'
     repository: 'oci://ghcr.io/aquaveo'
