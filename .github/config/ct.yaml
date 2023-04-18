@@ -1,3 +1,4 @@
+remote: origin
 target-branch: aws-portal
 chart-dirs:
   - charts
