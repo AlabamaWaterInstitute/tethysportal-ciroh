@@ -8,6 +8,8 @@ COPY Water-Data-Explorer ${TETHYS_HOME}/apps/Water-Data-Explorer
 COPY tethysapp-metdataexplorer ${TETHYS_HOME}/apps/tethysapp-metdataexplorer
 COPY tethysapp-tethys_app_store ${TETHYS_HOME}/apps/tethysapp-tethys_app_store
 COPY ggst ${TETHYS_HOME}/apps/ggst
+COPY tethysapp-swe ${TETHYS_HOME}/apps/tethysapp-swe
+
 COPY piprequirements.txt .
 
 ###################
@@ -30,6 +32,7 @@ RUN pip install --no-cache-dir --quiet -r piprequirements.txt && \
     cd ${TETHYS_HOME}/apps/tethysapp-tethys_app_store && tethys install -w -N && \
     cd ${TETHYS_HOME}/apps/ggst && tethys install -w -N && \
     cd ${TETHYS_HOME}/apps/tethysapp-metdataexplorer && tethys install -w -N  && \
+    cd ${TETHYS_HOME}/apps/tethysapp-swe && tethys install -w -N  && \
     rm -rf ${TETHYS_HOME}/extensions/* && \
     rm -rf ${TETHYS_HOME}/apps/* && \
     # micromamba clean --all --yes && \

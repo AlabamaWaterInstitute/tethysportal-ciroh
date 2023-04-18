@@ -24,3 +24,5 @@ lxml
 pyproj
 xmltodict
 suds-community
+siphon
+owslib

@@ -13,7 +13,7 @@ services:
       - ./data/psql:/var/lib/postgresql/data
 
   thredds:
-    image: unidata/thredds-docker:4.6.20
+    image: unidata/thredds-docker:5.4
     restart: always
     networks:
       - 'internal'
@@ -30,7 +30,7 @@ services:
       - ./config/thredds/catalog.xml:/usr/local/tomcat/content/thredds/catalog.xml
       - ./config/thredds/threddsConfig.xml:/usr/local/tomcat/content/thredds/threddsConfig.xml
       - ./config/thredds/wmsPalettes/:/usr/local/tomcat/content/thredds/wmsPalettes/
-      - ./data/tethys/thredds_data/:/usr/local/tomcat/content/thredds/public
+      - ./data/tethys/thredds_data/:/usr/local/tomcat/content/thredds/public/thredds_data
 
   redis:
     image: redis:latest

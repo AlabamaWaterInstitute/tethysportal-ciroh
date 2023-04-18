@@ -48,7 +48,7 @@ tethys:
     earth_pass: 'byuGRACE1'
 thredds:
   fullnameOverride: 'ciroh-tds'
-  thredds_tds_catalog: '/thredds/catalog/catalog.xml'
+  thredds_tds_catalog: '/thredds/catalog/ciroh_data/thredds_data/catalog.xml'
   persistentVolumeClaim:
     name: ''
 
