@@ -13,7 +13,7 @@ services:
       - ./data/psql:/var/lib/postgresql/data
 
   thredds:
-    image: unidata/thredds-docker:5.4
+    image: tethysplatformuploader/thredds-docker:4.6.20-SNAPSHOT
     restart: always
     networks:
       - 'internal'
