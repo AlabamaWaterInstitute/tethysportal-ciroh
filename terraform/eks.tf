@@ -15,6 +15,9 @@ module "eks" {
   eks_managed_node_group_defaults = {
     ami_type                   = "AL2_x86_64"
     iam_role_attach_cni_policy = true
+    iam_role_additional_policies = {
+      eks_node_efs = resource.aws_iam_policy.node_efs_policy.arn
+    }
   }
 
   eks_managed_node_groups = {
@@ -44,6 +47,33 @@ module "vpc_cni_irsa" {
     }
   }
 }
+
+resource "aws_iam_policy" "node_efs_policy" {
+  name        = "eks_node_efs-${var.app_name}"
+  path        = "/"
+  description = "Policy for EFKS nodes to use EFS"
+
+  policy = jsonencode({
+    "Statement" : [
+      {
+        "Action" : [
+          "elasticfilesystem:DescribeMountTargets",
+          "elasticfilesystem:DescribeFileSystems",
+          "elasticfilesystem:DescribeAccessPoints",
+          "elasticfilesystem:CreateAccessPoint",
+          "elasticfilesystem:DeleteAccessPoint",
+          "ec2:DescribeAvailabilityZones"
+        ],
+        "Effect" : "Allow",
+        "Resource" : "*",
+        "Sid" : ""
+      }
+    ],
+    "Version" : "2012-10-17"
+    }
+  )
+}
+
 # data "aws_iam_policy" "ebs_csi_policy" {
 #   arn = "arn:aws:iam::aws:policy/service-role/AmazonEBSCSIDriverPolicy"
 # }

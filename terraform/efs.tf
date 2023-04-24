@@ -40,37 +40,16 @@ resource "aws_efs_mount_target" "mount" {
   security_groups = [aws_security_group.efs.id]
 }
 
+resource "aws_efs_mount_target" "mount1" {
+  file_system_id  = aws_efs_file_system.efs.id
+  subnet_id       = module.vpc.private_subnets[1]
+  security_groups = [aws_security_group.efs.id]
+}
+
 
 # 4- Output
 output "efs_id" {
   value = aws_efs_file_system.efs.id
-}
-
-# 5- Create the role policy
-resource "aws_iam_policy" "node_efs_policy" {
-  name        = "eks_node_efs-${var.app_name}"
-  path        = "/"
-  description = "Policy for EFKS nodes to use EFS"
-
-  policy = jsonencode({
-    "Statement" : [
-      {
-        "Action" : [
-          "elasticfilesystem:DescribeMountTargets",
-          "elasticfilesystem:DescribeFileSystems",
-          "elasticfilesystem:DescribeAccessPoints",
-          "elasticfilesystem:CreateAccessPoint",
-          "elasticfilesystem:DeleteAccessPoint",
-          "ec2:DescribeAvailabilityZones"
-        ],
-        "Effect" : "Allow",
-        "Resource" : "*",
-        "Sid" : ""
-      }
-    ],
-    "Version" : "2012-10-17"
-    }
-  )
 }
 
 # 5- Install the efs-csi-driver
