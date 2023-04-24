@@ -466,6 +466,7 @@ storageClass:
   provisioner: k8s.io/minikube-hostpath
   createStorageClass: false
   storageClassName: 'ciroh-storage'
-  annotations: { storageclass.kubernetes.io/is-default-class: 'true' }
+  annotations:
+    storageclass.kubernetes.io/is-default-class: 'true'
   reclaimPolicy: Delete
   parameters: {}

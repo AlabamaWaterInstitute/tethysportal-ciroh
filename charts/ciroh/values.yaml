@@ -67,7 +67,8 @@ thredds:
       init_data: false
       data_archive:
       subpath: 'wmsPalettes'
-
+  storageClass:
+    createClass: false
   persistentVolumeClaim:
     name: 'thredds-pv-claim'
   env:
@@ -209,3 +210,6 @@ storageClass:
   annotations: {}
   reclaimPolicy: Delete
   parameters: {}
+  volumeBindingMode: ''
+  allowVolumeExpansion: ''
+  mountOptions: []
