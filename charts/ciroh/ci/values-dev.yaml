@@ -42,8 +42,13 @@ tethys:
     mde_disclaimer: 'CIROH TERMS OF SERVICE'
     mde_disclaimer_message: 'The MDE is a tethys application under the MIT license'
     global_output_directory: '/usr/lib/tethys_persist'
-    grace_thredds_directory_relative_path: '/thredds_data/ggst/fake_data'
-    grace_thredds_catalog: '/thredds/catalog/ciroh_data/fake_data/catalog.xml'
+    # grace_thredds_directory_relative_path: '/thredds_data/ggst/fake_data'
+    # grace_thredds_catalog: '/thredds/catalog/ciroh_data/fake_data/catalog.xml'
+    thredds_data_relative_path: '/thredds_data/tethys'
+    # relative path to the grace thredds directory: /thredds_data/ggst/fake_data
+    grace_thredds_directory_relative_path: '/thredds_data/tethys/ggst_thredds_directory'
+    # path to the grace thredds directory: /thredds/catalog/ciroh_data/fake_data/catalog.xml
+    grace_thredds_catalog: '/thredds/catalog/ciroh_data/tethys/ggst_thredds_directory/catalog.xml'
     earth_username: 'byugrace'
     earth_pass: 'byuGRACE1'
 thredds:
@@ -58,12 +63,12 @@ thredds:
     # an example of a data archive is the following https://example.com/some/web/thredds_data.tgz
     public:
       init_data: true
-      data_archive: 'https://s3.amazonaws.com/init-data/ciroh/ggst_thredds_directory_small.2023.4.7.tar.gz'
-      subpath: 'fake_data'
+      data_archive: 'https://init-service-data.s3.amazonaws.com/tds_data.tar.gz'
+      subpath: 'tethys'
     wms_palettes:
       # an example of a wmsPalettes archive is the following https://example.com/some/web/wmsPalettes.tgz
       init_data: true
-      data_archive: 'https://s3.amazonaws.com/init-data/ciroh/wmsPalettes.2023.4.7.tar.gz'
+      data_archive: 'https://init-service-data.s3.amazonaws.com/wmsPalettes.tar.gz'
       subpath: 'wmsPalettes'
 
   # Configuration files: catalog.xml, threddsCatalog.xml, wmsConfig.xml, tomcat-users.xml
