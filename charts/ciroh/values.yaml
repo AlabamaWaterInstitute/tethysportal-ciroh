@@ -146,6 +146,7 @@ tethys:
     mde_disclaimer: ''
     mde_disclaimer_message: ''
     global_output_directory: ''
+    thredds_data_relative_path: ''
     grace_thredds_catalog: ''
     grace_thredds_directory_relative_path: ''
     earth_username: ''

@@ -165,7 +165,7 @@ spec:
               mountPath: '/var/lib/tethys_persist'
             {{- if .Values.thredds.data.init_default_config }}  
             - name: thredds-persistent-storage
-              mountPath: '/var/lib/tethys_persist{{ .Values.tethys.settings.grace_thredds_directory_relative_path }}'
+              mountPath: '/var/lib/tethys_persist{{ .Values.tethys.settings.thredds_data_relative_path }}'
               subPath: {{ .Values.thredds.data.public.subpath }}
             {{- end }}
       volumes:

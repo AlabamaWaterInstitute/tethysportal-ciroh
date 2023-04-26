@@ -24,8 +24,8 @@ spec:
   {{- end }}
   rules:
   {{- range .Values.ingresses.external.hosts }}
-    - host: {{ .host | quote }}
-      http:
+    # - host: {{ .host | quote }}
+    - http:
         paths:
           - path: "/"
             pathType: Prefix
