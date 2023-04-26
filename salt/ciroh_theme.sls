@@ -43,7 +43,7 @@ Site_Settings_CIROH_Theme:
 
 Making_Portal_Home_Open:
   cmd.run:
-    - name: tethys settings --set BYPASS_TETHYS_HOME_PAGE "{{ BYPASS_TETHYS_HOME_PAGE }}"
+    - name: tethys settings --set TETHYS_PORTAL_CONFIG.ENABLE_OPEN_PORTAL "{{ ENABLE_OPEN_PORTAL }}"
     - shell: /bin/bash
     - unless: /bin/bash -c "[ -f "{{ TETHYS_PERSIST }}/ciroh_theme_complete" ];"
 
