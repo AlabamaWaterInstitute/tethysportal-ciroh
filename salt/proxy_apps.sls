@@ -1,3 +1,4 @@
+{% set TETHYS_PERSIST = salt['environ.get']('TETHYS_PERSIST') %}
 {% set TETHYS_DB_NAME = salt['environ.get']('TETHYS_DB_NAME') %}
 {% set TETHYS_DB_HOST = salt['environ.get']('TETHYS_DB_HOST') %}
 {% set TETHYS_DB_SUPERUSER = salt['environ.get']('TETHYS_DB_SUPERUSER') %}
