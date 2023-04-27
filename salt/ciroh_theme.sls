@@ -3,7 +3,7 @@
 {% set TETHYS_PUBLIC_HOST = salt['environ.get']('TETHYS_PUBLIC_HOST') %}
 {% set TETHYS_PERSIST = salt['environ.get']('TETHYS_PERSIST') %}
 
-{% set BYPASS_TETHYS_HOME_PAGE = salt['environ.get']('BYPASS_TETHYS_HOME_PAGE') %}
+{% set ENABLE_OPEN_PORTAL = salt['environ.get']('ENABLE_OPEN_PORTAL') %}
 
 
 {% set HERO_TEXT = salt['environ.get']('HERO_TEXT') %}
