@@ -18,6 +18,17 @@ app_name = "tethysportal"
 helm_chart = "./helm_package.tgz"  # add helm package to working directory
 helm_values_file = "./values.yaml"  # add custom values.yaml to working directory
 ```
+or
+
+```yaml
+region = "aws_region"
+profile = "aws_profile"
+cluster_name = "tethysportal-ciroh"
+app_name = "tethysportal"
+helm_chart = "chart_name"
+helm_repo = "url_to_helm_repo"
+helm_values_file = "./values.yaml"  # add custom values.yaml to working directory
+```
 
 How to Run
 ----------
@@ -28,3 +39,9 @@ Configure kubectl
 -----------------
 
 `aws eks update-kubeconfig --name <cluster_name> --region <region> --profile <profile>`
+
+Specify kubeconfig for Terraform
+--------------------------------
+
+- Unix: KUBE_CONFIG_PATH=/path/to/kubeconfig
+- Powershell: $Env:KUBE_CONFIG_PATH=/path/to/kubeconfig
