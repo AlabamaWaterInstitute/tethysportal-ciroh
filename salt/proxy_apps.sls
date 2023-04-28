@@ -41,7 +41,7 @@
 Add_Proxy_Apps:
   cmd.run:
     - name: >
-        PGPASSWORD={{ TETHYS_DB_SUPERUSER_PASS }} psql -U {{ TETHYS_DB_SUPERUSER}} -d {{ TETHYS_DB_NAME }} -h {{ TETHYS_DB_HOST }} -c \
+        PGPASSWORD="{{ TETHYS_DB_SUPERUSER_PASS }}" psql -U {{ TETHYS_DB_SUPERUSER}} -d {{ TETHYS_DB_NAME }} -h {{ TETHYS_DB_HOST }} -c \
         "INSERT into tethys_apps_proxyapp (id,name,endpoint,logo_url,description,tags,enabled,show_in_apps_library,\"order\",back_url,open_in_new_tab) \
         VALUES (1, {{ PROXY_APP_1_NAME }}, {{ PROXY_APP_1_ENDPOINT }}, {{ PROXY_APP_1_LOGO_URL }}, {{ PROXY_APP_1_DESCRIPTION }}, {{ PROXY_APP_1_TAGS }}, {{ PROXY_APP_1_ENABLED }}, {{ PROXY_APP_1_SHOW_IN_APPS_LIBRARY }}, {{ PROXY_APP_1_ORDER }}, {{ PROXY_APP_1_BACK_URL }}, {{ PROXY_APP_1_OPEN_IN_NEW_TAB }}), \
         VALUES (2, {{ PROXY_APP_2_NAME }}, {{ PROXY_APP_2_ENDPOINT }}, {{ PROXY_APP_2_LOGO_URL }}, {{ PROXY_APP_2_DESCRIPTION }}, {{ PROXY_APP_2_TAGS }}, {{ PROXY_APP_2_ENABLED }}, {{ PROXY_APP_2_SHOW_IN_APPS_LIBRARY }}, {{ PROXY_APP_2_ORDER }}, {{ PROXY_APP_2_BACK_URL }}, {{ PROXY_APP_2_OPEN_IN_NEW_TAB }}), \
