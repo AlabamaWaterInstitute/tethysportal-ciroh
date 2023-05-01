@@ -55,7 +55,7 @@ output "efs_id" {
 module "attach_efs_csi_role" {
   source = "terraform-aws-modules/iam/aws//modules/iam-role-for-service-accounts-eks"
 
-  role_name             = "efs-csi-${terraform.workspace}"
+  role_name             = "efs-csi-${var.environment}"
   attach_efs_csi_policy = true
 
   oidc_providers = {
