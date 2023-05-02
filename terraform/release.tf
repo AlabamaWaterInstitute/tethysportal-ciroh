@@ -52,19 +52,23 @@ resource "kubernetes_annotations" "make-default-storageclass" {
   annotations = {
     "storageclass.kubernetes.io/is-default-class" = "true"
   }
+  depends_on = [
+    helm_release.tethysportal_helm_release
+  ]
+
 }
 
-# resource "helm_release" "tethysportal_helm_release" {
-#   name       = "${var.app_name}-${var.environment}"
-#   chart      = var.helm_chart
-#   repository = var.helm_repo
-#   namespace  = var.app_name
-#   timeout    = 900
+resource "helm_release" "tethysportal_helm_release" {
+  name       = "${var.app_name}-${var.environment}"
+  chart      = var.helm_chart
+  repository = var.helm_repo
+  namespace  = var.app_name
+  timeout    = 900
 
-#   values = [
-#     file(var.helm_values_file)
-#   ]
-# }
+  values = [
+    file(var.helm_values_file)
+  ]
+}
 
 resource "aws_iam_policy" "worker_policy" {
   name        = "worker-policy-${var.environment}"
