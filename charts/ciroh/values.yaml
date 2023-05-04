@@ -34,7 +34,8 @@ geoserver:
       cpu: '1'
     limits:
       memory: '4Gi'
-
+  storageClass:
+    storageClassName: ''
 thredds:
   fullnameOverride: 'ciroh-tds'
   thredds_tds_catalog: '/thredds/catalog/ciroh_data/thredds_data/catalog.xml'
@@ -69,6 +70,7 @@ thredds:
       subpath: 'wmsPalettes'
   storageClass:
     createClass: false
+    storageClassName: ''
   persistentVolumeClaim:
     name: 'thredds-pv-claim'
   env:
@@ -112,7 +114,8 @@ postgis:
     limits:
       cpu: 2
       memory: 4Gi
-
+  storageClass:
+    storageClassName: ''
 redis:
   fullnameOverride: 'ciroh-redis'
   architecture: standalone
