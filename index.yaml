@@ -3,13 +3,13 @@ entries:
   ciroh:
   - apiVersion: v2
     appVersion: 0.0.1
-    created: "2023-05-04T23:02:28.788379894Z"
+    created: "2023-05-05T04:01:08.429738682Z"
     dependencies:
     - name: postgis
-      repository: oci://ghcr.io/aquaveo
+      repository: oci://ghcr.io/romer8
       version: '*'
     - name: geoserver
-      repository: oci://ghcr.io/aquaveo
+      repository: oci://ghcr.io/romer8
       version: '*'
     - name: thredds
       repository: oci://ghcr.io/aquaveo
@@ -18,10 +18,10 @@ entries:
       repository: https://charts.bitnami.com/bitnami
       version: '*'
     description: Tethys portal for CIROH
-    digest: 1b0e019faaace3833f4644b2ffd8bacb14fa863bfc78c7b5bf49ca0fc2f0a69c
+    digest: 2dfd72898d380e6fbe88182cc25067fdd19a1e326f03047ea9e8a40cdfadce96
     name: ciroh
     type: application
     urls:
     - https://AlabamaWaterInstitute.github.io/tethysportal-ciroh/ciroh-0.1.6.tgz
     version: 0.1.6
-generated: "2023-05-04T23:02:28.778124327Z"
+generated: "2023-05-05T04:01:08.416833644Z"
