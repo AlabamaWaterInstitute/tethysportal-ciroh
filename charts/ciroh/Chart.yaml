@@ -6,10 +6,10 @@ type: application
 version: 0.1.6
 dependencies:
   - name: 'postgis'
-    repository: 'oci://ghcr.io/aquaveo'
+    repository: 'oci://ghcr.io/romer8'
     version: '*'
   - name: 'geoserver'
-    repository: 'oci://ghcr.io/aquaveo'
+    repository: 'oci://ghcr.io/romer8'
     version: '*'
   - name: 'thredds'
     repository: 'oci://ghcr.io/aquaveo'
