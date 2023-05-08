@@ -28,9 +28,9 @@ resource "aws_security_group" "efs" {
     protocol    = "-1"
   }
 
-  depends_on = [
-    module.vpc
-  ]
+  # depends_on = [
+  #   module.vpc
+  # ]
 }
 
 # 3- Set EFS mount target
@@ -44,12 +44,6 @@ resource "aws_efs_mount_target" "mount1" {
   file_system_id  = aws_efs_file_system.efs.id
   subnet_id       = module.vpc.private_subnets[1]
   security_groups = [aws_security_group.efs.id]
-}
-
-
-# 4- Output
-output "efs_id" {
-  value = aws_efs_file_system.efs.id
 }
 
 module "attach_efs_csi_role" {
