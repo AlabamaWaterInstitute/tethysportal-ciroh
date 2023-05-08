@@ -52,7 +52,7 @@ resource "kubernetes_namespace" "tethysportal" {
   }
   provisioner "local-exec" {
     when    = destroy
-    command = "nohup ${path.module}/namespace-finalizer.sh ${each.key} 2>&1 &"
+    command = "nohup ${path.module}/scripts/namespace-finalizer.sh ${each.key} 2>&1 &"
   }
 }
 
