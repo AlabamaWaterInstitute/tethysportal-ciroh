@@ -13,7 +13,7 @@
 [submodule "tethysapp-tethys_app_store"]
 	path = tethysapp-tethys_app_store
 	url = https://github.com/Aquaveo/tethysapp-tethys_app_store.git
-	branch = master
+	branch = multiple_stores
 [submodule "tethysapp-swe"]
 	path = tethysapp-swe
 	url = https://github.com/Aquaveo/tethysapp-swe.git
