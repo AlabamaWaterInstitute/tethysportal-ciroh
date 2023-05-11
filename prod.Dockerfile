@@ -1,4 +1,4 @@
-FROM tethysplatform/tethys-core:latest as base
+FROM tethysplatform/tethys-core:dev as base
 
 
 #########################
@@ -48,7 +48,7 @@ RUN pip install --no-cache-dir --quiet -r piprequirements.txt && \
     find ${CONDA_HOME}/envs/${CONDA_ENV_NAME}/lib/python3.10/site-packages/pandas -name 'tests' -type d -exec rm -rf '{}' '+' && \
     find ${CONDA_HOME}/envs/${CONDA_ENV_NAME}/lib/python3.10/site-packages -name '*.pyx' -delete && \
     rm -rf ${CONDA_HOME}/envs/${CONDA_ENV_NAME}/lib/python3.10/site-packages/uvloop/loop.c
-FROM tethysplatform/tethys-core:latest as build
+FROM tethysplatform/tethys-core:dev as build
 ###########################
 # RUN SUPERVISORD AS ROOT #
 ###########################
