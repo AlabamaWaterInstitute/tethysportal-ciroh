@@ -11,6 +11,7 @@ COPY ggst ${TETHYS_HOME}/apps/ggst
 COPY tethysapp-swe ${TETHYS_HOME}/apps/tethysapp-swe
 
 COPY piprequirements.txt .
+COPY config/tethys/tmp_app_store_files/conda_install.sh ${TETHYS_HOME}
 
 ###################
 # ADD THEME FILES #
@@ -39,24 +40,26 @@ RUN pip install --no-cache-dir --quiet -r piprequirements.txt && \
     conda clean --all --yes && \
     rm -rf /var/lib/apt/lists/* && \
     find -name '*.a' -delete && \
+    export PYTHON_SITE_PACKAGE_PATH=$(${CONDA_HOME}/envs/${CONDA_ENV_NAME}/bin/python -m site | grep -a -m 1 "site-packages" | head -1 | sed 's/.$//' | sed -e 's/^\s*//' -e '/^$/d'| sed 's![^/]*$!!' | cut -c2-) &&\
+    mv -f ${TETHYS_HOME}/conda_install.sh $PYTHON_SITE_PACKAGE_PATH/site-packages/tethysapp/app_store/scripts/conda_install.sh &&\
     rm -rf ${CONDA_HOME}/envs/${CONDA_ENV_NAME}/conda-meta && \
     rm -rf ${CONDA_HOME}/envs/${CONDA_ENV_NAME}/include && \
     find -name '__pycache__' -type d -exec rm -rf '{}' '+' && \
-    rm -rf ${CONDA_HOME}/envs/${CONDA_ENV_NAME}/lib/python3.10/site-packages/pip ${CONDA_HOME}/envs/${CONDA_ENV_NAME}/lib/python3.10/idlelib ${CONDA_HOME}/envs/${CONDA_ENV_NAME}/lib/python3.10/ensurepip && \
-    find ${CONDA_HOME}/envs/${CONDA_ENV_NAME}/lib/python3.10/site-packages/scipy -name 'tests' -type d -exec rm -rf '{}' '+' && \
-    find ${CONDA_HOME}/envs/${CONDA_ENV_NAME}/lib/python3.10/site-packages/numpy -name 'tests' -type d -exec rm -rf '{}' '+' && \
-    find ${CONDA_HOME}/envs/${CONDA_ENV_NAME}/lib/python3.10/site-packages/pandas -name 'tests' -type d -exec rm -rf '{}' '+' && \
-    find ${CONDA_HOME}/envs/${CONDA_ENV_NAME}/lib/python3.10/site-packages -name '*.pyx' -delete && \
-    rm -rf ${CONDA_HOME}/envs/${CONDA_ENV_NAME}/lib/python3.10/site-packages/uvloop/loop.c
+    rm -rf $PYTHON_SITE_PACKAGE_PATH/site-packages/pip $PYTHON_SITE_PACKAGE_PATH/idlelib $PYTHON_SITE_PACKAGE_PATH/ensurepip && \
+    find $PYTHON_SITE_PACKAGE_PATH/site-packages/scipy -name 'tests' -type d -exec rm -rf '{}' '+' && \
+    find $PYTHON_SITE_PACKAGE_PATH/site-packages/numpy -name 'tests' -type d -exec rm -rf '{}' '+' && \
+    find $PYTHON_SITE_PACKAGE_PATH/site-packages/pandas -name 'tests' -type d -exec rm -rf '{}' '+' && \
+    find $PYTHON_SITE_PACKAGE_PATH/site-packages -name '*.pyx' -delete && \
+    rm -rf $PYTHON_SITE_PACKAGE_PATH/uvloop/loop.c
 FROM tethysplatform/tethys-core:dev as build
 ###########################
 # RUN SUPERVISORD AS ROOT #
 ###########################
-COPY --chown=www:www --from=base /opt/conda/envs/tethys /opt/conda/envs/tethys
-COPY config/tethys/asgi_supervisord.conf /var/lib/tethys_persist/asgi_supervisord.conf
+COPY --chown=www:www --from=base ${CONDA_HOME}/envs/${CONDA_ENV_NAME} ${CONDA_HOME}/envs/${CONDA_ENV_NAME}
+COPY config/tethys/asgi_supervisord.conf ${TETHYS_PERSIST}/asgi_supervisord.conf
 COPY config/tethys/supervisord.conf /etc/supervisor/supervisord.conf
-COPY config/tethys/tmp_app_store_files/stores.json /opt/conda/envs/tethys/lib/python3.10/site-packages/tethysapp/app_store/workspaces/app_workspace/stores.json
-COPY config/tethys/tmp_app_store_files/conda_install.sh /opt/conda/envs/tethys/lib/python3.10/site-packages/tethysapp/app_store/scripts/conda_install.sh
+# COPY config/tethys/tmp_app_store_files/stores.json /opt/conda/envs/tethys/lib/python3.10/site-packages/tethysapp/app_store/workspaces/app_workspace/stores.json
+# COPY config/tethys/tmp_app_store_files/conda_install.sh /opt/conda/envs/tethys/lib/python3.10/site-packages/tethysapp/app_store/scripts/conda_install.sh
 COPY salt/ /srv/salt/
 
 # Activate tethys conda environment during build
