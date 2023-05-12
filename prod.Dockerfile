@@ -58,8 +58,6 @@ FROM tethysplatform/tethys-core:dev as build
 COPY --chown=www:www --from=base ${CONDA_HOME}/envs/${CONDA_ENV_NAME} ${CONDA_HOME}/envs/${CONDA_ENV_NAME}
 COPY config/tethys/asgi_supervisord.conf ${TETHYS_PERSIST}/asgi_supervisord.conf
 COPY config/tethys/supervisord.conf /etc/supervisor/supervisord.conf
-# COPY config/tethys/tmp_app_store_files/stores.json /opt/conda/envs/tethys/lib/python3.10/site-packages/tethysapp/app_store/workspaces/app_workspace/stores.json
-# COPY config/tethys/tmp_app_store_files/conda_install.sh /opt/conda/envs/tethys/lib/python3.10/site-packages/tethysapp/app_store/scripts/conda_install.sh
 COPY salt/ /srv/salt/
 
 # Activate tethys conda environment during build

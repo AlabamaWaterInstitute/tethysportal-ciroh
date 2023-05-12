@@ -25,6 +25,10 @@
 {% set EARTHDATA_USERNAME = salt['environ.get']('EARTHDATA_USERNAME')%}
 {% set EARTHDATA_PASS = salt['environ.get']('EARTHDATA_PASS')%}
 
+{% set ENCRYPTION_KEY = salt['environ.get']('ENCRYPTION_KEY')%}
+{% set STORES_JSON_STRING = salt['environ.get']('STORES_JSON_STRING')%}
+
+
 {% set POSTGIS_SERVICE_NAME = 'tethys_postgis' %}
 
 
@@ -58,7 +62,9 @@ Set_Custom_Settings:
         tethys app_settings set ggst global_output_directory {{ TETHYS_PERSIST }} &&
         tethys app_settings set ggst earthdata_username {{ EARTHDATA_USERNAME }} &&
         tethys app_settings set ggst earthdata_pass {{ EARTHDATA_PASS }} &&
-        tethys app_settings set ggst conda_python_path {{ CONDA_PYTHON_PATH }}
+        tethys app_settings set ggst conda_python_path {{ CONDA_PYTHON_PATH }} &&
+        tethys app_settings set app_store encryption_key {{ ENCRYPTION_KEY }} &&
+        tethys app_settings set app_store stores_settings {{ STORES_JSON_STRING }}
     - shell: /bin/bash
     - unless: /bin/bash -c "[ -f "{{ TETHYS_PERSIST }}/init_apps_setup_complete" ];"
 
