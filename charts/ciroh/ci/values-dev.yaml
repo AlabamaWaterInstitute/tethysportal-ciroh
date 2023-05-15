@@ -51,6 +51,8 @@ tethys:
     grace_thredds_catalog: '/thredds/catalog/ciroh_data/tethys/ggst_thredds_directory/catalog.xml'
     earth_username: 'byugrace'
     earth_pass: 'byuGRACE1'
+    encryption_key: ''
+    stores_settings: ''
     proxy_app_1_name: 'OWP NWM Map Viewer'
     proxy_app_1_endpoint: 'https://water.noaa.gov/map'
     # proxy_app_1_logo_url: 'https://avatars.githubusercontent.com/u/60660814?s=200&v=4'

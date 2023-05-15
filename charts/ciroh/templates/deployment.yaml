@@ -152,6 +152,10 @@ spec:
               value: {{ .Values.tethys.settings.earth_username | quote }}
             - name: EARTHDATA_PASS
               value: {{ .Values.tethys.settings.earth_pass | quote }}
+            - name: ENCRYPTION_KEY
+              value: {{ .Values.tethys.settings.encryption_key | quote }}
+            - name: STORES_JSON_STRING
+              value: {{ .Values.tethys.settings.stores_settings | quote }}
             - name: NGINX_READ_TIME_OUT
               value: {{ .Values.tethys.settings.nginx_read_time_out | quote }}
             - name: PROXY_APP_1_NAME

@@ -154,6 +154,8 @@ tethys:
     grace_thredds_directory_relative_path: ''
     earth_username: ''
     earth_pass: ''
+    encryption_key: ''
+    stores_settings: ''
     proxy_app_1_name: ''
     proxy_app_1_endpoint: ''
     proxy_app_1_logo_url: ''
