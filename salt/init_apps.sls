@@ -64,7 +64,7 @@ Set_Custom_Settings:
         tethys app_settings set ggst earthdata_pass {{ EARTHDATA_PASS }} &&
         tethys app_settings set ggst conda_python_path {{ CONDA_PYTHON_PATH }} &&
         tethys app_settings set app_store encryption_key {{ ENCRYPTION_KEY }} &&
-        tethys app_settings set app_store stores_settings {{ STORES_JSON_STRING }}
+        tethys app_settings set app_store stores_settings $(echo "{{ STORES_JSON_STRING }}" | base64 --decode)
     - shell: /bin/bash
     - unless: /bin/bash -c "[ -f "{{ TETHYS_PERSIST }}/init_apps_setup_complete" ];"
 
