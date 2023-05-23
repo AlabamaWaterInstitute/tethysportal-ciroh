@@ -21,15 +21,38 @@ with open("$TETHYS_PERSIST_HOME/portal_config.yaml") as portal_configuration:
         ymlportal = yaml.safe_load(portal_configuration)
         if not ymlportal['apps']:
             ymlportal['apps'] = ymlportal_changes['apps']
-
+        else:
+            print("update the changes now")
 with open("$TETHYS_PERSIST_HOME/portal_config.yaml", "w") as portal_configuration:
     yaml.dump(ymlportal, portal_configuration)
 END
 )
+
+
 update_with_changes="$(python3 -c "$INIT_UPDATE")"
 
 
+# Python code to convert JSON string to a dictionary
+ADD_DATA=$(cat <<EOF
+import json
+import sys
 
+# Read JSON string from command-line argument
+print(sys.argv[1])
+
+json_string = sys.argv[1]
+
+# Convert JSON string to dictionary
+data = json.loads(json_string)
+
+# Print the dictionary
+print(data)
+EOF
+)
+
+
+# Print the dictionary string
+echo "$dict_string"
 
 for app_installed in ${apps_arr[@]:1}; do 
 
@@ -40,11 +63,11 @@ for app_installed in ${apps_arr[@]:1}; do
     # echo "$output"
     # Extract unlinked settings
     unlinked_settings=$(echo "$output" | awk '/Unlinked Settings:/{flag=1; next} /Linked Settings:/{flag=0} flag')
-    echo $unlinked_settings
+    # echo $unlinked_settings
     # Extract linked settings
     linked_settings=$(echo "$output" | awk '/Linked Settings:/{flag=1; next} flag')
-    echo $linked_settings
-    echo "-------"
+    # echo $linked_settings
+    # echo "-------"
     # Parse unlinked settings
     IFS=$'\n'
     unlinked_array=()
@@ -67,15 +90,18 @@ for app_installed in ${apps_arr[@]:1}; do
         linked_array+=("{\"ID\": \"$id\", \"Name\": \"$name\", \"Type\": \"$type\", \"Linked With\": \"$linked_with\"}")
     done
 
-    # Print the arrays
-    echo "Unlinked Settings:"
-    for item in "${unlinked_array[@]}"; do
-        echo "$item"
-    done
+    # # Output the arrays
+    # echo "Unlinked Settings:"
+    # for item in "${unlinked_array[@]}"; do
+    #     echo "$item" | sed "s/'/\"/g"
+        
+    # done
 
     echo "Linked Settings:"
     for item in "${linked_array[@]}"; do
-        echo "$item"
+        # echo "$item" | sed "s/'/\"/g"
+        update_linked_settings="$(python3 -c "$ADD_DATA" $(echo "$item" | sed "s/'/\"/g"))"
+
     done
     
 done

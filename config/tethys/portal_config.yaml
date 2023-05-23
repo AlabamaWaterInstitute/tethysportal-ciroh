@@ -1,0 +1,64 @@
+apps:
+  ggst:
+    services:
+      custom_settings:
+        conda_python_path: '{{ CONDA_HOME }} + "/envs/" + {{ CONDA_ENV_NAME }} + "/bin/python"'
+        earthdata_pass: byuGRACE1
+        earthdata_username: byugrace
+        global_output_directory: /usr/lib/tethys
+        grace_thredds_catalog: /thredds_data/tethys/ggst_thredds_directory
+        grace_thredds_directory: /thredds/catalog/ciroh_data/tethys/ggst_thredds_directory/catalog.xml
+      dataset: {}
+      persistent: {}
+      spatial: {}
+      wps: {}
+  metdataexplorer:
+    services:
+      custom_settings:
+        disclaimer_header: CIROH TERMS OF SERVICE
+        disclaimer_message: The MDE is a tethys application under the MIT license
+      dataset: {}
+      persistent:
+        thredds_db: tethys_postgis
+      spatial: {}
+      wps: {}
+  swe:
+    services:
+      custom_settings: {}
+      dataset: {}
+      persistent: {}
+      spatial:
+        thredds_service: tethys_thredds
+      wps: {}
+  water_data_explorer:
+    services:
+      custom_settings: {}
+      dataset: {}
+      persistent:
+        catalog_db: tethys_postgis
+      spatial: {}
+      wps: {}
+name: None
+settings:
+  CHANNEL_LAYERS:
+    default:
+      BACKEND: channels_redis.core.RedisChannelLayer
+      CONFIG:
+        hosts:
+        - redis://localhost:6379
+  DATABASES:
+    default:
+      DIR: psql
+      ENGINE: django.db.backends.postgresql
+      HOST: localhost
+      NAME: tethys_platform
+      PASSWORD: pass
+      PORT: 5436
+      USER: tethys_super
+  SECRET_KEY: Y8VPTDqgHsrblKlIOuJhUTfNOVOGP5liTHu1p3Pz5HZ41YdC9g
+site_settings:
+  CUSTOM_STYLES: {}
+  CUSTOM_TEMPLATES: {}
+  GENERAL_SETTINGS: {}
+  HOME_PAGE: {}
+version: 2.0
