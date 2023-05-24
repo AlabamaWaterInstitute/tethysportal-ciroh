@@ -1,14 +1,17 @@
 apps:
   app_store:
     services:
-      custom_settings:
-        encryption_key: holaasfasgasfg
-        stores_settings: {}
-        sudo_server_pass: None
+      custom_settings: {}
+  metdataexplorer:
+    services:
+      custom_settings: {}
+      persistent: {}
   reservoirs:
     services:
-      custom_settings:
-        Hydroser_Endpoint: None
+      custom_settings: {}
+  swe:
+    services:
+      custom_settings: {}
 name: None
 settings:
   CHANNEL_LAYERS:

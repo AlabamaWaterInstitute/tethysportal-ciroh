@@ -52,8 +52,25 @@ apps:
   reservoirs:
     services:
       persistent: {}
+      spatial: {}
+      dataset: {}
+      wps: {}
+      custom_settings: {}
+  metdataexplorer:
+    services:
+      persistent:
+        thredds_db: psql
+      spatial: {}
+      dataset: {}
+      wps: {}
+      custom_settings:
+        disclaimer_header: 'CIROH TERMS OF SERVICE'
+        disclaimer_message: 'The MDE is a tethys application under the MIT license'
+  swe:
+    services:
+      persistent: {}
       spatial:
-        thredds_service: tethys_thredds
+        thredds_service: tds
       dataset: {}
       wps: {}
       custom_settings: {}
