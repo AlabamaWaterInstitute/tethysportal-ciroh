@@ -13,43 +13,26 @@ apps_strings=$(echo $(tethys list) | grep 'Apps:')
 # echo $apps_strings
 apps_arr=($apps_strings)
 
-INIT_UPDATE=$(cat <<END
-import yaml
-with open("$TETHYS_PERSIST_HOME/portal_config.yaml") as portal_configuration:
-    with open("$TETHYS_PERSIST_HOME/portal_changes.yaml") as portal_changes:
-        ymlportal_changes = yaml.safe_load(portal_changes)
-        ymlportal = yaml.safe_load(portal_configuration)
-        if not ymlportal['apps']:
-            ymlportal['apps'] = ymlportal_changes['apps']
-        else:
-            print("update the changes now")
-with open("$TETHYS_PERSIST_HOME/portal_config.yaml", "w") as portal_configuration:
-    yaml.dump(ymlportal, portal_configuration)
-END
-)
+# INIT_UPDATE=$(cat <<END
+# import yaml
+# with open("$TETHYS_PERSIST_HOME/portal_config.yaml") as portal_configuration:
+#     with open("$TETHYS_PERSIST_HOME/portal_changes.yaml") as portal_changes:
+#         ymlportal_changes = yaml.safe_load(portal_changes)
+#         ymlportal = yaml.safe_load(portal_configuration)
+#         if not ymlportal['apps']:
+#             ymlportal['apps'] = ymlportal_changes['apps']
+#         else:
+#             print("update the changes now")
+# with open("$TETHYS_PERSIST_HOME/portal_config.yaml", "w") as portal_configuration:
+#     yaml.dump(ymlportal, portal_configuration)
+# END
+# )
 
 
-update_with_changes="$(python3 -c "$INIT_UPDATE")"
+# update_with_changes="$(python3 -c "$INIT_UPDATE")"
 
 
 # Python code to convert JSON string to a dictionary
-ADD_DATA=$(cat <<EOF
-import json
-import sys
-
-# Read JSON string from command-line argument
-print(sys.argv[1])
-
-json_string = sys.argv[1]
-
-# Convert JSON string to dictionary
-data = json.loads(json_string)
-
-# Print the dictionary
-print(data)
-EOF
-)
-
 
 # Print the dictionary string
 echo "$dict_string"
@@ -97,12 +80,49 @@ for app_installed in ${apps_arr[@]:1}; do
         
     # done
 
-    echo "Linked Settings:"
-    for item in "${linked_array[@]}"; do
-        # echo "$item" | sed "s/'/\"/g"
-        update_linked_settings="$(python3 -c "$ADD_DATA" $(echo "$item" | sed "s/'/\"/g"))"
 
+    for ((i=0; i<${#linked_array[@]}; i++)); do
+        linked_array[$i]="${linked_array[$i]//\'/\"}"
+        # linked_array[$i]="${linked_array[$i]//\"/\\\"}"
     done
+
+    for ((i=0; i<${#unlinked_array[@]}; i++)); do
+        ulinked_array[$i]="${ulinked_array[$i]//\'/\"}"
+        # ulinked_array[$i]="${ulinked_array[$i]//\"/\\\"}"
+    done
+    # echo "${linked_array[@]}"
+
+    if (( ${#linked_array[@]} )); then
+        update_settings="$(python3 "$TETHYS_PERSIST_HOME/update_settings.py" --app_name "$app_installed" --linked_settings "${linked_array[@]:1}")"
+    fi
+
+    # if (( ${#linked_array[@]} )) && (( ${#unlinked_array[@]} )); then
+    #     echo "we have both"
+    #     update_settings="$(python3 "$TETHYS_PERSIST_HOME/update_settings.py" --app_name "$app_installed" --linked_settings "${linked_array[@]}" --unlinked_settings "${unlinked_array[@]}")"
+    # elif (( ${#linked_array[@]} ))
+    # then
+    #     echo "we have linked"
+    #     update_settings="$(python3 "$TETHYS_PERSIST_HOME/update_settings.py" --app_name "$app_installed" --linked_settings "${linked_array[@]}")"
+    # elif (( ${#unlinked_array[@]} ))
+    # then
+    #     echo "we have unlinked"
+    #     update_settings="$(python3 "$TETHYS_PERSIST_HOME/update_settings.py" --app_name "$app_installed" --unlinked_settings "${unlinked_array[@]}")"
+    # fi
+
+
+    # update_settings="$(python3 "$TETHYS_PERSIST_HOME/update_settings.py" --app_name "$app_installed" --linked_settings "${linked_array[@]}" --unlinked_settings "${unlinked_array[@]}")"
+    echo "$update_settings"
+
+    # echo "Linked Settings:"
+    # for item in "${linked_array[@]}"; do
+    #     # echo $item
+    #     #replace all single quotes to double quotes
+    #     setting_val=$(echo "$item" | sed "s/'/\"/g")
+    #     #escape double quotes
+    #     setting_val=${setting_val//\"/\\\"}
+    #     update_linked_settings="$(python3 "$TETHYS_PERSIST_HOME/update_settings.py" "\"$setting_val\"")"
+
+    # done
     
 done
 

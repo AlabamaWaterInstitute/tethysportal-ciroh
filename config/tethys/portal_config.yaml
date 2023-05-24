@@ -1,43 +1,9 @@
 apps:
-  ggst:
+  app_store:
     services:
       custom_settings:
-        conda_python_path: '{{ CONDA_HOME }} + "/envs/" + {{ CONDA_ENV_NAME }} + "/bin/python"'
-        earthdata_pass: byuGRACE1
-        earthdata_username: byugrace
-        global_output_directory: /usr/lib/tethys
-        grace_thredds_catalog: /thredds_data/tethys/ggst_thredds_directory
-        grace_thredds_directory: /thredds/catalog/ciroh_data/tethys/ggst_thredds_directory/catalog.xml
-      dataset: {}
-      persistent: {}
-      spatial: {}
-      wps: {}
-  metdataexplorer:
-    services:
-      custom_settings:
-        disclaimer_header: CIROH TERMS OF SERVICE
-        disclaimer_message: The MDE is a tethys application under the MIT license
-      dataset: {}
-      persistent:
-        thredds_db: tethys_postgis
-      spatial: {}
-      wps: {}
-  swe:
-    services:
-      custom_settings: {}
-      dataset: {}
-      persistent: {}
-      spatial:
-        thredds_service: tethys_thredds
-      wps: {}
-  water_data_explorer:
-    services:
-      custom_settings: {}
-      dataset: {}
-      persistent:
-        catalog_db: tethys_postgis
-      spatial: {}
-      wps: {}
+        Name: Linked With
+        encryption_key: ImM4THZJdmlKdHFfMVJheGp6N05uZkdqeFd4OURQWGZPM2ZqcGtKWjdQMUk9Ig:Ho-6nxM4759OhbgMNPeA_yAVJs04hIqCHcxDudvBMWI
 name: None
 settings:
   CHANNEL_LAYERS:
