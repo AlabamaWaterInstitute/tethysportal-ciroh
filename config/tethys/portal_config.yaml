@@ -3,12 +3,12 @@ apps:
     services:
       custom_settings:
         encryption_key: holaasfasgasfg
-        stores_settings: '{"key1": "value1", "key2": "value2", "key3": 3}'
-        sudo_server_pass: {}
+        stores_settings: {}
+        sudo_server_pass: None
   reservoirs:
     services:
       custom_settings:
-        Hydroser_Endpoint: {}
+        Hydroser_Endpoint: None
 name: None
 settings:
   CHANNEL_LAYERS:

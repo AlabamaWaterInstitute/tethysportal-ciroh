@@ -28,9 +28,10 @@ def check_for_json_setting(current_setting):
     setting_type = current_setting['Type']
 
     if setting_type == 'json_custom_setting':
-        setting_new_value = json.dumps(current_setting['Linked With'])
+        setting_new_value = current_setting.get('Linked With', {})
+        setting_new_value = json.dumps(setting_new_value)
     else:
-        setting_new_value = current_setting.get('Linked With', None)
+        setting_new_value = current_setting.get('Linked With', 'None')
     return setting_new_value
 
 def update_state(array_string,app_name):
@@ -61,10 +62,12 @@ def update_settings(current_setting, app_name):
         # #Update using the portal changes yaml file
         with open(portal_change_path) as portal_changes:
             ymlportal_changes = yaml.safe_load(portal_changes)
-            new_val_for_setting = ymlportal_changes.get('apps',{}).get(f'{app_name}',{}).get('services',{}).get('custom_settings',{}).get(setting_name,{})
+            new_val_for_setting = ymlportal_changes.get('apps',{}).get(f'{app_name}',{}).get('services',{}).get('custom_settings',{}).get(setting_name,'None')
             if not new_val_for_setting is False:
                 logging.info(f'{app_name} updating with the portal_change.yaml file')
-                setting_new_value = new_val_for_setting 
+                setting_new_value = new_val_for_setting
+                if current_setting['Type'] == 'json_custom_setting':
+                    setting_new_value = {}
         # logging.info(f'{setting_new_value}')
 
         change_single_setting(ymlportal,app_name,setting_name,setting_new_value)
