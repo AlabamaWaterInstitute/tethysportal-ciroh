@@ -2,8 +2,13 @@ apps:
   app_store:
     services:
       custom_settings:
-        Name: Linked With
-        encryption_key: ImM4THZJdmlKdHFfMVJheGp6N05uZkdqeFd4OURQWGZPM2ZqcGtKWjdQMUk9Ig:Ho-6nxM4759OhbgMNPeA_yAVJs04hIqCHcxDudvBMWI
+        encryption_key: holaasfasgasfg
+        stores_settings: '{"key1": "value1", "key2": "value2", "key3": 3}'
+        sudo_server_pass: {}
+  reservoirs:
+    services:
+      custom_settings:
+        Hydroser_Endpoint: {}
 name: None
 settings:
   CHANNEL_LAYERS:
