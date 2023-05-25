@@ -27,20 +27,20 @@ ARG MAMBA_DOCKERFILE_ACTIVATE=1
 #######################################
 RUN pip install --no-cache-dir --quiet -r piprequirements.txt && \
     conda install --yes -c conda-forge udunits2 && \
-    # micromamba install --yes -c conda-forge --file requirements.txt && \
+    # micromamba install --yes -c conda-forge --file requirements.txt --> problem installing with microbamba, but pip is working well but unstable
+    export PYTHON_SITE_PACKAGE_PATH=$(${CONDA_HOME}/envs/${CONDA_ENV_NAME}/bin/python -m site | grep -a -m 1 "site-packages" | head -1 | sed 's/.$//' | sed -e 's/^\s*//' -e '/^$/d'| sed 's![^/]*$!!' | cut -c2-) &&\
     cd ${TETHYS_HOME}/extensions/tethysext-ciroh_theme && python setup.py install && \
-    cd ${TETHYS_HOME}/apps/Water-Data-Explorer && tethys install -w -N && \
-    cd ${TETHYS_HOME}/apps/tethysapp-tethys_app_store && tethys install -w -N && \
-    cd ${TETHYS_HOME}/apps/ggst && tethys install -w -N && \
-    cd ${TETHYS_HOME}/apps/tethysapp-metdataexplorer && tethys install -w -N  && \
-    cd ${TETHYS_HOME}/apps/tethysapp-swe && tethys install -w -N  && \
+    cd ${TETHYS_HOME}/apps/Water-Data-Explorer && tethys install -w -N && cp install.yml $PYTHON_SITE_PACKAGE_PATH/site-packages/water_data_explorer.yml && \
+    cd ${TETHYS_HOME}/apps/tethysapp-tethys_app_store && tethys install -w -N && cp install.yml $PYTHON_SITE_PACKAGE_PATH/site-packages/app_store.yml && \
+    cd ${TETHYS_HOME}/apps/ggst && tethys install -w -N && cp install.yml $PYTHON_SITE_PACKAGE_PATH/site-packages/ggst.yml && \
+    cd ${TETHYS_HOME}/apps/tethysapp-metdataexplorer && tethys install -w -N  && cp install.yml $PYTHON_SITE_PACKAGE_PATH/site-packages/metdataexplorers.yml && \
+    cd ${TETHYS_HOME}/apps/tethysapp-swe && tethys install -w -N  && cp install.yml $PYTHON_SITE_PACKAGE_PATH/site-packages/swe.yml && \
     rm -rf ${TETHYS_HOME}/extensions/* && \
     rm -rf ${TETHYS_HOME}/apps/* && \
-    # micromamba clean --all --yes && \
+    # micromamba clean --all --yes && --> only if installing with microbamba 
     conda clean --all --yes && \
     rm -rf /var/lib/apt/lists/* && \
     find -name '*.a' -delete && \
-    export PYTHON_SITE_PACKAGE_PATH=$(${CONDA_HOME}/envs/${CONDA_ENV_NAME}/bin/python -m site | grep -a -m 1 "site-packages" | head -1 | sed 's/.$//' | sed -e 's/^\s*//' -e '/^$/d'| sed 's![^/]*$!!' | cut -c2-) &&\
     mv -f ${TETHYS_HOME}/conda_install.sh $PYTHON_SITE_PACKAGE_PATH/site-packages/tethysapp/app_store/scripts/conda_install.sh &&\
     rm -rf ${CONDA_HOME}/envs/${CONDA_ENV_NAME}/conda-meta && \
     rm -rf ${CONDA_HOME}/envs/${CONDA_ENV_NAME}/include && \
@@ -51,6 +51,7 @@ RUN pip install --no-cache-dir --quiet -r piprequirements.txt && \
     find $PYTHON_SITE_PACKAGE_PATH/site-packages/pandas -name 'tests' -type d -exec rm -rf '{}' '+' && \
     find $PYTHON_SITE_PACKAGE_PATH/site-packages -name '*.pyx' -delete && \
     rm -rf $PYTHON_SITE_PACKAGE_PATH/uvloop/loop.c
+
 FROM tethysplatform/tethys-core:dev as build
 ###########################
 # RUN SUPERVISORD AS ROOT #
