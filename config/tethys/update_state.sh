@@ -11,6 +11,9 @@ apps_strings=$(echo "$tethys_list_output" | awk '/Apps:/{flag=1; next} /Extensio
 extensions_strings=$(echo "$tethys_list_output" | awk '/Extensions:/{flag=1; next} flag')
 apps_arr=("$apps_strings")
 
+#start with clean state
+sed -i -n '/apps:/{p; :a; N; /name:/!ba; s/.*\n//}; p' "$TETHYS_PERSIST_HOME/portal_config.yaml"
+
 # iterate over all the installed appps, and udpate the current values of the portal config and then the values of the portal change file
 for app_installed in ${apps_arr[@]}; do 
     # Execute the command and store the output in a variable
