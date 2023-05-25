@@ -1,22 +1,4 @@
 apps:
-  app_store:
-    services:
-      custom_settings:
-        encryption_key: holaasfasgasfg
-        stores_settings: '{"key1": "value1", "key2": "value2", "key3": 3}'
-  metdataexplorer:
-    services:
-      custom_settings:
-        disclaimer_header: CIROH TERMS OF SERVICE
-        disclaimer_message: The MDE is a tethys application under the MIT license
-      persistent:
-        thredds_db: psql
-  reservoirs:
-    services:
-      custom_settings: {}
-  swe:
-    services:
-      custom_settings: {}
 name: None
 settings:
   CHANNEL_LAYERS:
