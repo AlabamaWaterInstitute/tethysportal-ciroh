@@ -3,6 +3,7 @@ import yaml
 import argparse
 import logging
 import os
+import pdb
 
 logging.basicConfig(format='%(asctime)s - %(message)s', level=logging.INFO)
 script_dir = os.path.dirname(__file__)
@@ -40,10 +41,7 @@ def get_current_setting_val(current_setting):
     setting_new_value = current_setting.get('Linked With', {})
 
     if setting_type == 'json_custom_setting':
-        # setting_new_value = current_setting.get('Linked With', {})
         setting_new_value = json.dumps(setting_new_value)
-    # else:
-    #     setting_new_value = current_setting.get('Linked With', 'None')
     return setting_new_value
 
 def update_state(array_string,app_name):
@@ -62,26 +60,17 @@ def update_settings(current_setting, app_name):
         service_type = get_service(current_setting['Type'])
         settings_dict = ymlportal.get('apps',{}).get(f'{app_name}',{}).get('services',{}).get(service_type,{})
         setting_name = current_setting['Name']
-        if not settings_dict is False:
+        if settings_dict:
             logging.info(f'{setting_name} updating with the portal_config.yaml file')
             setting_new_value = get_current_setting_val(current_setting)
         # #Update using the portal changes yaml file
         with open(portal_change_path) as portal_changes:
             ymlportal_changes = yaml.safe_load(portal_changes)
-            # new_val_for_setting = ymlportal_changes.get('apps',{}).get(f'{app_name}',{}).get('services',{}).get('custom_settings',{}).get(setting_name,{})
             logging.info(f'{setting_name} updating with the portal_change.yaml file')
             setting_new_value = ymlportal_changes.get('apps',{}).get(f'{app_name}',{}).get('services',{}).get(service_type,{}).get(setting_name,{})
-            # if not new_val_for_setting is False:
-            #     logging.info(f'{app_name} updating with the portal_change.yaml file')
-            #     setting_new_value = new_val_for_setting
-                # if current_setting['Type'] == 'json_custom_setting':
-                #     setting_new_value = {}
-        # logging.info(f'{setting_new_value}')
         
         change_single_setting(ymlportal,app_name,service_type,setting_name,setting_new_value)
-    #write the new values of the setting
-    # logging.info(f'{ymlportal}')
-    
+    #write the new values of the setting    
     with open(portal_config_path, "w") as portal_configuration:
         yaml.dump(ymlportal, portal_configuration)
 
@@ -90,9 +79,8 @@ def change_single_setting(ymlportal,app_name,service_type,setting_name,setting_n
     ymlportal['apps'][app_name] = ymlportal['apps'].get(app_name, {})
     ymlportal['apps'][app_name]['services'] = ymlportal['apps'][app_name].get('services', {})
     ymlportal['apps'][app_name]['services'][service_type] = ymlportal['apps'][app_name]['services'].get(service_type, {})
-    if not setting_new_value is False:
+    if setting_new_value:
         logging.info(f'{setting_name} updating with {setting_new_value}')
-
         ymlportal['apps'][app_name]['services'][service_type][setting_name] = setting_new_value
 
 def main():

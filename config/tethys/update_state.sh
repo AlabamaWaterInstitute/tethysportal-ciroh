@@ -9,11 +9,10 @@ PATH_INSTALL_FILES="$2"
 tethys_list_output=$(tethys list)
 apps_strings=$(echo "$tethys_list_output" | awk '/Apps:/{flag=1; next} /Extensions:/{flag=0} flag')
 extensions_strings=$(echo "$tethys_list_output" | awk '/Extensions:/{flag=1; next} flag')
-apps_arr=($apps_strings)
+apps_arr=("$apps_strings")
 
 # iterate over all the installed appps, and udpate the current values of the portal config and then the values of the portal change file
 for app_installed in ${apps_arr[@]}; do 
-
     # Execute the command and store the output in a variable
     output=$(tethys app_settings list "$app_installed")
     # Extract unlinked settings
@@ -65,7 +64,10 @@ for app_installed in ${apps_arr[@]}; do
     fi
 
     #install the app again, but this time do it from file
-    tethys install -w -f "$PATH_INSTALL_FILES/$app_installed"
+    if [ "$app_installed" == "swe" ]; then
+        echo "${PATH_INSTALL_FILES}/${app_installed}.yml"
+        tethys install -w -f "${PATH_INSTALL_FILES}/${app_installed}.yml"
+    fi
 
 done
 
