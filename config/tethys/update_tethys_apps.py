@@ -3,13 +3,15 @@ import yaml
 import argparse
 import logging
 import os
-import pdb
+import re
 
 logging.basicConfig(format='%(asctime)s - %(message)s', level=logging.INFO)
 script_dir = os.path.dirname(__file__)
-portal_config_path = os.path.join(script_dir, 'portal_config.yaml')
-portal_change_path = os.path.join(script_dir, 'portal_changes.yaml')
+portal_config_path = os.path.join(script_dir, 'portal_config.yml')
+portal_change_path = os.path.join(script_dir, 'portal_changes.yml')
 custom_settings_type = ['custom_settings', 'ds_spatial', 'ps_database','json_custom_setting','secret_custom_setting']
+env_pattern = re.compile(r".*?\${(.*?)}.*?")
+#add env variables to yaml :) https://stackoverflow.com/questions/65414773/parse-environment-variable-from-yaml-with-pyyaml
 
 def parse_args():
     parser = argparse.ArgumentParser()
@@ -18,6 +20,13 @@ def parse_args():
     parser.add_argument('--app_name', nargs='+')
     args = parser.parse_args()
     return args
+
+def env_constructor(loader, node):
+    value = loader.construct_scalar(node)
+    for group in env_pattern.findall(value):
+        value = value.replace(f"${{{group}}}", os.environ.get(group))
+    return value
+
 
 def get_service(setting_type):
     service_type = 'custom_settings'
@@ -48,10 +57,9 @@ def update_state(array_string,app_name):
     for setting in array_string:
         try:
             json_setting = json.loads(validate_setting(setting))
-            logging.info(f'updating {json_setting["Name"]} setting')
             update_settings(json_setting, app_name)
         except:
-            logging.warning(f'updating {json_setting["Name"]} setting not possible')
+            logging.error(f'updating {json_setting["Name"]} setting not possible')
 
 def update_settings(current_setting, app_name):
     with open(portal_config_path) as portal_configuration:
@@ -80,11 +88,14 @@ def change_single_setting(ymlportal,app_name,service_type,setting_name,setting_n
     ymlportal['apps'][app_name]['services'] = ymlportal['apps'][app_name].get('services', {})
     ymlportal['apps'][app_name]['services'][service_type] = ymlportal['apps'][app_name]['services'].get(service_type, {})
     if setting_new_value:
-        logging.info(f'{setting_name} updating with {setting_new_value}')
+        # logging.info(f'{setting_name} updating with {setting_new_value}')
         ymlportal['apps'][app_name]['services'][service_type][setting_name] = setting_new_value
 
 def main():
     inputs=parse_args()
+    yaml.add_implicit_resolver("!pathex", env_pattern)
+    yaml.add_constructor("!pathex", env_constructor)
+    # logging.info(f'{inputs.app_name[0]} -- Updating Settings')
     if inputs.linked_settings:
         update_state(inputs.linked_settings, inputs.app_name[0])
     if inputs.unlinked_settings:

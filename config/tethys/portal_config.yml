@@ -1,12 +1,12 @@
-apps:
 name: None
+apps:
 settings:
   CHANNEL_LAYERS:
     default:
       BACKEND: channels_redis.core.RedisChannelLayer
       CONFIG:
         hosts:
-        - redis://localhost:6379
+          - redis://localhost:6379
   DATABASES:
     default:
       DIR: psql

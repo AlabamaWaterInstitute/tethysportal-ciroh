@@ -1,9 +1,12 @@
 #!/bin/bash
 
-TETHYS_PERSIST_HOME="$1"
+# TETHYS_HOME=$TETHYS_HOME
+# TETHYS_PERSIST=$TETHYS_PERSIST
 
 #path to the install files -> we might need to create files <app_name>.yaml in the site_packages folder of the env in which tethys is installed
-PATH_INSTALL_FILES="$2"
+PATH_INSTALL_FILES=$(${CONDA_HOME}/envs/${CONDA_ENV_NAME}/bin/python -m site | grep -a -m 1 "site-packages" | head -1 | sed 's/.$//' | sed -e 's/^\s*//' -e '/^$/d'| sed 's![^/]*$!!' | cut -c2-)
+# TETHYS_PERSIST_HOME="$1"
+# PATH_INSTALL_FILES="$2"
 
 #create list of Intalled apps
 tethys_list_output=$(tethys list)
@@ -12,10 +15,11 @@ extensions_strings=$(echo "$tethys_list_output" | awk '/Extensions:/{flag=1; nex
 apps_arr=("$apps_strings")
 
 #start with clean state
-sed -i -n '/apps:/{p; :a; N; /name:/!ba; s/.*\n//}; p' "$TETHYS_PERSIST_HOME/portal_config.yaml"
+sed -i -n '/apps:/{p; :a; N; /settings:/!ba; s/.*\n//}; p' "${TETHYS_HOME}/portal_config.yml"
 
 # iterate over all the installed appps, and udpate the current values of the portal config and then the values of the portal change file
-for app_installed in ${apps_arr[@]}; do 
+for app_installed in ${apps_arr[@]}; do
+    echo "updating ${app_installed}"
     # Execute the command and store the output in a variable
     output=$(tethys app_settings list "$app_installed")
     # Extract unlinked settings
@@ -57,23 +61,21 @@ for app_installed in ${apps_arr[@]}; do
 
     #update the settings in the apps portion of the portal_config.yaml
     if (( ${#linked_array[@]} )) && (( ${#unlinked_array[@]} )); then
-        update_settings="$(python3 "$TETHYS_PERSIST_HOME/update_tethys_apps.py" --app_name "$app_installed" --linked_settings "${linked_array[@]}" --unlinked_settings "${unlinked_array[@]}")"
+        update_settings="$(python3 "${TETHYS_HOME}/update_tethys_apps.py" --app_name "$app_installed" --linked_settings "${linked_array[@]}" --unlinked_settings "${unlinked_array[@]}")"
     elif (( ${#linked_array[@]} ))
     then
-        update_settings="$(python3 "$TETHYS_PERSIST_HOME/update_tethys_apps.py" --app_name "$app_installed" --linked_settings "${linked_array[@]}")"
+        update_settings="$(python3 "${TETHYS_HOME}/update_tethys_apps.py" --app_name "$app_installed" --linked_settings "${linked_array[@]}")"
     elif (( ${#unlinked_array[@]} ))
     then
-        update_settings="$(python3 "$TETHYS_PERSIST_HOME/update_tethys_apps.py" --app_name "$app_installed" --unlinked_settings "${unlinked_array[@]}")"
+        echo "${unlinked_array[@]}"
+        update_settings="$(python3 "${TETHYS_HOME}/update_tethys_apps.py" --app_name "$app_installed" --unlinked_settings "${unlinked_array[@]}")"
     fi
 
     #install the app again, but this time do it from file
-    if [ "$app_installed" == "swe" ]; then
-        echo "${PATH_INSTALL_FILES}/${app_installed}.yml"
-        tethys install -w -f "${PATH_INSTALL_FILES}/${app_installed}.yml"
-    fi
+    tethys install -w -q -f "${PATH_INSTALL_FILES}/site-packages/${app_installed}.yml"
+    
 
 done
-
 
 #here we migh need to add the code to update the proxy apps
 

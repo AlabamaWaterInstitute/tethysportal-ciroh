@@ -1,0 +1,82 @@
+apps:
+  water_data_explorer:
+    services:
+      persistent:
+        catalog_db: tethys_postgis
+      spatial: {}
+      dataset: {}
+      wps: {}
+  metdataexplorer:
+    services:
+      persistent:
+        thredds_db: tethys_postgis
+      spatial: {}
+      dataset: {}
+      wps: {}
+      custom_settings:
+        disclaimer_header: CIROH TERMS OF SERVICE
+        disclaimer_message: The MDE is a tethys application under the MIT license
+  ggst:
+    services:
+      persistent: {}
+      spatial: {}
+      dataset: {}
+      wps: {}
+      custom_settings:
+        grace_thredds_directory: ${TETHYS_PERSIST}/thredds_data/tethys/ggst_thredds_directory
+        grace_thredds_catalog: http://localhost:8080/thredds/catalog/ciroh_data/tethys/ggst_thredds_directory/catalog.xml
+        global_output_directory: ${TETHYS_HOME}
+        earthdata_username: byugrace
+        earthdata_pass: byuGRACE1
+        conda_python_path: ${CONDA_HOME}/envs/${CONDA_ENV_NAME}/bin/python
+  swe:
+    services:
+      persistent: {}
+      spatial:
+        thredds_service: tethys_thredds
+      dataset: {}
+      wps: {}
+  app_store:
+    services:
+      persistent: {}
+      spatial: {}
+      dataset: {}
+      wps: {}
+      custom_settings:
+        stores_settings: '{"name":"John Doe","age":25,"email":"johndoe@example.com"}'
+        encryption_key: GH_d9DGg9Gf107dbYkb8PZ6LgdYvA4W-sQmK-EWlolI=
+# apps:
+#   app_store:
+#     services:
+#       persistent: {}
+#       spatial: {}
+#       dataset: {}
+#       wps: {}
+#       custom_settings:
+#         stores_settings: '{"key1": "value1", "key2": "value2", "key3": 3}'
+#         encryption_key: 'holaasfasgasfg'
+#   reservoirs:
+#     services:
+#       persistent: {}
+#       spatial: {}
+#       dataset: {}
+#       wps: {}
+#       custom_settings: {}
+#   metdataexplorer:
+#     services:
+#       persistent:
+#         thredds_db: psql
+#       spatial: {}
+#       dataset: {}
+#       wps: {}
+#       custom_settings:
+#         disclaimer_header: 'CIROH TERMS OF SERVICE'
+#         disclaimer_message: 'The MDE is a tethys application under the MIT license'
+#   swe:
+#     services:
+#       persistent: {}
+#       spatial:
+#         thredds_service: tds
+#       dataset: {}
+#       wps: {}
+#       custom_settings: {}
