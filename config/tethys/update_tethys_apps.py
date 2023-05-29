@@ -66,11 +66,11 @@ def update_settings(current_setting, app_name):
         #Update the current portal configuration yaml file using the tethys app_settings list
         ymlportal = yaml.safe_load(portal_configuration)
         service_type = get_service(current_setting['Type'])
-        settings_dict = ymlportal.get('apps',{}).get(f'{app_name}',{}).get('services',{}).get(service_type,{})
+        # settings_dict = ymlportal.get('apps',{}).get(f'{app_name}',{}).get('services',{}).get(service_type,{})
         setting_name = current_setting['Name']
-        if settings_dict:
-            logging.info(f'{setting_name} updating with the portal_config.yaml file')
-            setting_new_value = get_current_setting_val(current_setting)
+        # if settings_dict:
+            # logging.info(f'{setting_name} updating with the portal_config.yaml file')
+            # setting_new_value = get_current_setting_val(current_setting)
         # #Update using the portal changes yaml file
         with open(portal_change_path) as portal_changes:
             ymlportal_changes = yaml.safe_load(portal_changes)
