@@ -8,7 +8,7 @@ from typing import Any
 
 logging.basicConfig(format='%(asctime)s - %(message)s', level=logging.INFO)
 # script_dir = os.path.dirname(__file__)
-script_dir = os.environ['TETHYS_PERSIST']
+script_dir = os.environ['TETHYS_HOME']
 portal_config_path = os.path.join(script_dir, 'portal_config.yml')
 portal_change_path = os.path.join(script_dir, 'portal_changes.yml')
 custom_settings_type = ['custom_settings', 'ds_spatial', 'ps_database','json_custom_setting','secret_custom_setting']
