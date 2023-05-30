@@ -4,7 +4,7 @@
 # TETHYS_PERSIST=$TETHYS_PERSIST
 
 #path to the install files -> we might need to create files <app_name>.yaml in the site_packages folder of the env in which tethys is installed
-# PATH_INSTALL_FILES=$(${CONDA_HOME}/envs/${CONDA_ENV_NAME}/bin/python -m site | grep -a -m 1 "site-packages" | head -1 | sed 's/.$//' | sed -e 's/^\s*//' -e '/^$/d'| sed 's![^/]*$!!' | cut -c2-)
+PATH_INSTALL_FILES=$(${CONDA_HOME}/envs/${CONDA_ENV_NAME}/bin/python -m site | grep -a -m 1 "site-packages" | head -1 | sed 's/.$//' | sed -e 's/^\s*//' -e '/^$/d'| sed 's![^/]*$!!' | cut -c2-)
 # TETHYS_PERSIST_HOME="$1"
 # PATH_INSTALL_FILES="$2"
 

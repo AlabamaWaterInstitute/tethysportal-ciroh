@@ -4,13 +4,27 @@ import argparse
 import logging
 import os
 import re
+from typing import Any
 
 logging.basicConfig(format='%(asctime)s - %(message)s', level=logging.INFO)
-script_dir = os.path.dirname(__file__)
+# script_dir = os.path.dirname(__file__)
+script_dir = os.environ['TETHYS_PERSIST']
 portal_config_path = os.path.join(script_dir, 'portal_config.yml')
 portal_change_path = os.path.join(script_dir, 'portal_changes.yml')
 custom_settings_type = ['custom_settings', 'ds_spatial', 'ps_database','json_custom_setting','secret_custom_setting']
-env_pattern = re.compile(r".*?\${(.*?)}.*?")
+# env_pattern = re.compile(r".*?\${(.*?)}.*?")
+
+_var_matcher = re.compile(r"\${([^}^{]+)}")
+_tag_matcher = re.compile(r"[^$]*\${([^}^{]+)}.*")
+
+
+def _path_constructor(_loader: Any, node: Any):
+    def replace_fn(match):
+        envparts = f"{match.group(1)}:".split(":")
+        return os.environ.get(envparts[0], envparts[1])
+    return _var_matcher.sub(replace_fn, node.value)
+
+
 #add env variables to yaml :) https://stackoverflow.com/questions/65414773/parse-environment-variable-from-yaml-with-pyyaml
 
 def parse_args():
@@ -20,12 +34,6 @@ def parse_args():
     parser.add_argument('--app_name', nargs='+')
     args = parser.parse_args()
     return args
-
-def env_constructor(loader, node):
-    value = loader.construct_scalar(node)
-    for group in env_pattern.findall(value):
-        value = value.replace(f"${{{group}}}", os.environ.get(group))
-    return value
 
 
 def get_service(setting_type):
@@ -66,12 +74,7 @@ def update_settings(current_setting, app_name):
         #Update the current portal configuration yaml file using the tethys app_settings list
         ymlportal = yaml.safe_load(portal_configuration)
         service_type = get_service(current_setting['Type'])
-        # settings_dict = ymlportal.get('apps',{}).get(f'{app_name}',{}).get('services',{}).get(service_type,{})
         setting_name = current_setting['Name']
-        # if settings_dict:
-            # logging.info(f'{setting_name} updating with the portal_config.yaml file')
-            # setting_new_value = get_current_setting_val(current_setting)
-        # #Update using the portal changes yaml file
         with open(portal_change_path) as portal_changes:
             ymlportal_changes = yaml.safe_load(portal_changes)
             logging.info(f'{setting_name} updating with the portal_change.yaml file')
@@ -88,14 +91,12 @@ def change_single_setting(ymlportal,app_name,service_type,setting_name,setting_n
     ymlportal['apps'][app_name]['services'] = ymlportal['apps'][app_name].get('services', {})
     ymlportal['apps'][app_name]['services'][service_type] = ymlportal['apps'][app_name]['services'].get(service_type, {})
     if setting_new_value:
-        # logging.info(f'{setting_name} updating with {setting_new_value}')
         ymlportal['apps'][app_name]['services'][service_type][setting_name] = setting_new_value
 
 def main():
     inputs=parse_args()
-    yaml.add_implicit_resolver("!pathex", env_pattern)
-    yaml.add_constructor("!pathex", env_constructor)
-    # logging.info(f'{inputs.app_name[0]} -- Updating Settings')
+    yaml.add_implicit_resolver("!envvar", _tag_matcher, None, yaml.SafeLoader)
+    yaml.add_constructor("!envvar", _path_constructor, yaml.SafeLoader)    
     if inputs.linked_settings:
         update_state(inputs.linked_settings, inputs.app_name[0])
     if inputs.unlinked_settings:

@@ -14,8 +14,8 @@ apps:
       dataset: {}
       wps: {}
       custom_settings:
-        disclaimer_header: CIROH TERMS OF SERVICE
-        disclaimer_message: The MDE is a tethys application under the MIT license
+        disclaimer_header: GIO TERMS OF SERVICE 4
+        disclaimer_message: The MDE is a happy tethys application
   ggst:
     services:
       persistent: {}
@@ -44,39 +44,4 @@ apps:
       wps: {}
       custom_settings:
         stores_settings: '{"name":"John Doe","age":25,"email":"johndoe@example.com"}'
-        encryption_key: GH_d9DGg9Gf107dbYkb8PZ6LgdYvA4W-sQmK-EWlolI=
-# apps:
-#   app_store:
-#     services:
-#       persistent: {}
-#       spatial: {}
-#       dataset: {}
-#       wps: {}
-#       custom_settings:
-#         stores_settings: '{"key1": "value1", "key2": "value2", "key3": 3}'
-#         encryption_key: 'holaasfasgasfg'
-#   reservoirs:
-#     services:
-#       persistent: {}
-#       spatial: {}
-#       dataset: {}
-#       wps: {}
-#       custom_settings: {}
-#   metdataexplorer:
-#     services:
-#       persistent:
-#         thredds_db: psql
-#       spatial: {}
-#       dataset: {}
-#       wps: {}
-#       custom_settings:
-#         disclaimer_header: 'CIROH TERMS OF SERVICE'
-#         disclaimer_message: 'The MDE is a tethys application under the MIT license'
-#   swe:
-#     services:
-#       persistent: {}
-#       spatial:
-#         thredds_service: tds
-#       dataset: {}
-#       wps: {}
-#       custom_settings: {}
+        encryption_key: GH_d9DGg9Gf107dbYkb8PZ6LgdYvA4WsQmKEWlolI=
