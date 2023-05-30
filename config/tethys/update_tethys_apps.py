@@ -66,8 +66,9 @@ def update_state(array_string,app_name):
         try:
             json_setting = json.loads(validate_setting(setting))
             update_settings(json_setting, app_name)
-        except:
+        except Exception as e:
             logging.error(f'updating {json_setting["Name"]} setting not possible')
+            logging.error(f'{e}')
 
 def update_settings(current_setting, app_name):
     with open(portal_config_path) as portal_configuration:

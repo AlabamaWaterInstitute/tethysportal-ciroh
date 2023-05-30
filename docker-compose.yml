@@ -77,7 +77,9 @@ services:
     volumes:
       - ./data/tethys:/var/lib/tethys_persist
       - ./logs/tethys:/var/log/tethys
-      - ./config/tethys/portal_changes.yml:/var/lib/tethys_persist/portal_changes.yml
+      # - ./config/tethys/portal_changes.yml:/var/lib/tethys_persist/portal_changes.yml
+      - ./config/tethys/portal_changes.yml:/usr/lib/tethys/portal_changes.yml
+
 networks:
   internal:
     internal: true

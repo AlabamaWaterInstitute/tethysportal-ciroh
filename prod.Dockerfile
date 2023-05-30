@@ -67,8 +67,8 @@ COPY salt/ /srv/salt/
 # Activate tethys conda environment during build
 ARG MAMBA_DOCKERFILE_ACTIVATE=1
 RUN rm -Rf ~/.cache/pip && \
-    micromamba clean --all --yes && \
-    touch ${TETHYS_HOME}/portal_changes.yml
+    micromamba clean --all --yes
+# touch ${TETHYS_HOME}/portal_changes.yml
 #########
 # PORTS #
 #########

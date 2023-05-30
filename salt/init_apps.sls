@@ -51,17 +51,17 @@ Sync_Apps:
     - shell: /bin/bash
     - unless: /bin/bash -c "[ -f "{{ TETHYS_PERSIST }}/init_apps_setup_complete" ];"
 
-Initial_Tethys_Apps_Update:
-  cmd.run:
-    - name: {{ TETHYS_HOME }}/update_state.sh 
-    # - cwd: {{ TETHYS_PERSIST }}
-    - shell: /bin/bash
-    - unless: /bin/bash -c "[ -f "{{ TETHYS_PERSIST }}/init_apps_setup_complete" ];"
+# Initial_Tethys_Apps_Update:
+#   cmd.run:
+#     - name: {{ TETHYS_HOME }}/update_state.sh 
+#     # - cwd: {{ TETHYS_PERSIST }}
+#     - shell: /bin/bash
+#     - unless: /bin/bash -c "[ -f "{{ TETHYS_PERSIST }}/init_apps_setup_complete" ];"
 
 Update_Tethys_Apps:
   file.managed:
-    - name: {{ TETHYS_HOME }}/portal_changes.yml
-    - source: {{ TETHYS_PERSIST }}/portal_changes.yml
+    - name: {{ TETHYS_PERSIST }}/portal_changes.yml
+    - source: {{ TETHYS_HOME }}/portal_changes.yml
   # cmd.run:
   #   - name: {{ TETHYS_HOME }}/update_state.sh 
   #   - cwd: {{ TETHYS_PERSIST }}
@@ -69,11 +69,11 @@ Update_Tethys_Apps:
   #   - onchanges:
   #     - file: Update_Tethys_Apps
 run_on_changes:
-  cmd.wait:
+  cmd.run:
     - name: {{ TETHYS_HOME }}/update_state.sh 
-    - cwd: {{ TETHYS_PERSIST }}
+    # - cwd: {{ TETHYS_PERSIST }}
     - shell: /bin/bash
-    - watch:
+    - onchanges:
       - file: Update_Tethys_Apps
 
 # Set_Tethys_Apps_State:
