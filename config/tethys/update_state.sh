@@ -92,3 +92,4 @@ done
 if (( ${#proxy_apps_to_update[@]} )); then
     update_proxy_apps="$(python3 "${TETHYS_HOME}/update_proxy_apps.py")"
 
+fi

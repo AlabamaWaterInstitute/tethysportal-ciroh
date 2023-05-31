@@ -34,66 +34,93 @@ def replace_last(string, delimiter, replacement):
     return start + replacement + end
 
 def create_sql_insert_query():
-    query = 'insert into tethys_apps_proxyapp (id,name,endpoint,logo_url,description,tags,enabled,show_in_apps_library,\"order\",back_url,open_in_new_tab) VALUES'
-    
-    with open(portal_change_path) as portal_changes:
-        ymlportal_changes = yaml.safe_load(portal_changes)
-        # logging.info(f'{setting_name} updating with the portal_change.yaml file')
-        proxy_apps = ymlportal_changes.get('proxy_apps',{})
-        counter_id = 1
-        for proxy_app in proxy_apps:
-            app_name=proxy_apps[proxy_app]['name']
-            endpoint=proxy_apps[proxy_app]['endpoint']
-            logo_url=proxy_apps[proxy_app]['logo_url']
-            description=proxy_apps[proxy_app]['description']
-            tags=proxy_apps[proxy_app]['tags']
-            enabled=proxy_apps[proxy_app]['enabled']
-            show_in_apps_library=proxy_apps[proxy_app]['show_in_apps_library']
-            app_order=proxy_apps[proxy_app]['app_order']
-            back_url=proxy_apps[proxy_app]['back_url']
-            open_new_tab=proxy_apps[proxy_app]['open_new_tab']
+    query = 'insert into tethys_apps_proxyapp (id,name,endpoint,logo_url,description,tags,enabled,show_in_apps_library,\"order\",back_url,open_in_new_tab) VALUES '
+    try:
+        with open(portal_change_path) as portal_changes:
+            ymlportal_changes = yaml.safe_load(portal_changes)
+            # logging.info(f'{setting_name} updating with the portal_change.yaml file')
+            proxy_apps = ymlportal_changes.get('proxy_apps',{})
+            counter_id = 1
+            for proxy_app in proxy_apps:
+                app_name=proxy_apps[proxy_app]['name']
+                endpoint=proxy_apps[proxy_app]['endpoint']
+                logo_url=proxy_apps[proxy_app]['logo_url']
+                description=proxy_apps[proxy_app]['description']
+                tags=proxy_apps[proxy_app]['tags']
+                enabled=proxy_apps[proxy_app]['enabled']
+                show_in_apps_library=proxy_apps[proxy_app]['show_in_apps_library']
+                app_order=proxy_apps[proxy_app]['order']
+                back_url=proxy_apps[proxy_app]['back_url']
+                open_new_tab=proxy_apps[proxy_app]['open_in_new_tab']
 
-            query+=f"({counter_id}, '{app_name}', '{endpoint}', '{logo_url}', '{description}', '{tags}', '{enabled}', '{show_in_apps_library}', '{app_order}', '{back_url}', '{open_new_tab}'),"
-            counter_id+=1
-        query = replace_last(query,',',';')   
-    
+                query+=f"({counter_id}, '{app_name}', '{endpoint}', '{logo_url}', '{description}', '{tags}', '{enabled}', '{show_in_apps_library}', '{app_order}', '{back_url}', '{open_new_tab}'),"
+                counter_id+=1
+            if query != 'insert into tethys_apps_proxyapp (id,name,endpoint,logo_url,description,tags,enabled,show_in_apps_library,\"order\",back_url,open_in_new_tab) VALUES ':
+                query = replace_last(query,',',';')
+    except Exception as e:
+        logging.error(f'{e}')
     return query
 
 def create_sql_update_query():
-    query = 'udpate tethys_apps_proxyapp'
-    with open(portal_change_path) as portal_changes:
-        ymlportal_changes = yaml.safe_load(portal_changes)
-        proxy_apps = ymlportal_changes.get('proxy_apps',{})
-        for proxy_app in proxy_apps:
-            for setting in proxy_apps[proxy_app]:
-                setting_to_update = proxy_apps[proxy_app][setting]
-                if setting_to_update:
-                    query+=f'set {setting}={setting_to_update}'
-        query += f'where name={proxy_app}'   
-    
+    query = ''
+    # query_last_part = ' where name in ( '
+    try:
+        with open(portal_change_path) as portal_changes:
+            ymlportal_changes = yaml.safe_load(portal_changes)
+            proxy_apps = ymlportal_changes.get('proxy_apps',{})
+            for proxy_app in proxy_apps:
+                query += 'update tethys_apps_proxyapp set '
+                for setting in proxy_apps[proxy_app]:
+                    setting_to_update = proxy_apps[proxy_app].get(setting,{})
+                    if setting_to_update:
+                        # query+=f'{setting}'
+                        # query+='(case '
+                        # query_last_part += f"'{proxy_apps[proxy_app]['name']}',"
+                        if setting == 'order':
+                            # query+=f"\"{setting}\" when name = {proxy_apps[proxy_app]['name']} then'{setting_to_update}', "
+                            query+=f"\"{setting}\" = '{setting_to_update}', "
+                        else:
+                            # query+=f"{setting} = when name = {proxy_apps[proxy_app]['name']} then'{setting_to_update}', "
+                            query+=f"{setting} = '{setting_to_update}', "
+
+                query = replace_last(query,',','')
+            # query_last_part = replace_last(query_last_part,',','')
+            # query += 'end) '
+            # query_last_part += ')'
+            # query = query + query_last_part
+                query += f"where name = '{proxy_apps[proxy_app]['name']}';"
+    except Exception as e:
+        logging.error(f'{e}')
     return query
 
 #check if there is already rows in tethys_apps_proxyapp table, so we can choose between update and insert records
 def check_for_proxy_apps(database):
-    is_there_proxy_apps = database.execute("select exists(select * from information_schema.tables where table_name=%s)", ('tethys_apps_proxyapp',))
-    return is_there_proxy_apps
+    database.execute("select exists(select * from information_schema.tables where table_name=%s)", ('tethys_apps_proxyapp',))
+    return database.fetchone()[0]
 
 def update_state(database):
     is_first_time = check_for_proxy_apps(database)
-    sql_query=''
-    if is_first_time:
-        sql_query+=create_sql_insert_query()
+    query=''
+    if not is_first_time:
+        query+=create_sql_insert_query()
     else:
-        sql_query+=create_sql_update_query()
-    database.execute(sql_query)
-    
+        query+=create_sql_update_query()
+
+    logging.info(f'{query}')
+    try:
+        if query != '' and query != 'insert into tethys_apps_proxyapp (id,name,endpoint,logo_url,description,tags,enabled,show_in_apps_library,\"order\",back_url,open_in_new_tab) VALUES ':
+            database.execute(query)
+    except Exception as e:
+        logging.error(f'{e}')
+    pass
 
 def main():
     yaml.add_implicit_resolver("!envvar", _tag_matcher, None, yaml.SafeLoader)
     yaml.add_constructor("!envvar", _path_constructor, yaml.SafeLoader)    
-    conn = psycopg2.connect(host=f'{TETHYS_DB_HOST}', port = f'{TETHYS_DB_HOST}', database=f'{TETHYS_DB_NAME}', user="postgres", password=f'{POSTGRES_PASSWORD}')
+    conn = psycopg2.connect(host=f'{TETHYS_DB_HOST}', port = f'{TETHYS_DB_PORT}', database=f'{TETHYS_DB_NAME}', user="postgres", password=f'{POSTGRES_PASSWORD}')
     cur = conn.cursor()
     update_state(cur)
+    conn.commit()
     cur.close()
     conn.close()
 if __name__ == '__main__':
