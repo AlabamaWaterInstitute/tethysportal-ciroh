@@ -8,6 +8,7 @@ from typing import Any
 
 logging.basicConfig(format='%(asctime)s - %(message)s', level=logging.INFO)
 # script_dir = os.path.dirname(__file__)
+#if the TETHYS_PERSIST is set instead of the TETHYS_HOME, because TETHYS_PERSIST is being still created, then it will not update any app 
 script_dir = os.environ['TETHYS_HOME']
 portal_config_path = os.path.join(script_dir, 'portal_config.yml')
 portal_change_path = os.path.join(script_dir, 'portal_changes.yml')

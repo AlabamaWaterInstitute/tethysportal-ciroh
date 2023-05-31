@@ -24,8 +24,7 @@ data=$(cat "$yaml_file")
 # Extract the keys from the "apps" level using awk and save them in an array
 # apps_to_update=($(echo "$data" | awk '/^apps:/{flag=1; next} /^  [^ ]/{flag=0} flag'))
 apps_to_update=($(awk '/^apps:/ {p=1} p && /^  [^ ]+/ {sub(/:/, "", $1); print $1}' "$yaml_file"))
-
-# echo "${apps_to_update}"
+proxy_apps_to_update=($(awk '/^proxy_apps:/ {p=1} p && /^  [^ ]+/ {sub(/:/, "", $1); print $1}' "$yaml_file"))
 
 # iterate over all the installed appps, and udpate the current values of the portal config and then the values of the portal change file
 for app_installed in ${apps_arr[@]}; do
@@ -89,6 +88,7 @@ for app_installed in ${apps_arr[@]}; do
 
 done
 
-#here we migh need to add the code to update the proxy apps
-
+#Update the proxy apps only if ther is something in the proxy_apps section of the portal_changes.yaml
+if (( ${#proxy_apps_to_update[@]} )); then
+    update_proxy_apps="$(python3 "${TETHYS_HOME}/update_proxy_apps.py")"
 
