@@ -10,10 +10,6 @@ logging.basicConfig(format='%(asctime)s - %(message)s', level=logging.INFO)
 script_dir = os.environ['TETHYS_PERSIST']
 TETHYS_DB_HOST = os.environ['TETHYS_DB_HOST']
 TETHYS_DB_PORT = os.environ['TETHYS_DB_PORT']
-# TETHYS_DB_USERNAME = os.environ['TETHYS_DB_USERNAME']
-# TETHYS_DB_PASSWORD = os.environ['TETHYS_DB_PASSWORD']
-# TETHYS_DB_SUPERUSER = os.environ['TETHYS_DB_SUPERUSER']
-# TETHYS_DB_SUPERUSER_PASS = os.environ['TETHYS_DB_SUPERUSER_PASS']
 TETHYS_DB_NAME = os.environ['TETHYS_DB_NAME']
 POSTGRES_PASSWORD = os.environ['POSTGRES_PASSWORD']
 
@@ -38,7 +34,6 @@ def create_sql_insert_query():
     try:
         with open(portal_change_path) as portal_changes:
             ymlportal_changes = yaml.safe_load(portal_changes)
-            # logging.info(f'{setting_name} updating with the portal_change.yaml file')
             proxy_apps = ymlportal_changes.get('proxy_apps',{})
             counter_id = 1
             for proxy_app in proxy_apps:
@@ -57,13 +52,14 @@ def create_sql_insert_query():
                 counter_id+=1
             if query != 'insert into tethys_apps_proxyapp (id,name,endpoint,logo_url,description,tags,enabled,show_in_apps_library,\"order\",back_url,open_in_new_tab) VALUES ':
                 query = replace_last(query,',',';')
+            else:
+                query = ''
     except Exception as e:
         logging.error(f'{e}')
     return query
 
 def create_sql_update_query():
     query = ''
-    # query_last_part = ' where name in ( '
     try:
         with open(portal_change_path) as portal_changes:
             ymlportal_changes = yaml.safe_load(portal_changes)
@@ -73,21 +69,12 @@ def create_sql_update_query():
                 for setting in proxy_apps[proxy_app]:
                     setting_to_update = proxy_apps[proxy_app].get(setting,{})
                     if setting_to_update:
-                        # query+=f'{setting}'
-                        # query+='(case '
-                        # query_last_part += f"'{proxy_apps[proxy_app]['name']}',"
                         if setting == 'order':
-                            # query+=f"\"{setting}\" when name = {proxy_apps[proxy_app]['name']} then'{setting_to_update}', "
                             query+=f"\"{setting}\" = '{setting_to_update}', "
                         else:
-                            # query+=f"{setting} = when name = {proxy_apps[proxy_app]['name']} then'{setting_to_update}', "
                             query+=f"{setting} = '{setting_to_update}', "
 
                 query = replace_last(query,',','')
-            # query_last_part = replace_last(query_last_part,',','')
-            # query += 'end) '
-            # query_last_part += ')'
-            # query = query + query_last_part
                 query += f"where name = '{proxy_apps[proxy_app]['name']}';"
     except Exception as e:
         logging.error(f'{e}')
@@ -108,7 +95,7 @@ def update_state(database):
 
     logging.info(f'{query}')
     try:
-        if query != '' and query != 'insert into tethys_apps_proxyapp (id,name,endpoint,logo_url,description,tags,enabled,show_in_apps_library,\"order\",back_url,open_in_new_tab) VALUES ':
+        if query != '':
             database.execute(query)
     except Exception as e:
         logging.error(f'{e}')
