@@ -104,6 +104,12 @@ spec:
               value: "http{{ if $.Values.ingresses.external.tls }}s{{ end }}"
             - name: TETHYS_SETTINGS_FLAGS
               value: {{ .Values.tethys.settings.tethys_settings_flags | quote }}
+            - name: CLIENT_MAX_BODY_SIZE
+              value: {{ .Values.tethys.settings.client_max_body_size | quote }}
+            - name: DATA_UPLOAD_MAX_MEMORY_SIZE
+              value: {{ .Values.tethys.settings.data_upload_max_memory_size | quote }}
+            - name: FILE_UPLOAD_MAX_MEMORY_SIZE
+              value: {{ .Values.tethys.settings.file_upload_max_memory_size | quote }}              
             - name: SITE_TITLE
               value: {{ .Values.tethys.settings.portal_title | quote }}
             - name: BRAND_TEXT
@@ -130,94 +136,8 @@ spec:
               value: {{ .Values.tethys.settings.feature_3_heading | quote }}
             - name: FEATURE_3_BODY
               value: {{ .Values.tethys.settings.feature_3_body | quote }}
-            - name: CLIENT_MAX_BODY_SIZE
-              value: {{ .Values.tethys.settings.client_max_body_size | quote }}
-            - name: DATA_UPLOAD_MAX_MEMORY_SIZE
-              value: {{ .Values.tethys.settings.data_upload_max_memory_size | quote }}
-            - name: FILE_UPLOAD_MAX_MEMORY_SIZE
-              value: {{ .Values.tethys.settings.file_upload_max_memory_size | quote }}
             - name: COPYRIGHT
               value: {{ .Values.tethys.settings.copyright | quote }}
-            - name: MDE_DISCLAIMER_HEADER
-              value: {{ .Values.tethys.settings.mde_disclaimer | quote }}
-            - name: MDE_DISCLAIMER_MESSAGE
-              value: {{ .Values.tethys.settings.mde_disclaimer_message | quote }}              
-            - name: GRACE_THREDDS_CATALOG
-              value: {{ .Values.tethys.settings.grace_thredds_catalog | quote }}
-            - name: GLOBAL_OUTPUT_DIRECTORY
-              value: {{ .Values.tethys.settings.global_output_directory | quote }}
-            - name: GRACE_THREDDS_DIRECTORY_RELATIVE_PATH
-              value: {{ .Values.tethys.settings.grace_thredds_directory_relative_path | quote }}              
-            - name: EARTHDATA_USERNAME
-              value: {{ .Values.tethys.settings.earth_username | quote }}
-            - name: EARTHDATA_PASS
-              value: {{ .Values.tethys.settings.earth_pass | quote }}
-            - name: ENCRYPTION_KEY
-              value: {{ .Values.tethys.settings.encryption_key | quote }}
-            - name: STORES_JSON_STRING
-              value: {{ .Values.tethys.settings.stores_settings | quote }}
-            - name: NGINX_READ_TIME_OUT
-              value: {{ .Values.tethys.settings.nginx_read_time_out | quote }}
-            - name: PROXY_APP_1_NAME
-              value: {{ .Values.tethys.settings.proxy_app_1_name | quote }}
-            - name: PROXY_APP_1_ENDPOINT
-              value: {{ .Values.tethys.settings.proxy_app_1_endpoint | quote }}
-            - name: PROXY_APP_1_LOGO_URL
-              value: {{ .Values.tethys.settings.proxy_app_1_logo_url | quote }}
-            - name: PROXY_APP_1_DESCRIPTION
-              value: {{ .Values.tethys.settings.proxy_app_1_description | quote }}
-            - name: PROXY_APP_1_TAGS
-              value: {{ .Values.tethys.settings.proxy_app_1_tags | quote }}
-            - name: PROXY_APP_1_ENABLED
-              value: {{ .Values.tethys.settings.proxy_app_1_enabled | quote }}
-            - name: PROXY_APP_1_SHOW_IN_APPS_LIBRARY
-              value: {{ .Values.tethys.settings.proxy_app_1_show_in_apps_library | quote }}
-            - name: PROXY_APP_1_ORDER
-              value: {{ .Values.tethys.settings.proxy_app_1_order | quote }}
-            - name: PROXY_APP_1_BACK_URL
-              value: {{ (index .Values.ingresses.external.hosts 0).host | quote }}
-            - name: PROXY_APP_1_OPEN_IN_NEW_TAB
-              value: {{ .Values.tethys.settings.proxy_app_1_open_in_new_tab | quote }}                            
-            - name: PROXY_APP_2_NAME
-              value: {{ .Values.tethys.settings.proxy_app_2_name | quote }}
-            - name: PROXY_APP_2_ENDPOINT
-              value: {{ .Values.tethys.settings.proxy_app_2_endpoint | quote }}
-            - name: PROXY_APP_2_LOGO_URL
-              value: {{ .Values.tethys.settings.proxy_app_2_logo_url | quote }}
-            - name: PROXY_APP_2_DESCRIPTION
-              value: {{ .Values.tethys.settings.proxy_app_2_description | quote }}
-            - name: PROXY_APP_2_TAGS
-              value: {{ .Values.tethys.settings.proxy_app_2_tags | quote }}
-            - name: PROXY_APP_2_ENABLED
-              value: {{ .Values.tethys.settings.proxy_app_2_enabled | quote }}
-            - name: PROXY_APP_2_SHOW_IN_APPS_LIBRARY
-              value: {{ .Values.tethys.settings.proxy_app_2_show_in_apps_library | quote }}
-            - name: PROXY_APP_2_ORDER
-              value: {{ .Values.tethys.settings.proxy_app_2_order | quote }}
-            - name: PROXY_APP_2_BACK_URL
-              value: {{ (index .Values.ingresses.external.hosts 0).host | quote }}
-            - name: PROXY_APP_2_OPEN_IN_NEW_TAB
-              value: {{ .Values.tethys.settings.proxy_app_2_open_in_new_tab | quote }}
-            - name: PROXY_APP_3_NAME
-              value: {{ .Values.tethys.settings.proxy_app_3_name | quote }}
-            - name: PROXY_APP_3_ENDPOINT
-              value: {{ .Values.tethys.settings.proxy_app_3_endpoint | quote }}
-            - name: PROXY_APP_3_LOGO_URL
-              value: {{ .Values.tethys.settings.proxy_app_3_logo_url | quote }}
-            - name: PROXY_APP_3_DESCRIPTION
-              value: {{ .Values.tethys.settings.proxy_app_3_description | quote }}
-            - name: PROXY_APP_3_TAGS
-              value: {{ .Values.tethys.settings.proxy_app_3_tags | quote }}
-            - name: PROXY_APP_3_ENABLED
-              value: {{ .Values.tethys.settings.proxy_app_3_enabled | quote }}
-            - name: PROXY_APP_3_SHOW_IN_APPS_LIBRARY
-              value: {{ .Values.tethys.settings.proxy_app_3_show_in_apps_library | quote }}
-            - name: PROXY_APP_3_ORDER
-              value: {{ .Values.tethys.settings.proxy_app_3_order | quote }}
-            - name: PROXY_APP_3_BACK_URL
-              value: {{ (index .Values.ingresses.external.hosts 0).host | quote }}
-            - name: PROXY_APP_3_OPEN_IN_NEW_TAB
-              value: {{ .Values.tethys.settings.proxy_app_3_open_in_new_tab | quote }}
           ports:
             - name: http
               containerPort: {{ .Values.service.port }}
@@ -232,6 +152,9 @@ spec:
               mountPath: '/var/lib/tethys_persist{{ .Values.tethys.settings.thredds_data_relative_path }}'
               subPath: {{ .Values.thredds.data.public.subpath }}
             {{- end }}
+            - name: config-volume
+              mountPath: '/usr/lib/tethys/portal_changes.yml'
+              subPath: portal_changes.yml
       volumes:
         - name: tethys-persist-pv
           persistentVolumeClaim:
@@ -241,6 +164,9 @@ spec:
           persistentVolumeClaim:
             claimName: {{ template "thredds.pvcname" .Subcharts.thredds }}
         {{- end }}
+        - name: config-volume
+          configMap:
+            name: "{{ include "ciroh.fullname" . }}-configmap"        
       {{- with .Values.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}

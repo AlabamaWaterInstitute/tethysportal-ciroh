@@ -1,0 +1,10 @@
+{{- $fullName := include "ciroh.fullname" . -}}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: "{{ $fullName }}-configmap"
+data:
+  {{- if .Values.tethys.portal_config }}
+  portal_changes.yml: |
+  {{- toYaml .Values.tethys.portal_config | nindent 4 }}
+  {{- end }}
