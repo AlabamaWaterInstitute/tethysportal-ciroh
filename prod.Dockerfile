@@ -9,6 +9,7 @@ COPY tethysapp-metdataexplorer ${TETHYS_HOME}/apps/tethysapp-metdataexplorer
 COPY tethysapp-tethys_app_store ${TETHYS_HOME}/apps/tethysapp-tethys_app_store
 COPY ggst ${TETHYS_HOME}/apps/ggst
 COPY tethysapp-swe ${TETHYS_HOME}/apps/tethysapp-swe
+COPY tethysapp-hydrocompute ${TETHYS_HOME}/apps/tethysapp-hydrocompute
 
 COPY piprequirements.txt .
 COPY config/tethys/tmp_app_store_files/conda_install.sh ${TETHYS_HOME}
@@ -35,6 +36,7 @@ RUN pip install --no-cache-dir --quiet -r piprequirements.txt && \
     cd ${TETHYS_HOME}/apps/ggst && tethys install -w -N -q && cp install.yml $PYTHON_SITE_PACKAGE_PATH/site-packages/ggst.yml && \
     cd ${TETHYS_HOME}/apps/tethysapp-metdataexplorer && tethys install -w -N -q && cp install.yml $PYTHON_SITE_PACKAGE_PATH/site-packages/metdataexplorer.yml && \
     cd ${TETHYS_HOME}/apps/tethysapp-swe && tethys install -w -N -q && cp install.yml $PYTHON_SITE_PACKAGE_PATH/site-packages/swe.yml && \
+    cd ${TETHYS_HOME}/apps/tethysapp-hydrocompute && tethys install -w -N -q && cp install.yml $PYTHON_SITE_PACKAGE_PATH/site-packages/hydrocompute.yml && \
     rm -rf ${TETHYS_HOME}/extensions/* && \
     rm -rf ${TETHYS_HOME}/apps/* && \
     # micromamba clean --all --yes && --> only if installing with microbamba 
