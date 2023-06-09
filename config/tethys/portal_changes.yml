@@ -1,47 +1,65 @@
 apps:
-  water_data_explorer:
+  app_store:
     services:
-      persistent:
-        catalog_db: tethys_postgis
-      spatial: {}
-      dataset: {}
-      wps: {}
+      custom_settings:
+        encryption_key: GH_d9DGg9Gf107dbYkb8PZ6LgdYvA4WsQmKEWlolI=
+        stores_settings: '{"name":"John Doe","age":25,"email":"johndoe@example.com"}'
+  ggst:
+    services:
+      custom_settings:
+        conda_python_path: /opt/conda/envs/tethys/bin/python
+        earthdata_pass: byuGRACE1
+        earthdata_username: byugrace
+        global_output_directory: /usr/lib/tethys
+        grace_thredds_catalog: http://localhost:8080/thredds/catalog/ciroh_data/tethys/ggst_thredds_directory/catalog.xml
+        grace_thredds_directory: /var/lib/tethys_persist/thredds_data/tethys/ggst_thredds_directory
   metdataexplorer:
     services:
-      persistent:
-        thredds_db: tethys_postgis
-      spatial: {}
-      dataset: {}
-      wps: {}
       custom_settings:
         disclaimer_header: GIO TERMS OF SERVICE 4
         disclaimer_message: The MDE is a happy tethys application
-  ggst:
-    services:
-      persistent: {}
-      spatial: {}
-      dataset: {}
-      wps: {}
-      custom_settings:
-        grace_thredds_directory: ${TETHYS_PERSIST}/thredds_data/tethys/ggst_thredds_directory
-        grace_thredds_catalog: http://localhost:8080/thredds/catalog/ciroh_data/tethys/ggst_thredds_directory/catalog.xml
-        global_output_directory: ${TETHYS_HOME}
-        earthdata_username: byugrace
-        earthdata_pass: byuGRACE1
-        conda_python_path: ${CONDA_HOME}/envs/${CONDA_ENV_NAME}/bin/python
+      persistent:
+        thredds_db: tethys_postgis
   swe:
     services:
-      persistent: {}
-      spatial:
-        thredds_service: tethys_thredds
-      dataset: {}
-      wps: {}
-  app_store:
+      custom_settings: {}
+  water_data_explorer:
     services:
-      persistent: {}
-      spatial: {}
-      dataset: {}
-      wps: {}
-      custom_settings:
-        stores_settings: '{"name":"John Doe","age":25,"email":"johndoe@example.com"}'
-        encryption_key: GH_d9DGg9Gf107dbYkb8PZ6LgdYvA4WsQmKEWlolI=
+      custom_settings: {}
+      persistent:
+        catalog_db: tethys_postgis
+
+proxy_apps:
+  owp_nwm_map_viewer:
+    name: OWP NWM Map Viewer
+    endpoint: https://water.noaa.gov/map
+    logo_url: /static/ciroh_theme/images/owp.png
+    description: Proxy app for Office in Water Prediction
+    tags: NOAA
+    enabled: true
+    show_in_apps_library: true
+    order: 0
+    back_url: web
+    open_in_new_tab: true
+  ciroh_jupyterhub:
+    name: CIROH JupyterHub
+    endpoint: https://jupyterhub.cuahsi.org/hub/login
+    logo_url: /static/ciroh_theme/images/jupyterhub.png
+    description: Proxy app for the CIROH JupyterHub
+    tags: CUAHSI
+    enabled: true
+    show_in_apps_library: true
+    order: 1
+    back_url: web
+    open_in_new_tab: true
+  hydroshare:
+    name: HydroShare
+    endpoint: https://www.hydroshare.org/home/
+    logo_url: /static/ciroh_theme/images/HydroShare.png
+    description: Proxy app for the Hydroshare app
+    tags: CUAHSI
+    enabled: true
+    show_in_apps_library: true
+    order: 2
+    back_url: web
+    open_in_new_tab: true

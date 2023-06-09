@@ -1,3 +1,8 @@
+image:
+  repository: 'ciroh/tethysapp-ciroh'
+  tag: dev_4acd5a9ce6a40475cac5fa635af826429f944b52
+  pullPolicy: Always
+
 ingresses:
   enabled: true
   external:
@@ -44,7 +49,7 @@ tethys:
     # global_output_directory: '/usr/lib/tethys_persist'
     # # grace_thredds_directory_relative_path: '/thredds_data/ggst/fake_data'
     # # grace_thredds_catalog: '/thredds/catalog/ciroh_data/fake_data/catalog.xml'
-    # thredds_data_relative_path: '/thredds_data/tethys'
+    thredds_data_relative_path: '/thredds_data/tethys'
     # # relative path to the grace thredds directory: /thredds_data/ggst/fake_data
     # grace_thredds_directory_relative_path: '/thredds_data/tethys/ggst_thredds_directory'
     # # path to the grace thredds directory: /thredds/catalog/ciroh_data/fake_data/catalog.xml
@@ -151,6 +156,9 @@ tethys:
         open_in_new_tab: true
 
 thredds:
+  image:
+    repository: tethysplatformuploader/thredds-docker
+    tag: 4.6.20-SNAPSHOT
   fullnameOverride: 'ciroh-tds'
   thredds_tds_catalog: '/thredds/catalog/ciroh_data/thredds_data/catalog.xml'
   persistentVolumeClaim:

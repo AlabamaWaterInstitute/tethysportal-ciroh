@@ -109,7 +109,9 @@ spec:
             - name: DATA_UPLOAD_MAX_MEMORY_SIZE
               value: {{ .Values.tethys.settings.data_upload_max_memory_size | quote }}
             - name: FILE_UPLOAD_MAX_MEMORY_SIZE
-              value: {{ .Values.tethys.settings.file_upload_max_memory_size | quote }}              
+              value: {{ .Values.tethys.settings.file_upload_max_memory_size | quote }}
+            - name: NGINX_READ_TIME_OUT
+              value: {{ .Values.tethys.settings.nginx_read_time_out | quote }}                           
             - name: SITE_TITLE
               value: {{ .Values.tethys.settings.portal_title | quote }}
             - name: BRAND_TEXT
