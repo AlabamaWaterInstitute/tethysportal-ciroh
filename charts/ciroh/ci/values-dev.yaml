@@ -1,6 +1,6 @@
 image:
   repository: 'ciroh/tethysapp-ciroh'
-  tag: dev_4acd5a9ce6a40475cac5fa635af826429f944b52
+  tag: dev_6d174d64d672ae11b62417334d7482de150be787
   pullPolicy: Always
 
 ingresses:
