@@ -25,7 +25,11 @@ jobs:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v2
         with:
-          submodules: 'recursive'
+          submodules: 'true'
+      # Checks-out the hydrocompute extra submodule
+      - name: checkout Hydrocompute submodule
+        run: |
+          cd tethysapp-hydrocompute/tethysapp/hydrocompute/public/HydroCompute && git submodule update --init --recursive
       - name: Set Env
         run: |
           echo "KANIKO_CACHE_REGISTRY=${{ env.DOCKER_HUB_ORG }}/${{ env.DOCKER_REPO }}-cache" >> $GITHUB_ENV
