@@ -20,12 +20,67 @@ ingresses:
       - host: localhost
     tls: []
 
+djangocms:
+  image:
+    repository: gioelkin/django-cms
+    tag: v1.1.1
+  ingress:
+    enabled: false
+  fullnameOverride: 'ciroh-cms'
+  env:
+    - name: DJANGOCMS_DB_NAME
+      value: 'djangocms'
+    - name: DJANGOCMS_DB_USER
+      value: 'djangocmsadmin'
+    - name: DJANGOCMS_DB_PWD
+      value: 'pass'
+    - name: DJANGOCMS_DB_HOST
+      value: 'ciroh-db'
+    - name: DJANGOCMS_DB_PORT
+      value: '5432'
+    - name: DJANGO_SUPERUSER_USERNAME
+      value: 'admin'
+    - name: DJANGO_SUPERUSER_EMAIL
+      value: 'example@gmail.com'
+    - name: DJANGO_SUPERUSER_PASSWORD
+      value: 'pass'
+    - name: DJANGOCMS_ADMIN_DB_USER
+      value: 'postgres'
+    - name: DJANGOCMS_ADMIN_DB_PWD
+      value: 'please_dont_use_default_passwords'
+    - name: DEFAULT_STORAGE_DSN
+      value: '=file:///data/media/?url=%2Fmedia%2F'
+    - name: DEBUG
+      value: 'False'
+    - name: DOMAIN_ALIASES
+      value: 'localhost, 127.0.0.1'
+    - name: SECURE_SSL_REDIRECT
+      value: 'False'
+    - name: DOMAIN
+      value: 'localhost'
+    - name: STATIC_URL
+      value: '/static_cms/'
+  service:
+    type: ClusterIP
+    externalPort: 3000
+    internalPort: 80
+  storage_size: 3Gi
+  resources:
+    requests:
+      cpu: 100m
+      memory: 128Mi
+    limits:
+      cpu: 2
+      memory: 2Gi
+  persistentVolumeClaim:
+    name: 'djangocms-pv-claim'
+
 tethys:
   workspace_size: '5Gi'
   settings:
     tethys_settings_flags: '--production, --overwrite'
     enable_portal_open: 'true'
-    bypass_tethys_home_page: 'false'
+    bypass_tethys_home_page: 'true'
     channel_layers_backend: 'channels_redis.core.RedisChannelLayer'
     portal_title: 'CIROH Portal'
     primary_color: '#256291'

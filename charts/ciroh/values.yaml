@@ -9,6 +9,12 @@ imagePullSecrets: []
 nameOverride: ''
 fullnameOverride: ''
 
+djangocms:
+  fullnameOverride: 'ciroh-cms'
+  postgis:
+    enabled: false
+  env: []
+
 geoserver:
   fullnameOverride: 'ciroh-gs'
   username: 'admin'

@@ -11,6 +11,9 @@ spec:
       targetPort: http
       protocol: TCP
       name: http
+    # - name: http
+      # port: {{ .Values.service.port }}
+      # targetPort: {{ .Values.service.port }}      
   selector:
     app.kubernetes.io/name: {{ include "ciroh.name" . }}
     app.kubernetes.io/instance: {{ .Release.Name }}

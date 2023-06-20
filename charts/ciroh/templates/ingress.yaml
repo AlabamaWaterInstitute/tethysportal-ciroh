@@ -26,14 +26,29 @@ spec:
   {{- range .Values.ingresses.external.hosts }}
     # - host: {{ .host | quote }}
     - http:
-        paths:
-          - path: "/"
+        paths:        
+          - path: "/apps"
             pathType: Prefix
             backend:
               service:
                 name: {{ $fullName }}
                 port:
                   name: http
+                  # number: {{ $.Values.service.port }}
+          - path: "/static"
+            pathType: Prefix
+            backend:
+              service:
+                name: {{ $fullName }}
+                port:
+                  name: http                  
+          - path: "/"
+            pathType: Prefix
+            backend:
+              service:
+                name: {{ $.Values.djangocms.fullnameOverride }}
+                port:
+                  number: {{ $.Values.djangocms.service.externalPort }}
 
           - path: "/geoserver"
             pathType: Prefix
@@ -42,14 +57,14 @@ spec:
                 name: {{ $.Values.geoserver.fullnameOverride }}
                 port: 
                   number: 8181
-                  
+
           - path: "/thredds"
             pathType: Prefix
             backend:
               service:
                 name: {{ $.Values.thredds.fullnameOverride }}
                 port: 
-                  number: 8080                  
+                  number: 8080    
 
   {{- end }}
 ---
@@ -85,7 +100,21 @@ spec:
             backend:
               service:
                 name: {{ $fullName }}
-                port: 
+                port:
                   name: http
+          - path: "/static_cms"
+            pathType: Prefix
+            backend:
+              service:
+                name: {{ $.Values.djangocms.fullnameOverride }}
+                port:
+                  number: {{ $.Values.djangocms.service.externalPort }}                  
+                  # number: {{ $.Values.service.port }}          
+            # pathType: Prefix
+            # backend:
+            #   service:
+            #     name: {{ $fullName }}
+            #     port: 
+            #       name: http
   {{- end }}
 {{- end }}
