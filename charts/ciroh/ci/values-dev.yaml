@@ -176,6 +176,17 @@ tethys:
           custom_settings: {}
           persistent:
             catalog_db: tethys_postgis
+      gwdm:
+        services:
+          custom_settings:
+            gw_data_directory: /var/lib/tethys_persist/thredds_data/tethys/gwdm_data_directory
+            gw_thredds_directory: /var/lib/tethys_persist/thredds_data/tethys/gwdm_thredds_directory
+            gw_thredds_catalog: http://localhost:8080/thredds/catalog/ciroh_data/tethys/gwdm_thredds_directory/catalog.xml
+          persistent:
+            gwdb: tethys_postgis
+          spatial:
+            primary_geoserver: tethys_geoserver
+            primary_thredds: tethys_thredds
     proxy_apps:
       owp_nwm_map_viewer:
         name: OWP NWM Map Viewer
