@@ -22,3 +22,7 @@
 	path = tethysapp-hydrocompute
 	url = https://github.com/tethysplatform/tethysapp-hydrocompute.git
 	branch = main
+[submodule "gwdm"]
+	path = gwdm
+	url = https://github.com/Aquaveo/gwdm.git
+	branch = tethys_4_upgrade
