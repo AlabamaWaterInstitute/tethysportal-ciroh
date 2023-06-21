@@ -11,12 +11,16 @@ dependencies:
   - name: 'geoserver'
     repository: 'oci://ghcr.io/romer8'
     version: '*'
+    condition: geoserver.enabled
   - name: 'thredds'
     repository: 'oci://ghcr.io/aquaveo'
     version: '*'
+    condition: thredds.enabled
   - name: 'redis'
     repository: 'https://charts.bitnami.com/bitnami'
     version: '*'
+    condition: redis.enabled
   - name: 'djangocms'
     repository: 'oci://ghcr.io/romer8'
     version: '*'
+    condition: djangocms.enabled

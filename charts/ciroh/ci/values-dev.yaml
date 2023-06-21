@@ -24,6 +24,7 @@ djangocms:
   image:
     repository: gioelkin/django-cms
     tag: v1.1.1
+  enabled: true
   ingress:
     enabled: false
   fullnameOverride: 'ciroh-cms'

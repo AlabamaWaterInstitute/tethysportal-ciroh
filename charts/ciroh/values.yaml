@@ -10,12 +10,14 @@ nameOverride: ''
 fullnameOverride: ''
 
 djangocms:
+  enabled: false
   fullnameOverride: 'ciroh-cms'
   postgis:
     enabled: false
   env: []
 
 geoserver:
+  enabled: true
   fullnameOverride: 'ciroh-gs'
   username: 'admin'
   password: 'geoserver'
@@ -43,6 +45,7 @@ geoserver:
   storageClass:
     storageClassName: ''
 thredds:
+  enabled: true
   fullnameOverride: 'ciroh-tds'
   thredds_tds_catalog: '/thredds/catalog/ciroh_data/thredds_data/catalog.xml'
   username: 'admin'
@@ -123,6 +126,7 @@ postgis:
   storageClass:
     storageClassName: ''
 redis:
+  enabled: true
   fullnameOverride: 'ciroh-redis'
   architecture: standalone
   auth:
