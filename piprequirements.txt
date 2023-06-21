@@ -26,3 +26,13 @@ xmltodict
 suds-community
 siphon
 owslib
+scipy
+statsmodels
+simplejson
+pandarallel
+gstools
+thredds_crawler
+matplotlib
+sphinx_rtd_theme
+sphinx
+sphinxcontrib-napoleon

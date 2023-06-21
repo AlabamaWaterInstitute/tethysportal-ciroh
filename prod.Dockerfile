@@ -8,7 +8,7 @@ COPY Water-Data-Explorer ${TETHYS_HOME}/apps/Water-Data-Explorer
 COPY tethysapp-metdataexplorer ${TETHYS_HOME}/apps/tethysapp-metdataexplorer
 COPY tethysapp-tethys_app_store ${TETHYS_HOME}/apps/tethysapp-tethys_app_store
 COPY ggst ${TETHYS_HOME}/apps/ggst
-COPY gwdm ${TETHYS_HOME}/apps/gwmd
+COPY gwdm ${TETHYS_HOME}/apps/gwdm
 COPY tethysapp-swe ${TETHYS_HOME}/apps/tethysapp-swe
 COPY tethysapp-hydrocompute ${TETHYS_HOME}/apps/tethysapp-hydrocompute
 
