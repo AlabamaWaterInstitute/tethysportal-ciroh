@@ -37,6 +37,7 @@ RUN pip install --no-cache-dir --quiet -r piprequirements.txt && \
     cd ${TETHYS_HOME}/apps/tethysapp-metdataexplorer && tethys install -w -N -q && cp install.yml $PYTHON_SITE_PACKAGE_PATH/site-packages/metdataexplorer.yml && \
     cd ${TETHYS_HOME}/apps/tethysapp-swe && tethys install -w -N -q && cp install.yml $PYTHON_SITE_PACKAGE_PATH/site-packages/swe.yml && \
     cd ${TETHYS_HOME}/apps/tethysapp-hydrocompute && tethys install -w -N -q && cp install.yml $PYTHON_SITE_PACKAGE_PATH/site-packages/hydrocompute.yml && \
+    cd ${TETHYS_HOME}/apps/gwdm && tethys install -w -N -q && cp install.yml $PYTHON_SITE_PACKAGE_PATH/site-packages/gwdm.yml && \
     rm -rf ${TETHYS_HOME}/extensions/* && \
     rm -rf ${TETHYS_HOME}/apps/* && \
     # micromamba clean --all --yes && --> only if installing with microbamba 
@@ -70,7 +71,6 @@ COPY salt/ /srv/salt/
 ARG MAMBA_DOCKERFILE_ACTIVATE=1
 RUN rm -Rf ~/.cache/pip && \
     micromamba clean --all --yes
-# touch ${TETHYS_HOME}/portal_changes.yml
 #########
 # PORTS #
 #########
