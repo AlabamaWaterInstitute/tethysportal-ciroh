@@ -7,11 +7,8 @@ on:
       - 'adding-gwdm'
 
 env:
-  # TEST_IMAGE: gioelkin/tethys_portal:dev_${GITHUB_SHA}
   IMAGE_TAG: dev_${GITHUB_SHA}
-  # DOCKER_HUB_ORG: gioelkin
   DOCKER_HUB_ORG: ciroh
-  # DOCKER_REPO: tethys_portal
   DOCKER_REPO: tethysapp-ciroh
   MAX_NUMBER_IMAGE: 5
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
@@ -57,7 +54,7 @@ jobs:
         with:
           context: .
           push: true
-          tags: ${{ env.KANIKO_IMAGE }}:${{ env.TAG }}
+          tags: ${{ env.DOCKER_HUB_ORG }}/${{ env.DOCKER_REPO }}:${{ env.TAG }}
           cache-from: type=registry,ref=${{ env.DOCKER_HUB_ORG }}/${{ env.DOCKER_REPO }}-cache:buildcache
           cache-to: type=registry,${{ env.DOCKER_HUB_ORG }}/${{ env.DOCKER_REPO }}-cache:buildcache,mode=max
 
