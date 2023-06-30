@@ -55,8 +55,8 @@ jobs:
           context: .
           push: true
           tags: ${{ env.DOCKER_HUB_ORG }}/${{ env.DOCKER_REPO }}:${{ env.TAG }}
-          cache-from: type=registry,ref=${{ env.DOCKER_HUB_ORG }}/${{ env.DOCKER_REPO }}-cache:build-cache
-          cache-to: type=registry,${{ env.DOCKER_HUB_ORG }}/${{ env.DOCKER_REPO }}-cache:build-cache,mode=max
+          cache-from: type=registry,ref=${{ env.DOCKER_HUB_ORG }}/${{ env.DOCKER_REPO }}-cache:latest
+          cache-to: type=registry,${{ env.DOCKER_HUB_ORG }}/${{ env.DOCKER_REPO }}-cache:latest,mode=max
 
       # - name: build and push tag
       #   uses: aevea/action-kaniko@master
