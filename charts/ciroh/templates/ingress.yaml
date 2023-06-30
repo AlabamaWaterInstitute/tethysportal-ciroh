@@ -27,7 +27,16 @@ spec:
     # - host: {{ .host | quote }}
     - http:
         paths:        
-          - path: "/apps"
+
+          # - path: "/"
+          #   pathType: Prefix
+          #   backend:
+          #     service:
+          #       name: {{ $.Values.djangocms.fullnameOverride }}
+          #       port:
+          #         number: {{ $.Values.djangocms.service.externalPort }}
+
+          - path: "/"
             pathType: Prefix
             backend:
               service:
@@ -35,21 +44,7 @@ spec:
                 port:
                   name: http
                   # number: {{ $.Values.service.port }}
-          - path: "/static"
-            pathType: Prefix
-            backend:
-              service:
-                name: {{ $fullName }}
-                port:
-                  name: http                  
-          - path: "/"
-            pathType: Prefix
-            backend:
-              service:
-                name: {{ $.Values.djangocms.fullnameOverride }}
-                port:
-                  number: {{ $.Values.djangocms.service.externalPort }}
-
+           
           - path: "/geoserver"
             pathType: Prefix
             backend:
@@ -95,20 +90,20 @@ spec:
   {{- range .Values.ingresses.static.hosts }}
     - http:
         paths:
-          - path: "/static"
+          - path: "/tethys/static"
             pathType: Prefix
             backend:
               service:
                 name: {{ $fullName }}
                 port:
                   name: http
-          - path: "/static_cms"
-            pathType: Prefix
-            backend:
-              service:
-                name: {{ $.Values.djangocms.fullnameOverride }}
-                port:
-                  number: {{ $.Values.djangocms.service.externalPort }}                  
+          # - path: "/static_cms"
+          #   pathType: Prefix
+          #   backend:
+          #     service:
+          #       name: {{ $.Values.djangocms.fullnameOverride }}
+          #       port:
+          #         number: {{ $.Values.djangocms.service.externalPort }}                  
                   # number: {{ $.Values.service.port }}          
             # pathType: Prefix
             # backend:
