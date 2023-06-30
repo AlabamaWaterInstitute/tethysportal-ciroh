@@ -64,7 +64,7 @@ jobs:
           cache_registry: ${{ env.KANIKO_CACHE_REGISTRY }}
           # Dockerfile filename
           build_file: prod.Dockerfile
-          extra_args: --use-new-run --compressed-caching=false --snapshotMode=redo --cleanup
+          extra_args: --cache=true --use-new-run --compressed-caching=false --snapshotMode=redo --cleanup
   startup_test:
     needs: [build]
     runs-on: ubuntu-latest
