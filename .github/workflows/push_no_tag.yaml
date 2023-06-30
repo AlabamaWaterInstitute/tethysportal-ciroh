@@ -53,6 +53,7 @@ jobs:
         uses: docker/build-push-action@v4
         with:
           context: .
+          file: ./prod.Dockerfile
           push: true
           tags: ${{ env.DOCKER_HUB_ORG }}/${{ env.DOCKER_REPO }}:${{ env.TAG }}
           cache-from: type=registry,ref=${{ env.DOCKER_HUB_ORG }}/${{ env.DOCKER_REPO }}-cache:latest
