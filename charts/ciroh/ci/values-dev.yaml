@@ -1,6 +1,8 @@
 image:
-  repository: 'ciroh/tethysapp-ciroh'
-  tag: dev_6d174d64d672ae11b62417334d7482de150be787
+  repository: 'gioelkin/tethys-ciroh-portal'
+  # repository: 'ciroh/tethysapp-ciroh'
+  # tag: dev_aea20c0fc2e159559e561b2b1bf9a3861542fb0b
+  tag: latest
   pullPolicy: Always
 
 ingresses:
@@ -79,6 +81,7 @@ djangocms:
 tethys:
   workspace_size: '5Gi'
   settings:
+    prefix_to_path: 'tethys_platform'
     tethys_settings_flags: '--production, --overwrite'
     enable_portal_open: 'true'
     bypass_tethys_home_page: 'true'
@@ -110,42 +113,7 @@ tethys:
     # grace_thredds_directory_relative_path: '/thredds_data/tethys/ggst_thredds_directory'
     # # path to the grace thredds directory: /thredds/catalog/ciroh_data/fake_data/catalog.xml
     # grace_thredds_catalog: '/thredds/catalog/ciroh_data/tethys/ggst_thredds_directory/catalog.xml'
-    # earth_username: 'byugrace'
-    # earth_pass: 'byuGRACE1'
-    # encryption_key: ''
-    # stores_settings: ''
-    # proxy_app_1_name: 'OWP NWM Map Viewer'
-    # proxy_app_1_endpoint: 'https://water.noaa.gov/map'
-    # # proxy_app_1_logo_url: 'https://avatars.githubusercontent.com/u/60660814?s=200&v=4'
-    # proxy_app_1_logo_url: '/static/ciroh_theme/images/owp.png'
-    # proxy_app_1_description: 'Proxy app for office in water prediction'
-    # proxy_app_1_tags: 'NOAA'
-    # proxy_app_1_enabled: 'true'
-    # proxy_app_1_show_in_apps_library: 'true'
-    # proxy_app_1_order: '0'
-    # proxy_app_1_open_in_new_tab: 'false'
-    # proxy_app_2_name: 'CIROH JupyterHub'
-    # proxy_app_2_endpoint: 'https://jupyterhub.cuahsi.org/hub/login'
-    # # proxy_app_2_logo_url: 'https://help.hydroshare.org/static/media/uploads/.thumbnails/jupyterhub2.png/jupyterhub2-211x209.png'
-    # proxy_app_2_logo_url: '/static/ciroh_theme/images/jupyterhub.png'
-    # proxy_app_2_description: 'Proxy app for the CIROH JupyterHub'
-    # proxy_app_2_tags: 'CUAHSI'
-    # proxy_app_2_enabled: 'true'
-    # proxy_app_2_show_in_apps_library: 'true'
-    # proxy_app_2_order: '1'
-    # proxy_app_2_open_in_new_tab: 'false'
-    # proxy_app_3_name: 'HydroShare'
-    # proxy_app_3_endpoint: 'https://www.hydroshare.org/home/'
-    # # proxy_app_3_logo_url: 'https://avatars.githubusercontent.com/u/3444493?s=200&v=4'
-    # proxy_app_3_logo_url: '/static/ciroh_theme/images/HydroShare.png'
-    # proxy_app_3_description: 'Proxy app for the HydroShare app'
-    # proxy_app_3_tags: 'HydroShare'
-    # proxy_app_3_enabled: 'true'
-    # proxy_app_3_show_in_apps_library: 'true'
-    # proxy_app_3_order: '2'
-    # proxy_app_3_open_in_new_tab: 'false'
-
-  portal_config:
+  portal_changes:
     apps:
       app_store:
         services:
@@ -159,7 +127,7 @@ tethys:
             earthdata_pass: byuGRACE1
             earthdata_username: byugrace
             global_output_directory: /usr/lib/tethys
-            grace_thredds_catalog: http://localhost:8080/thredds/catalog/ciroh_data/tethys/ggst_thredds_directory/catalog.xml
+            grace_thredds_catalog: http://localhost:8000/thredds/catalog/ciroh_data/tethys/ggst_thredds_directory/catalog.xml
             grace_thredds_directory: /var/lib/tethys_persist/thredds_data/tethys/ggst_thredds_directory
       metdataexplorer:
         services:
