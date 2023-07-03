@@ -26,6 +26,8 @@ spec:
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           env:
+            - name: PREFIX_TO_PATH
+              value: {{ .Values.tethys.settings.prefix_to_path | quote }}
             - name: ALLOWED_HOSTS
               value: "\"[{{- range .Values.ingresses.external.hosts }}{{ .host }},{{- end }}]\""
             - name: ENABLE_OPEN_PORTAL
@@ -157,6 +159,7 @@ spec:
             - name: config-volume
               mountPath: '/usr/lib/tethys/portal_changes.yml'
               subPath: portal_changes.yml
+                     
       volumes:
         - name: tethys-persist-pv
           persistentVolumeClaim:

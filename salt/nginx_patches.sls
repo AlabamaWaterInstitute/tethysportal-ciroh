@@ -13,8 +13,16 @@ Patch_NGINX_TimeOut:
 Add_Wasm_MIME_Type:
   cmd.run:
     - name: >
-        sed -i '1s/^/include mime.types;\n\n/' /etc/nginx/sites-enabled/tethys_nginx.conf && sed -i '2s/^/types {\n    application\/wasm wasm;\n}\n\n/' /etc/nginx/sites-enabled/tethys_nginx.conf &&
+        sed -i '1s/^/#include mime.types;\n\n/' /etc/nginx/sites-enabled/tethys_nginx.conf && sed -i '2s/^/types {\n    application\/wasm wasm;\n}\n\n/' /etc/nginx/sites-enabled/tethys_nginx.conf &&
         cat /etc/nginx/sites-enabled/tethys_nginx.conf
+    - shell: /bin/bash
+    - unless: /bin/bash -c "[ -f "{{ TETHYS_PERSIST }}/apply_nginx_patches_complete" ];"
+# necesary for prefix path:
+Add_Prefix_to_static:
+  cmd.run:
+    - name: >
+          sed -i 's/location \/static/location \/tethys_platform\/static/g' /etc/nginx/sites-enabled/tethys_nginx.conf
+          cat /etc/nginx/sites-enabled/tethys_nginx.conf
     - shell: /bin/bash
     - unless: /bin/bash -c "[ -f "{{ TETHYS_PERSIST }}/apply_nginx_patches_complete" ];"
 

@@ -4,7 +4,8 @@ kind: ConfigMap
 metadata:
   name: "{{ $fullName }}-configmap"
 data:
-  {{- if .Values.tethys.portal_config }}
+  {{- if .Values.tethys.portal_changes }}
   portal_changes.yml: |
-  {{- toYaml .Values.tethys.portal_config | nindent 4 }}
+  {{- toYaml .Values.tethys.portal_changes | nindent 4 }}
   {{- end }}
+
