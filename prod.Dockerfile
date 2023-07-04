@@ -28,6 +28,7 @@ ARG MAMBA_DOCKERFILE_ACTIVATE=1
 # INSTALL EXTENSIONS and APPLICATIONS #
 #######################################
 RUN pip install --no-cache-dir --quiet -r piprequirements.txt && \
+    micromamba install --yes -c conda-forge geoserver-rest && \
     conda install --yes -c conda-forge udunits2 && \
     # micromamba install --yes -c conda-forge --file requirements.txt --> problem installing with microbamba, but pip is working well but unstable
     export PYTHON_SITE_PACKAGE_PATH=$(${CONDA_HOME}/envs/${CONDA_ENV_NAME}/bin/python -m site | grep -a -m 1 "site-packages" | head -1 | sed 's/.$//' | sed -e 's/^\s*//' -e '/^$/d'| sed 's![^/]*$!!' | cut -c2-) &&\
@@ -41,7 +42,7 @@ RUN pip install --no-cache-dir --quiet -r piprequirements.txt && \
     cd ${TETHYS_HOME}/apps/gwdm && tethys install -w -N -q && cp install.yml $PYTHON_SITE_PACKAGE_PATH/site-packages/gwdm.yml && \
     rm -rf ${TETHYS_HOME}/extensions/* && \
     rm -rf ${TETHYS_HOME}/apps/* && \
-    # micromamba clean --all --yes && --> only if installing with microbamba 
+    micromamba clean --all --yes && \ 
     conda clean --all --yes && \
     rm -rf /var/lib/apt/lists/* && \
     find -name '*.a' -delete && \
@@ -66,6 +67,8 @@ COPY config/tethys/supervisord.conf /etc/supervisor/supervisord.conf
 COPY config/tethys/update_tethys_apps.py ${TETHYS_HOME}
 COPY config/tethys/update_proxy_apps.py ${TETHYS_HOME}
 COPY config/tethys/update_state.sh ${TETHYS_HOME}
+COPY config/tethys/gwdm/post_setup_gwdm.py ${TETHYS_HOME}
+
 COPY salt/ /srv/salt/
 
 # Activate tethys conda environment during build

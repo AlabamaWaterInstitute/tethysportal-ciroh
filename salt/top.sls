@@ -7,3 +7,4 @@ base:
     - init_apps
     - post_app
     - nginx_patches
+    - post_gwdm
