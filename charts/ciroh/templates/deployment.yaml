@@ -26,6 +26,20 @@ spec:
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           env:
+            - name: GWDM_WORKSPACE_NAME
+              value: {{ .Values.tethys.settings.gwdm_workspace_name | quote }}
+            - name: GWDM_STORE_NAME
+              value: {{ .Values.tethys.settings.gwdm_store_name | quote }}
+            - name: GWDM_TABLE_NAME
+              value: {{ .Values.tethys.settings.gwdm_table_name | quote }}
+            - name: GWDM_REGION_LAYER_NAME
+              value: {{ .Values.tethys.settings.gwdm_region_layer_name | quote }}
+            - name: GWDM_AQUIFER_LAYER_NAME
+              value: {{ .Values.tethys.settings.gwdm_aquifer_layer_name | quote }}                                          
+            - name: GWDM_WELL_LAYER_NAME
+              value: {{ .Values.tethys.settings.gwdm_well_layer_name | quote }}
+            - name: POSTGRES_USER
+              value: {{ .Values.tethys.settings.postgres_user | quote }}
             - name: PREFIX_TO_PATH
               value: {{ .Values.tethys.settings.prefix_to_path | quote }}
             - name: ALLOWED_HOSTS
