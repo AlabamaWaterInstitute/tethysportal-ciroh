@@ -10,7 +10,8 @@ ingresses:
   external:
     enabled: false
     className: ''
-    annotations: null
+    annotations:
+      nginx.ingress.kubernetes.io/proxy-body-size: '1024000m'
     hosts:
       - host: localhost
     tls: []
