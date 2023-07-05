@@ -5,6 +5,9 @@ area
 utm
 pyshp
 pywaterml
+torch
+torchvision
+torchaudio
 geopandas
 shapely
 xarray
