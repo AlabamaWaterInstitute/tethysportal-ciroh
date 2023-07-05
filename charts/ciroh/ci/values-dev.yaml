@@ -12,6 +12,8 @@ ingresses:
     className: ''
     annotations:
       nginx.ingress.kubernetes.io/proxy-body-size: '1024000m'
+      nginx.ingress.kubernetes.io/proxy-read-timeout: '6000'
+      nginx.ingress.kubernetes.io/proxy-send-timeout: '6000'
     hosts:
       - host: localhost
     tls: []
