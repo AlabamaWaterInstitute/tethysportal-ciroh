@@ -1,8 +1,8 @@
 image:
-  repository: 'gioelkin/tethys-ciroh-portal'
+  repository: 'gioelkin/tethysapp-ciroh-portal'
   # repository: 'ciroh/tethysapp-ciroh'
   # tag: dev_aea20c0fc2e159559e561b2b1bf9a3861542fb0b
-  tag: latest
+  tag: dev_a5775f8c8cf0e487be2656729369f8944ff39bb3
   pullPolicy: Always
 
 ingresses:
@@ -28,7 +28,7 @@ ingresses:
 djangocms:
   image:
     repository: gioelkin/django-cms
-    tag: v1.1.1-rc
+    tag: dev_37e269e8f2702d25628e082e6b62c1b58e538dcf
   enabled: true
   ingress:
     enabled: false
@@ -162,7 +162,7 @@ tethys:
           custom_settings:
             gw_data_directory: /var/lib/tethys_persist/thredds_data/tethys/gwdm_data_directory
             gw_thredds_directory: /var/lib/tethys_persist/thredds_data/tethys/gwdm_thredds_directory
-            gw_thredds_catalog: http://localhost:8080/thredds/catalog/ciroh_data/tethys/gwdm_thredds_directory/catalog.xml
+            gw_thredds_catalog: http://localhost:8000/thredds/catalog/ciroh_data/tethys/gwdm_thredds_directory/catalog.xml
           persistent:
             gwdb: tethys_postgis
           spatial:

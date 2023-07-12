@@ -2,7 +2,7 @@ name: release
 on:
   push:
     branches:
-      - aws-portal
+      - dns-and_chart
     paths:
       - 'charts/**'
   release:
