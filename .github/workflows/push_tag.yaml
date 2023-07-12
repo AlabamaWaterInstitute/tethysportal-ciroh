@@ -7,27 +7,28 @@ on:
       - '*'
 
 env:
-  # DOCKER_HUB_ORG: gioelkin
-  DOCKER_HUB_ORG: ciroh
-  DOCKER_REPO: tethysapp-ciroh
-  # DOCKER_REPO: tethys_portal
+  DOCKER_HUB_ORG: gioelkin
+  # DOCKER_HUB_ORG: ciroh
+  DOCKER_REPO: tethysapp-ciroh-portal
+  # DOCKER_REPO: tethysapp-ciroh
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
-  # This workflow contains a single job called "build"
   build:
     # The type of runner that the job will run on
     runs-on: ubuntu-latest
+
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v2
         with:
           submodules: 'true'
-      - name: Set Env
+      # Checks-out the hydrocompute extra submodule
+      - name: checkout Hydrocompute submodule
         run: |
-          echo "KANIKO_CACHE_REGISTRY=${{ env.DOCKER_HUB_ORG }}/${{ env.DOCKER_REPO }}-cache" >> $GITHUB_ENV
-          echo "KANIKO_IMAGE=${{ env.DOCKER_HUB_ORG }}/${{ env.DOCKER_REPO }}" >> $GITHUB_ENV
+          cd tethysapp-hydrocompute/tethysapp/hydrocompute/public/HydroCompute && git submodule update --init --recursive
+
       - name: Set Tag
         run: |
           echo "TAG=${GITHUB_REF:10}" >> $GITHUB_ENV
@@ -35,43 +36,31 @@ jobs:
       - name: Test Tag
         run: |
           echo $TAG
-      - name: build and push tag
-        uses: aevea/action-kaniko@master
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v2
+      - name: Login to Docker Hub
+        uses: docker/login-action@v2
         with:
-          # Docker registry where the image will be pushed
-          registry: docker.io
-          # Username used for authentication to the Docker registry
           username: ${{ secrets.DOCKER_BUILDER_USERNAME }}
-          # Password used for authentication to the Docker registry
           password: ${{ secrets.DOCKER_BUILDER_TOKEN }}
-          # Image name
-          image: ${{ env.KANIKO_IMAGE }}
-          # Image tag
-          tag: ${{ env.TAG }}
-          # Enables build cache
-          cache: true
-          # Docker registry meant to be used as cache
-          cache_registry: ${{ env.KANIKO_CACHE_REGISTRY }}
-          # Dockerfile filename
-          build_file: prod.Dockerfile
-          extra_args: --use-new-run --compressed-caching=false --snapshotMode=redo --cleanup
-      - name: build and push latest
-        uses: aevea/action-kaniko@master
+
+      - name: build and push stable tag
+        uses: docker/build-push-action@v4
         with:
-          # Docker registry where the image will be pushed
-          registry: docker.io
-          # Username used for authentication to the Docker registry
-          username: ${{ secrets.DOCKER_BUILDER_USERNAME }}
-          # Password used for authentication to the Docker registry
-          password: ${{ secrets.DOCKER_BUILDER_TOKEN }}
-          # Image name
-          image: ${{ env.KANIKO_IMAGE }}
-          # Image tag
-          tag: ${{ env.TAG_LATEST }}
-          # Enables build cache
-          cache: true
-          # Docker registry meant to be used as cache
-          cache_registry: ${{ env.KANIKO_CACHE_REGISTRY }}
-          # Dockerfile filename
-          build_file: prod.Dockerfile
-          extra_args: --use-new-run --compressed-caching=false --snapshotMode=redo --cleanup
+          context: .
+          file: ./prod.Dockerfile
+          push: true
+          tags: ${{ env.DOCKER_HUB_ORG }}/${{ env.DOCKER_REPO }}:${{ env.TAG }}
+          cache-from: type=registry,ref=${{ env.DOCKER_HUB_ORG }}/${{ env.DOCKER_REPO }}-cache:latest
+          cache-to: type=registry,ref=${{ env.DOCKER_HUB_ORG }}/${{ env.DOCKER_REPO }}-cache:latest,mode=max
+
+      - name: build and push latest tag
+        uses: docker/build-push-action@v4
+        with:
+          context: .
+          file: ./prod.Dockerfile
+          push: true
+          tags: ${{ env.DOCKER_HUB_ORG }}/${{ env.DOCKER_REPO }}:${{ env.TAG_LATEST }}
+          cache-from: type=registry,ref=${{ env.DOCKER_HUB_ORG }}/${{ env.DOCKER_REPO }}-cache:latest
+          cache-to: type=registry,ref=${{ env.DOCKER_HUB_ORG }}/${{ env.DOCKER_REPO }}-cache:latest,mode=max
