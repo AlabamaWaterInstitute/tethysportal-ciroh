@@ -24,10 +24,10 @@ spec:
   {{- end }}
   rules:
   {{- range .Values.ingresses.external.hosts }}
-    - host: {{ .host | quote }}
-      http:
+    # - host: {{ .host | quote }}
+    - http:
           paths:        
-            - path: "/tethys_platform"
+            - path: "/{{ $.Values.tethys.settings.prefix_url }}"
               pathType: Prefix
               backend:
                 service:

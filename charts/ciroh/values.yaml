@@ -39,7 +39,7 @@ geoserver:
   resources:
     requests:
       memory: '2Gi'
-      cpu: '1'
+      cpu: '2'
     limits:
       memory: '4Gi'
   storageClass:
@@ -205,10 +205,10 @@ ingresses:
 resources:
   requests:
     cpu: 1
-    memory: 512Mi
+    memory: 2Gi
   limits:
     cpu: 2
-    memory: 1Gi
+    memory: 2Gi
 nodeSelector: {}
 tolerations: []
 affinity: {}

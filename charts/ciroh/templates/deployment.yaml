@@ -40,8 +40,8 @@ spec:
               value: {{ .Values.tethys.settings.gwdm_well_layer_name | quote }}
             - name: POSTGRES_USER
               value: {{ .Values.tethys.settings.postgres_user | quote }}
-            - name: PREFIX_TO_PATH
-              value: {{ .Values.tethys.settings.prefix_to_path | quote }}
+            - name: PREFIX_URL
+              value: {{ .Values.tethys.settings.prefix_url | quote }}
             - name: ALLOWED_HOSTS
               value: "\"[{{- range .Values.ingresses.external.hosts }}{{ .host }},{{- end }}]\""
             - name: ENABLE_OPEN_PORTAL
@@ -91,11 +91,11 @@ spec:
             - name: TETHYS_GS_PROTOCOL
               value: 'http'
             - name: TETHYS_GS_HOST
-              value: {{ .Values.geoserver.fullnameOverride | quote }}
+              value: {{ .Values.tethys.services.geoserver | quote }}
             - name: TETHYS_GS_PORT
               value: "8181"
             - name: TETHYS_GS_HOST_PUB
-              value: {{ (index .Values.ingresses.external.hosts 0).host | quote }}
+              value: {{ .Values.tethys.services.geoserver | quote }}
             - name: TETHYS_GS_PORT_PUB
               value: "{{ if $.Values.ingresses.external.tls }}443{{else}}80{{ end }}"
             - name: TETHYS_GS_PROTOCOL_PUB
@@ -109,11 +109,11 @@ spec:
             - name: THREDDS_TDS_PRIVATE_PROTOCOL
               value: 'http'
             - name: THREDDS_TDS_PRIVATE_HOST
-              value: {{ .Values.thredds.fullnameOverride | quote }}
+              value: {{ .Values.tethys.services.thredds | quote }}
             - name: THREDDS_TDS_PRIVATE_PORT
               value: "8080"
             - name: THREDDS_TDS_PUBLIC_HOST
-              value: {{ (index .Values.ingresses.external.hosts 0).host | quote }}
+              value: {{ .Values.tethys.services.thredds | quote }}
             - name: THREDDS_TDS_PUBLIC_PORT
               value: "{{ if $.Values.ingresses.external.tls }}443{{else}}80{{ end }}"
             - name: THREDDS_TDS_PUBLIC_PROTOCOL

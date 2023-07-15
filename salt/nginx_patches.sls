@@ -1,5 +1,6 @@
 {% set TETHYS_PERSIST = salt['environ.get']('TETHYS_PERSIST') %}
 {% set NGINX_READ_TIME_OUT = salt['environ.get']('NGINX_READ_TIME_OUT') %}
+{% set PREFIX_URL = salt['environ.get']('PREFIX_URL') %}
 
 Patch_NGINX_TimeOut:
   cmd.run:
@@ -21,7 +22,7 @@ Add_Wasm_MIME_Type:
 Add_Prefix_to_static:
   cmd.run:
     - name: >
-          sed -i 's/location \/static/location \/tethys_platform\/static/g' /etc/nginx/sites-enabled/tethys_nginx.conf &&
+          sed -i 's/location \/static/location \/{{ PREFIX_URL }}\/static/g' /etc/nginx/sites-enabled/tethys_nginx.conf &&
           cat /etc/nginx/sites-enabled/tethys_nginx.conf
     - shell: /bin/bash
     - unless: /bin/bash -c "[ -f "{{ TETHYS_PERSIST }}/apply_nginx_patches_complete" ];"
