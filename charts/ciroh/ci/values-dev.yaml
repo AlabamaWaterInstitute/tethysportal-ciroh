@@ -614,9 +614,11 @@ resources:
   requests:
     cpu: 1
     memory: 512Mi
+    ephemeral_storage: 2Gi
   limits:
     cpu: 2
     memory: 1Gi
+    ephemeral_storage: 2Gi
 nodeSelector: {}
 tolerations: []
 affinity: {}
