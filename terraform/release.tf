@@ -1,12 +1,5 @@
 ## Commenting out this file has the same effect as targeting module.eks (see READMED.md)
 
-# data "aws_eks_cluster" "cluster" {
-#   name = module.eks.cluster_name
-# }
-
-# data "aws_eks_cluster_auth" "cluster" {
-#   name = module.eks.cluster_name
-# }
 
 provider "kubernetes" {
   host                   = module.eks.cluster_endpoint
@@ -30,21 +23,6 @@ provider "helm" {
 
 }
 
-# provider "kubernetes" {
-#   host                   = module.eks.cluster_endpoint
-#   cluster_ca_certificate = base64decode(data.aws_eks_cluster.cluster.certificate_authority.0.data)
-#   token                  = data.aws_eks_cluster_auth.cluster.token
-# }
-
-# provider "helm" {
-#   kubernetes {
-#     host                   = module.eks.cluster_endpoint
-#     cluster_ca_certificate = base64decode(data.aws_eks_cluster.cluster.certificate_authority.0.data)
-#     token                  = data.aws_eks_cluster_auth.cluster.token
-#   }
-
-# }
-
 resource "kubernetes_namespace" "tethysportal" {
   for_each = toset([var.app_name])
   metadata {
@@ -56,52 +34,7 @@ resource "kubernetes_namespace" "tethysportal" {
   }
 }
 
-# resource "kubernetes_namespace" "tethysportal" {
-#   metadata {
-#     name = var.app_name
-#   }
-#   provisioner "local-exec" {
-#     when    = destroy
-#     command = "nohup scripts/namespace-finalizer.sh ${var.app_name} 2>&1 &"
-#   }
-# }
-
-# resource "kubernetes_namespace" "tethysportal" {
-#   metadata {
-#     name = var.app_name
-#   }
-# }
-
-
-resource "helm_release" "tethysportal_helm_release" {
-  name              = "${var.app_name}-${var.environment}"
-  chart             = var.helm_chart
-  repository        = var.helm_repo
-  namespace         = var.app_name
-  timeout           = 900
-  dependency_update = true
-  values = [
-    file(var.helm_values_file)
-  ]
-
-  set {
-    name  = "storageClass.parameters.fileSystemId"
-    value = aws_efs_file_system.efs.id
-  }
-
-  # Should we make the subnets autodiscoverable with tags: 
-  # https://kubernetes-sigs.github.io/aws-load-balancer-controller/v2.5/deploy/subnet_discovery/
-  set {
-    name  = "ingresses.external.annotations.alb\\.ingress\\.kubernetes\\.io/subnets"
-    value = join("\\,", module.vpc.public_subnets)
-  }
-  set {
-    name = "ingresses.internal.annotations.alb\\.ingress\\.kubernetes\\.io/subnets"
-    # value = jsonencode(module.vpc.public_subnets)
-    value = join("\\,", module.vpc.public_subnets)
-  }
-}
-
+#here
 resource "aws_iam_policy" "worker_policy" {
   name        = "worker-policy-${var.environment}"
   description = "Worker policy for the ALB Ingress"
