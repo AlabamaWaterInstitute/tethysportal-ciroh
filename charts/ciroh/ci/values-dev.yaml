@@ -28,12 +28,14 @@ ingresses:
 djangocms:
   image:
     repository: gioelkin/django-cms
-    tag: dev_37e269e8f2702d25628e082e6b62c1b58e538dcf
+    tag: dev_c28f0585667b1b02cff3772e481bb7f2c8883bdf
   enabled: true
   ingress:
     enabled: false
   fullnameOverride: 'ciroh-cms'
   env:
+    - name: SECRET_KEY
+      value: 'ztw%%f050)x2=t+2y+td#xfl$%i35g=s0!^%w7@pqo8z6w7(mz'
     - name: DJANGOCMS_DB_NAME
       value: 'djangocms'
     - name: DJANGOCMS_DB_USER
