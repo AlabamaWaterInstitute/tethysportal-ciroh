@@ -8,7 +8,7 @@ Patch_NGINX_TimeOut:
         sed -i 'N;/location \@proxy_to_app.*$/a \        proxy_read_timeout {{ NGINX_READ_TIME_OUT }};\n        proxy_connect_timeout {{ NGINX_READ_TIME_OUT }};\n        proxy_send_timeout {{ NGINX_READ_TIME_OUT }};\n' /etc/nginx/sites-enabled/tethys_nginx.conf &&
         cat /etc/nginx/sites-enabled/tethys_nginx.conf
     - shell: /bin/bash
-    - unless: /bin/bash -c "[ -f "{{ TETHYS_PERSIST }}/apply_nginx_patches_complete" ];"
+    # - unless: /bin/bash -c "[ -f "{{ TETHYS_PERSIST }}/apply_nginx_patches_complete" ];"
 
 # necesary for the hydrocompute app
 Add_Wasm_MIME_Type:
@@ -17,7 +17,7 @@ Add_Wasm_MIME_Type:
         sed -i '1s/^/#include mime.types;\n\n/' /etc/nginx/sites-enabled/tethys_nginx.conf && sed -i '2s/^/types {\n    application\/wasm wasm;\n}\n\n/' /etc/nginx/sites-enabled/tethys_nginx.conf &&
         cat /etc/nginx/sites-enabled/tethys_nginx.conf
     - shell: /bin/bash
-    - unless: /bin/bash -c "[ -f "{{ TETHYS_PERSIST }}/apply_nginx_patches_complete" ];"
+    # - unless: /bin/bash -c "[ -f "{{ TETHYS_PERSIST }}/apply_nginx_patches_complete" ];"
 # necesary for prefix path:
 Add_Prefix_to_static:
   cmd.run:
@@ -25,7 +25,7 @@ Add_Prefix_to_static:
           sed -i 's/location \/static/location \/{{ PREFIX_URL }}\/static/g' /etc/nginx/sites-enabled/tethys_nginx.conf &&
           cat /etc/nginx/sites-enabled/tethys_nginx.conf
     - shell: /bin/bash
-    - unless: /bin/bash -c "[ -f "{{ TETHYS_PERSIST }}/apply_nginx_patches_complete" ];"
+    # - unless: /bin/bash -c "[ -f "{{ TETHYS_PERSIST }}/apply_nginx_patches_complete" ];"
 
 Apply_NGINX_Patches_Complete_Setup:
   cmd.run:
