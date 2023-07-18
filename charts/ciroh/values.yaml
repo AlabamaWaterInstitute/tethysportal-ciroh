@@ -133,6 +133,9 @@ redis:
     enabled: false
 
 tethys:
+  services:
+    geoserver: ''
+    thredds: ''
   workspace_size: ''
   settings:
     tethys_settings_flags: '--production, --overwrite'

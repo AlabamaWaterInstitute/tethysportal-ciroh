@@ -87,6 +87,9 @@ djangocms:
 
 tethys:
   workspace_size: '5Gi'
+  services:
+    geoserver: 'ciroh-gs'
+    thredds: 'ciroh-tds'
   settings:
     prefix_url: 'tethys_platform'
     tethys_settings_flags: '--production, --overwrite'
