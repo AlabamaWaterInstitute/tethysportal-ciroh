@@ -134,8 +134,8 @@ redis:
 
 tethys:
   services:
-    geoserver: ''
-    thredds: ''
+    geoserver: 'ciroh-gs'
+    thredds: 'ciroh-tds'
   workspace_size: ''
   settings:
     tethys_settings_flags: '--production, --overwrite'
