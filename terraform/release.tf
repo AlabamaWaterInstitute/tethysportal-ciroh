@@ -34,6 +34,21 @@ resource "kubernetes_namespace" "tethysportal" {
   }
 }
 
+#basically removed the gp2 as the default class
+resource "kubernetes_annotations" "default-storageclass" {
+  api_version = "storage.k8s.io/v1"
+  kind        = "StorageClass"
+  force       = "true"
+
+  metadata {
+    name = "gp2"
+  }
+  annotations = {
+    "storageclass.kubernetes.io/is-default-class" = "false"
+  }
+}
+
+
 #here
 resource "aws_iam_policy" "worker_policy" {
   name        = "worker-policy-${var.environment}"
