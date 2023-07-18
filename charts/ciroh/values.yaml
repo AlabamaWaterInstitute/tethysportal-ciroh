@@ -225,3 +225,15 @@ storageClass:
   volumeBindingMode: ''
   allowVolumeExpansion: ''
   mountOptions: []
+
+namespace:
+  enabled: false
+  name: cirohportal
+  limits:
+    cpu: '4'
+    memory: 8Gi
+    ephemeral_storage: '5Gi'
+  requests:
+    cpu: '4'
+    memory: 8Gi
+    ephemeral_storage: '5Gi'
