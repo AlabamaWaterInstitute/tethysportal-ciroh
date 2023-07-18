@@ -88,7 +88,7 @@ def check_for_proxy_apps(database):
 def update_state(database):
     is_first_time = check_for_proxy_apps(database)
     query=''
-    if not is_first_time:
+    if is_first_time:
         query+=create_sql_insert_query()
     else:
         query+=create_sql_update_query()
