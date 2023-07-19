@@ -173,11 +173,7 @@ spec:
             - name: config-volume
               mountPath: '/usr/lib/tethys/portal_changes.yml'
               subPath: portal_changes.yml
-          resources:
-            requests:
-              ephemeral-storage: {{ .Values.resources.requests.ephemeral_storage }}
-            limits:
-              ephemeral-storage: {{ .Values.resources.limits.ephemeral_storage }}
+
       volumes:
         - name: tethys-persist-pv
           persistentVolumeClaim:
