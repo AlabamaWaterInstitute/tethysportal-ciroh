@@ -619,11 +619,11 @@ resources:
   requests:
     cpu: 1
     memory: 512Mi
-    ephemeral_storage: 2Gi
+    'ephemeral-storage': 3Gi
   limits:
     cpu: 2
     memory: 1Gi
-    ephemeral_storage: 2Gi
+    'ephemeral-storage': 3Gi
 nodeSelector: {}
 tolerations: []
 affinity: {}
@@ -640,10 +640,10 @@ namespace:
   enabled: false
   name: cirohportal
   limits:
-    cpu: '4'
-    memory: 8Gi
+    # cpu: '4'
+    # memory: 8Gi
     ephemeral_storage: '5Gi'
   requests:
-    cpu: '4'
-    memory: 8Gi
+    # cpu: '4'
+    # memory: 8Gi
     ephemeral_storage: '5Gi'
