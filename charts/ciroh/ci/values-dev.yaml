@@ -59,7 +59,7 @@ djangocms:
     - name: DEFAULT_STORAGE_DSN
       value: '=file:///data/media/?url=%2Fmedia%2F'
     - name: DEBUG
-      value: 'False'
+      value: 'True'
     - name: DOMAIN_ALIASES
       value: 'localhost, 127.0.0.1'
     - name: SECURE_SSL_REDIRECT
