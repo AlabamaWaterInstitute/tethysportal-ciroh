@@ -22,13 +22,16 @@ module "eks" {
 
   eks_managed_node_groups = {
     tethys-core = {
-      name           = "tethys-core-group"
-      instance_types = ["c5.xlarge"]
+      name                       = "tethys-core-group"
+      instance_types             = ["c5.xlarge"]
+      desired_size               = 3
+      min_size                   = 3
+      max_size                   = 4
+      use_custom_launch_template = false
+      disk_size                  = 50
 
-      desired_size = 3
-      min_size     = 3
-      max_size     = 4
     }
+
   }
 }
 
