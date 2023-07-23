@@ -3,7 +3,7 @@ entries:
   ciroh:
   - apiVersion: v2
     appVersion: 0.0.1
-    created: "2023-07-20T05:02:53.582924983Z"
+    created: "2023-07-23T03:54:05.125882764Z"
     dependencies:
     - name: postgis
       repository: oci://ghcr.io/romer8
@@ -25,10 +25,10 @@ entries:
       repository: oci://ghcr.io/romer8
       version: '*'
     description: Tethys portal for CIROH
-    digest: 72a90dc447b460fbfc1f473585320a56bb40ac441db9189097a26083f7811330
+    digest: d0b2d00795a03ed06028d918f69365440e973f388a008f51fd2b2bad028155bb
     name: ciroh
     type: application
     urls:
     - https://AlabamaWaterInstitute.github.io/tethysportal-ciroh/ciroh-0.1.6.tgz
     version: 0.1.6
-generated: "2023-07-20T05:02:53.570816099Z"
+generated: "2023-07-23T03:54:05.115224867Z"
