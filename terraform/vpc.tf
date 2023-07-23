@@ -16,4 +16,16 @@ module "vpc" {
   single_nat_gateway   = false
   enable_dns_hostnames = true
   enable_dns_support   = true
+
+  public_subnet_tags = {
+    #https://kubernetes-sigs.github.io/aws-load-balancer-controller/v2.5/deploy/subnet_discovery/
+    "kubernetes.io/role/elb" = 1
+  }
+
+  private_subnet_tags = {
+    #https://kubernetes-sigs.github.io/aws-load-balancer-controller/v2.5/deploy/subnet_discovery/
+    "kubernetes.io/role/internal-elb" = 1
+    # Tags subnets for Karpenter auto-discovery
+    "karpenter.sh/discovery" = var.cluster_name
+  }
 }
