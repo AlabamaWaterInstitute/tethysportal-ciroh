@@ -42,3 +42,11 @@ app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
 {{- end }}
 app.kubernetes.io/managed-by: {{ .Release.Service }}
 {{- end }}
+
+{{ define "render-value" }}
+  {{- if kindIs "string" .value }}
+    {{- tpl .value .context }}
+  {{- else }}
+    {{- tpl (.value | toYaml) .context }}     
+  {{- end }}
+{{- end }}
