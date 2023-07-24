@@ -1,3 +1,5 @@
+global:
+  host: ''
 image:
   repository: 'gioelkin/tethysapp-ciroh-portal'
   # repository: 'ciroh/tethysapp-ciroh'

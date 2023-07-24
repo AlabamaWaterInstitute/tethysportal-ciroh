@@ -1,3 +1,6 @@
+global:
+  host: ''
+
 replicaCount: 1
 
 image:

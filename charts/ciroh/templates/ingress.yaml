@@ -24,8 +24,9 @@ spec:
   {{- end }}
   rules:
   {{- range .Values.ingresses.external.hosts }}
-    # - host: {{ .host | quote }}
-    - http:
+    - host: {{ .host | quote }}
+      http:
+    # - http:
           paths:        
             - path: "/{{ $.Values.tethys.settings.prefix_url }}"
               pathType: Prefix
@@ -86,7 +87,9 @@ spec:
 {{- end }}
   rules:
   {{- range .Values.ingresses.static.hosts }}
-    - http:
+    - host: {{ .host | quote }}
+      http:
+    # - http:
         paths:
           - path: "/tethys_platform/static"
             pathType: Prefix

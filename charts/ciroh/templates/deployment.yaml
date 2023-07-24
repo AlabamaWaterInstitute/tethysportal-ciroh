@@ -5,6 +5,7 @@ metadata:
   name: {{ include "ciroh.fullname" . }}
   labels:
 {{ include "ciroh.labels" . | nindent 4 }}
+
 spec:
   replicas: {{ .Values.replicaCount }}
   selector:
