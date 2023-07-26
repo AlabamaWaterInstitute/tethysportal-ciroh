@@ -1,5 +1,12 @@
 data "aws_availability_zones" "available" {}
 
+# Creation of the different Elastic IPs 
+resource "aws_eip" "nat" {
+  count = 2
+
+  vpc = true
+}
+
 module "vpc" {
   source  = "terraform-aws-modules/vpc/aws"
   version = "3.19.0"
@@ -16,6 +23,10 @@ module "vpc" {
   single_nat_gateway   = false
   enable_dns_hostnames = true
   enable_dns_support   = true
+  # if using existing elastic ip is needed:
+  #https://registry.terraform.io/modules/terraform-aws-modules/vpc/aws/latest#external-nat-gateway-ips
+  # reuse_nat_ips       = true             # <= Skip creation of EIPs for the NAT Gateways
+  # external_nat_ip_ids = aws_eip.nat.*.id # <= IPs specified here as input to the module
 
   public_subnet_tags = {
     #https://kubernetes-sigs.github.io/aws-load-balancer-controller/v2.5/deploy/subnet_discovery/
@@ -28,4 +39,5 @@ module "vpc" {
     # Tags subnets for Karpenter auto-discovery
     "karpenter.sh/discovery" = var.cluster_name
   }
+
 }
