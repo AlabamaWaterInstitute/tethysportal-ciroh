@@ -31,7 +31,53 @@ helm_values_file = "./values.yaml" # add custom values.yaml to working directory
 
 ## How to Run
 
-The Helm provider depends on the eks module. To account for this run `terraform apply -target module.eks` so only the eks cluster and its dependencies are created. After the eks cluster is succesfully created, and in any subsequent update, run `terraform apply` normally.
+The initial Run can be done with the following:
+
+```bash
+terraform init
+terrafrom plan
+terraform apply
+```
+
+In order to destroy de infrastructure run the following:
+
+```bash
+terrafrom destroy
+```
+
+After the first run, you will se the following errors:
+
+```bash
+ Error: deleting EC2 Subnet (subnet-0c265a6bb8baa67cb): DependencyViolation: The subnet 'subnet-0c265a6bb8baa67cb' has dependencies and cannot be deleted.
+│ 	status code: 400, request id: d71817ae-7a12-481d-a2e3-b28183417894
+│
+│
+╵
+╷
+│ Error: context deadline exceeded
+│
+│
+╵
+╷
+│ Error: deleting EC2 Subnet (subnet-09e13f87f1aab0446): DependencyViolation: The subnet 'subnet-09e13f87f1aab0446' has dependencies and cannot be deleted.
+│ 	status code: 400, request id: 7a964213-67cd-4152-b229-15eb92763f2e
+│
+│
+╵
+╷
+│ Error: uninstallation completed with 1 error(s): context deadline exceeded
+│
+│
+╵
+╷
+│ Error: error detaching EC2 Internet Gateway (igw-0d82c59f9e9149bf1) from VPC (vpc-0799c7288fb67d02c): DependencyViolation: Network vpc-0799c7288fb67d02c has some mapped public address(es). Please unmap those public address(es) before detaching the gateway.
+│ 	status code: 400, request id: e77b40e3-a166-47bd-b273-31770990ae05
+
+```
+
+The contexty deadline is only a timeout error while the second indicated is related to two load balancers(internal and internet-facing) that were not deleted with the destruction of the tethys portal. You might need to go to the AWS dashboard and delete them manually.
+
+Run `terraform destroy` again, if the problem ios still the same delete the vpc manually and run again `terrafrom destroy`
 
 ## Configure kubectl
 
