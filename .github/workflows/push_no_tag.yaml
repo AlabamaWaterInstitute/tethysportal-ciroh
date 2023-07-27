@@ -4,7 +4,7 @@ name: push_commits_no_tag
 on:
   push:
     branches:
-      - 'dns-and_chart'
+      - 'main'
 
 env:
   IMAGE_TAG: dev_${GITHUB_SHA}
