@@ -20,6 +20,7 @@ terraform {
       source  = "hashicorp/time"
       version = "0.9.1"
     }
+
   }
 
   required_version = "~> 1.3"
@@ -53,5 +54,6 @@ provider "helm" {
       args        = ["eks", "get-token", "--cluster-name", module.eks.cluster_name]
     }
   }
+
 
 }

@@ -12,6 +12,7 @@ provider "kubectl" {
   }
 }
 
+
 module "eks" {
   source  = "terraform-aws-modules/eks/aws"
   version = "19.5.1"
@@ -44,6 +45,7 @@ module "eks" {
     iam_role_additional_policies = {
       eks_node_efs = resource.aws_iam_policy.node_efs_policy.arn
     }
+
   }
 
   eks_managed_node_groups = {
@@ -249,4 +251,5 @@ resource "aws_iam_policy" "node_efs_policy" {
     }
   )
 }
+
 
