@@ -5,4 +5,5 @@ chart-dirs:
 helm-extra-args: --timeout 600s
 chart-repos:
   - bitnami=https://charts.bitnami.com/bitnami
-  - aquaveo=oci://ghcr.io/aquaveo
+  - misc-helm-chart=oci://ghcr.io/aquaveo
+  - romero8=oci://ghcr.io/romer8
