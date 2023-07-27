@@ -2,10 +2,16 @@
 data "aws_availability_zones" "available" {}
 
 # Creation of the different Elastic IPs 
-resource "aws_eip" "nat" {
-  # count = 2
-  count = var.create_elastic_ips ? 2 : 0
-  vpc   = true
+# Commenting this line because we will use already created Elastic IPs
+# resource "aws_eip" "nat" {
+#   # count = 2
+#   count = var.create_elastic_ips ? 2 : 0
+#   vpc   = true
+# }
+
+data "aws_eip" "nlb" {
+  count = var.use_elastic_ips ? "${length(var.eips)}" : 0
+  id = "${element(var.eips, count.index)}"
 }
 
 module "vpc" {
@@ -21,7 +27,7 @@ module "vpc" {
   public_subnets  = ["10.0.2.0/24", "10.0.4.0/24"]
 
   enable_nat_gateway   = true
-  single_nat_gateway   = false
+  single_nat_gateway   = var.single_nat_gate_way
   enable_dns_hostnames = true
   enable_dns_support   = true
   # if using existing elastic ip is needed:
@@ -67,8 +73,9 @@ module "vpc_cni_irsa" {
 # }
 
 
-# Create Load Balancer of type Network Load Balancer
+# Create Load Balancer of type Network Load Balancer with subnet mapping
 resource "aws_lb" "nlb" {
+  count = var.use_elastic_ips ? 1 : 0
   name               = "${var.app_name}-${var.environment}-nlb"
   internal           = false
   load_balancer_type = "network"
@@ -77,8 +84,8 @@ resource "aws_lb" "nlb" {
   dynamic "subnet_mapping" {
     for_each = [for i in range(length(module.vpc.public_subnets)) : {
       subnet_id = module.vpc.public_subnets[i]
-      #   allocation_id = data.aws_eip.nlb[i].id
-      allocation_id = aws_eip.nat[i].id
+        allocation_id = data.aws_eip.nlb[i].id
+      # allocation_id = aws_eip.nat[i].id
 
     }]
     content {
@@ -91,10 +98,24 @@ resource "aws_lb" "nlb" {
 
 }
 
+# Create Load Balancer of type Network Load Balancer without subnet mapping
+resource "aws_lb" "nlb-dev" {
+  count = var.use_elastic_ips ? 0 : 1
+  name               = "${var.app_name}-${var.environment}-nlb"
+  internal           = false
+  load_balancer_type = "network"
+  subnets = module.vpc.public_subnets
+
+  depends_on = [helm_release.tethysportal_helm_release]
+
+}
+
+
 # Listener rule for HTTP traffic on each of the ALBs
 # It might help:https://medium.com/@sampark02/application-load-balancer-and-target-group-attachment-using-terraform-d212ce8a38a0
 resource "aws_lb_listener" "nlb" {
-  load_balancer_arn = aws_lb.nlb.arn
+  # load_balancer_arn = aws_lb.nlb.arn
+  load_balancer_arn = var.use_elastic_ips ? aws_lb.nlb[0].arn : aws_lb.nlb-dev[0].arn
   port              = "80"
   protocol          = "TCP"
 

@@ -1,6 +1,6 @@
 # 1- Create EFS that Pods of the cluster will use
 resource "aws_efs_file_system" "efs" {
-  creation_token   = "${var.app_name}-data-efs"
+  creation_token   = "${var.app_name}-${var.environment}-efs"
   performance_mode = "generalPurpose"
 
   lifecycle_policy {
@@ -11,7 +11,7 @@ resource "aws_efs_file_system" "efs" {
 
 # 2- Set security groups for EFS
 resource "aws_security_group" "efs" {
-  name        = "${var.app_name}-efs-sg"
+  name        = "${var.app_name}-${var.environment}-efs-sg"
   description = "Allow inbound efs traffic from Kubernetes Subnet"
   vpc_id      = module.vpc.vpc_id
 

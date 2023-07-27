@@ -57,7 +57,7 @@ module "eks" {
   }
 }
 resource "aws_iam_policy" "node_efs_policy" {
-  name        = "eks_node_efs-${var.app_name}"
+  name        = "eks_node_efs-${var.app_name}-${var.environment}"
   path        = "/"
   description = "Policy for EFKS nodes to use EFS"
 
