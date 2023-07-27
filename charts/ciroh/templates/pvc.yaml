@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: tethys-persist-pvc
+  labels:
+{{ include "ciroh.labels" . | indent 4 }}
+spec:
+  accessModes:
+    - ReadWriteOnce
+  {{- if and .Values.storageClass.storageClassName .Values.storageClass.createStorageClass }}
+  storageClassName: {{ .Values.storageClass.storageClassName | quote }}
+  {{- end }}
+  resources:
+    requests:
+      storage: {{ .Values.tethys.workspace_size | quote }}

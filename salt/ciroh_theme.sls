@@ -3,7 +3,7 @@
 {% set TETHYS_PUBLIC_HOST = salt['environ.get']('TETHYS_PUBLIC_HOST') %}
 {% set TETHYS_PERSIST = salt['environ.get']('TETHYS_PERSIST') %}
 
-{% set BYPASS_TETHYS_HOME_PAGE = salt['environ.get']('BYPASS_TETHYS_HOME_PAGE') %}
+{% set ENABLE_OPEN_PORTAL = salt['environ.get']('ENABLE_OPEN_PORTAL') %}
 
 
 {% set HERO_TEXT = salt['environ.get']('HERO_TEXT') %}
@@ -43,7 +43,7 @@ Site_Settings_CIROH_Theme:
 
 Making_Portal_Home_Open:
   cmd.run:
-    - name: tethys settings --set BYPASS_TETHYS_HOME_PAGE "{{ BYPASS_TETHYS_HOME_PAGE }}"
+    - name: tethys settings --set TETHYS_PORTAL_CONFIG.ENABLE_OPEN_PORTAL "{{ ENABLE_OPEN_PORTAL }}"
     - shell: /bin/bash
     - unless: /bin/bash -c "[ -f "{{ TETHYS_PERSIST }}/ciroh_theme_complete" ];"
 

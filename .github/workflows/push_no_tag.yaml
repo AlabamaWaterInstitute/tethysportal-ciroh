@@ -1,0 +1,100 @@
+name: push_commits_no_tag
+
+# Push to docker hub if no tag has been created.
+on:
+  push:
+    branches:
+      - 'main'
+
+env:
+  IMAGE_TAG: dev_${GITHUB_SHA}
+  DOCKER_HUB_ORG: gioelkin
+  # DOCKER_HUB_ORG: ciroh
+  DOCKER_REPO: tethysapp-ciroh-portal
+  MAX_NUMBER_IMAGE: 5
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+jobs:
+  build:
+    # The type of runner that the job will run on
+    runs-on: ubuntu-latest
+
+    # Steps represent a sequence of tasks that will be executed as part of the job
+    steps:
+      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+      - uses: actions/checkout@v2
+        with:
+          submodules: 'true'
+      # Checks-out the hydrocompute extra submodule
+      - name: checkout Hydrocompute submodule
+        run: |
+          cd tethysapp-hydrocompute/tethysapp/hydrocompute/public/HydroCompute && git submodule update --init --recursive
+
+      - name: Set Tag
+        run: |
+          echo "TAG=${{ env.IMAGE_TAG }}" >> $GITHUB_ENV
+        # If the branch is stable, we'll overwrite the TAG to include stable.
+      - name: Set Stable Tag
+        if: endsWith(github.ref, '/stable')
+        run: |
+          echo "TAG=stable" >> $GITHUB_ENV
+      - name: Test Tag
+        run: |
+          echo $TAG
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v2
+      - name: Login to Docker Hub
+        uses: docker/login-action@v2
+        with:
+          username: ${{ secrets.DOCKER_BUILDER_USERNAME }}
+          password: ${{ secrets.DOCKER_BUILDER_TOKEN }}
+      - name: build and push tag
+        uses: docker/build-push-action@v4
+        with:
+          context: .
+          file: ./prod.Dockerfile
+          push: true
+          tags: ${{ env.DOCKER_HUB_ORG }}/${{ env.DOCKER_REPO }}:${{ env.TAG }}
+          cache-from: type=registry,ref=${{ env.DOCKER_HUB_ORG }}/${{ env.DOCKER_REPO }}-cache:latest
+          cache-to: type=registry,ref=${{ env.DOCKER_HUB_ORG }}/${{ env.DOCKER_REPO }}-cache:latest,mode=max
+
+  startup_test:
+    needs: [build]
+    runs-on: ubuntu-latest
+    services:
+      db:
+        image: postgis/postgis
+        env:
+          POSTGRES_HOST: db
+          POSTGRES_PASSWORD: passpass
+          POSTGRES_DB: tethys_postgis
+          POSTGRES_PORT: 5432
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 10
+        ports:
+          - 5432:5432
+    steps:
+      - name: Check out repository code
+        uses: actions/checkout@v2
+
+      - name: Docker login
+        run: docker login -u ${{ secrets.DOCKER_BUILDER_USERNAME }} -p ${{ secrets.DOCKER_BUILDER_TOKEN }}
+
+      - name: Pull Docker Image
+        run: |
+          docker pull ${{ env.DOCKER_HUB_ORG }}/${{ env.DOCKER_REPO }}:${{ env.IMAGE_TAG }}
+      - name: Run Salt Test
+        run: |
+          docker run --rm --name ciroh_portal --network ${{ job.services.db.network }} --env-file env/web.env ${{ env.DOCKER_HUB_ORG }}/${{ env.DOCKER_REPO }}:${{ env.IMAGE_TAG }} /bin/bash -c "cd /usr/lib/tethys && source ./run.sh --test"
+  cleanup:
+    needs: [build]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: only keeps the first 5 image
+        run: |
+          echo "TAG=dev_${GITHUB_SHA}" >> $GITHUB_ENV
+          echo $TAG
+          . .github/scripts/clean_up_docker_hub.sh '${{ secrets.DOCKER_BUILDER_USERNAME }}' '${{ secrets.DOCKER_BUILDER_TOKEN }}' '${{ env.DOCKER_HUB_ORG }}' '${{ env.DOCKER_REPO }}' '${{ env.MAX_NUMBER_IMAGE }}'

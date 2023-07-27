@@ -212,13 +212,14 @@
   <!--
   The WCS Service is on by default.
   Also, off by default (and encouraged) is operating on a remote dataset.
+  -->
+
   <WCS>
     <allow>true</allow>
     <allowRemote>false</allowRemote>
     <scour>15 min</scour>
     <maxAge>30 min</maxAge>
   </WCS>
-  -->
 
   
   <WMS>
@@ -227,17 +228,16 @@
     <maxImageWidth>2048</maxImageWidth>
     <maxImageHeight>2048</maxImageHeight>
     <paletteLocationDir>/usr/local/tomcat/content/thredds/wmsPalettes</paletteLocationDir>
-    <!-- <paletteLocationDir>/usr/local/tomcat/content/thredds/palettes</paletteLocationDir> -->
   </WMS>
   
 
-  <!--
+  
   <NCISO>
     <ncmlAllow>true</ncmlAllow>
     <uddcAllow>true</uddcAllow>
     <isoAllow>true</isoAllow>
   </NCISO>
-  -->
+ 
 
   <!--
   <NCSOS>

@@ -6,25 +6,7 @@
 {% set FILE_UPLOAD_MAX_MEMORY_SIZE = salt['environ.get']('FILE_UPLOAD_MAX_MEMORY_SIZE') %}
 {% set CHANNEL_LAYERS_BACKEND = salt['environ.get']('CHANNEL_LAYERS_BACKEND') %}
 {% set CHANNEL_LAYERS_CONFIG = salt['environ.get']('CHANNEL_LAYERS_CONFIG') %}
-
-{% set MDE_DISCLAIMER_HEADER = salt['environ.get']('MDE_DISCLAIMER_HEADER') %}
-{% set MDE_DISCLAIMER_MESSAGE = salt['environ.get']('MDE_DISCLAIMER_MESSAGE') %}
-{% set MDE_SERVER_HOME_DIRECTORY = salt['environ.get']('HOME') %}
-
-{% set THREDDS_TDS_PUBLIC_PROTOCOL = salt['environ.get']('THREDDS_TDS_PUBLIC_PROTOCOL') %}
-{% set THREDDS_TDS_PUBLIC_HOST = salt['environ.get']('THREDDS_TDS_PUBLIC_HOST') %}
-{% set THREDDS_TDS_PUBLIC_PORT = salt['environ.get']('THREDDS_TDS_PUBLIC_PORT') %}
-
-{% set GRACE_THREDDS_CATALOG = salt['environ.get']('GRACE_THREDDS_CATALOG')%}
-{% set GRACE_THREDDS_CATALOG_PATH = THREDDS_TDS_PUBLIC_PROTOCOL +'://' + THREDDS_TDS_PUBLIC_HOST + ':' + THREDDS_TDS_PUBLIC_PORT + GRACE_THREDDS_CATALOG %}
-
-{% set GRACE_THREDDS_DIRECTORY = TETHYS_PERSIST +'/thredds_data/ggst/ggst_thredds_directory' %}
-
-{% set CONDA_PYTHON_PATH = CONDA_HOME + "/envs/" + CONDA_ENV_NAME + '/bin/python'%}
-{% set EARTHDATA_USERNAME = salt['environ.get']('EARTHDATA_USERNAME')%}
-{% set EARTHDATA_PASS = salt['environ.get']('EARTHDATA_PASS')%}
-
-{% set POSTGIS_SERVICE_NAME = 'tethys_postgis' %}
+{% set PREFIX_URL = salt['environ.get']('PREFIX_URL') %}
 
 
 Pre_Apps_Settings:
@@ -35,9 +17,10 @@ Pre_Apps_Settings:
 Set_Tethys_Settings_For_Apps:
   cmd.run:
     - name: >
-        tethys settings  --set FILE_UPLOAD_MAX_MEMORY_SIZE {{ FILE_UPLOAD_MAX_MEMORY_SIZE }} &&
-        tethys settings  --set DATA_UPLOAD_MAX_MEMORY_SIZE {{ FILE_UPLOAD_MAX_MEMORY_SIZE }} &&
-        tethys settings --set DATA_UPLOAD_MAX_NUMBER_FIELDS {{ FILE_UPLOAD_MAX_MEMORY_SIZE }}
+        tethys settings --set FILE_UPLOAD_MAX_MEMORY_SIZE {{ FILE_UPLOAD_MAX_MEMORY_SIZE }} &&
+        tethys settings --set DATA_UPLOAD_MAX_MEMORY_SIZE {{ FILE_UPLOAD_MAX_MEMORY_SIZE }} &&
+        tethys settings --set DATA_UPLOAD_MAX_NUMBER_FIELDS {{ FILE_UPLOAD_MAX_MEMORY_SIZE }} &&
+        tethys settings --set PREFIX_URL {{ PREFIX_URL }}
     - unless: /bin/bash -c "[ -f "${TETHYS_PERSIST}/init_apps_setup_complete" ];"
 
 Sync_Apps:
@@ -46,34 +29,19 @@ Sync_Apps:
     - shell: /bin/bash
     - unless: /bin/bash -c "[ -f "{{ TETHYS_PERSIST }}/init_apps_setup_complete" ];"
 
-Set_Custom_Settings:
-  cmd.run:
-    - name: >
-        tethys app_settings set metdataexplorer disclaimer_header "{{ MDE_DISCLAIMER_HEADER }}" &&
-        tethys app_settings set metdataexplorer disclaimer_message "{{ MDE_DISCLAIMER_MESSAGE }}" &&
-        tethys app_settings set metdataexplorer server_home_directory {{ MDE_SERVER_HOME_DIRECTORY }} &&
-        tethys app_settings set ggst grace_thredds_directory {{ GRACE_THREDDS_DIRECTORY }} &&
-        tethys app_settings set ggst grace_thredds_catalog {{ GRACE_THREDDS_CATALOG_PATH }} &&
-        tethys app_settings set ggst global_output_directory {{ TETHYS_PERSIST }} &&
-        tethys app_settings set ggst earthdata_username {{ EARTHDATA_USERNAME }} &&
-        tethys app_settings set ggst earthdata_pass {{ EARTHDATA_PASS }} &&
-        tethys app_settings set ggst conda_python_path {{ CONDA_PYTHON_PATH }}
-    - shell: /bin/bash
-    - unless: /bin/bash -c "[ -f "{{ TETHYS_PERSIST }}/init_apps_setup_complete" ];"
+Update_Tethys_Apps:
+  file.managed:
+    - name: {{ TETHYS_PERSIST }}/portal_changes.yml
+    - source: {{ TETHYS_HOME }}/portal_changes.yml
 
-Link_Tethys_Services_to_Apps:
+run_on_changes:
   cmd.run:
-    - name: >
-        tethys link persistent:{{ POSTGIS_SERVICE_NAME }} water_data_explorer:ps_database:catalog_db &&
-        tethys link persistent:{{ POSTGIS_SERVICE_NAME }} metdataexplorer:ps_database:thredds_db
+    - name: {{ TETHYS_HOME }}/update_state.sh 
     - shell: /bin/bash
-    - unless: /bin/bash -c "[ -f "{{ TETHYS_PERSIST }}/init_apps_setup_complete" ];"
+    - onchanges:
+      - file: Update_Tethys_Apps
 
-Sync_App_Persistent_Stores:
-  cmd.run:
-    - name: tethys syncstores all
-    - shell: /bin/bash
-    - unless: /bin/bash -c "[ -f "{{ TETHYS_PERSIST }}/init_apps_setup_complete" ];"
+# /srv/salt/my_file.sls
 
 Flag_Init_Apps_Setup_Complete:
   cmd.run:

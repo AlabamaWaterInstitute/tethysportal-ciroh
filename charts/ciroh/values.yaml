@@ -1,0 +1,245 @@
+global:
+  host: ''
+
+replicaCount: 1
+
+image:
+  repository: 'ciroh/tethysapp-ciroh'
+  tag: latest
+  pullPolicy: Always
+
+imagePullSecrets: []
+nameOverride: ''
+fullnameOverride: ''
+
+djangocms:
+  enabled: false
+  fullnameOverride: 'ciroh-cms'
+  postgis:
+    enabled: false
+  env: []
+
+geoserver:
+  enabled: true
+  fullnameOverride: 'ciroh-gs'
+  username: 'admin'
+  password: 'geoserver'
+  init_default_config: false
+  env:
+    - name: ENABLED_NODES
+      value: '4'
+    - name: REST_NODES
+      value: '1'
+    - name: MAX_MEMORY
+      value: '1024'
+    - name: MIN_MEMORY
+      value: '512'
+    - name: NUM_CORES
+      value: '8'
+    - name: MAX_TIMEOUT
+      value: '60'
+  storage_size: 2Gi
+  resources:
+    requests:
+      memory: '2Gi'
+      cpu: '2'
+    limits:
+      memory: '4Gi'
+  storageClass:
+    storageClassName: ''
+thredds:
+  enabled: true
+  fullnameOverride: 'ciroh-tds'
+  thredds_tds_catalog: '/thredds/catalog/ciroh_data/thredds_data/catalog.xml'
+  username: 'admin'
+  password: 'tdm_pass'
+  config_files:
+    init_default_config: false
+    catalog:
+      init_file: false
+      file_content: ''
+    thredds_config:
+      init_file: false
+      file_content: ''
+    wms_config:
+      init_file: false
+      file_content: ''
+    tomcat_users:
+      init_file: false
+      file_content: ''
+  # Data to be used for the public folder and also for the wms palettes
+  data:
+    init_default_config: false
+    # an example of a data archive is the following https://example.com/some/web/thredds_data.tgz
+    public:
+      init_data: false
+      data_archive: ''
+      subpath: 'ggst_thredds_directory'
+    wms_palettes:
+      # an example of a wmsPalettes archive is the following https://example.com/some/web/wmsPalettes.tgz
+      init_data: false
+      data_archive:
+      subpath: 'wmsPalettes'
+  storageClass:
+    createClass: false
+    storageClassName: ''
+  persistentVolumeClaim:
+    name: 'thredds-pv-claim'
+  env:
+    - name: TDM_PW
+      value: 'tdm_pass'
+    - name: TDS_HOST
+      value: 'http://localhost'
+    - name: THREDDS_XMX_SIZE
+      value: '4G'
+    - name: THREDDS_XMS_SIZE
+      value: '4G'
+    - name: TDM_XMX_SIZE
+      value: '6G'
+    - name: TDM_XMS_SIZE
+      value: '1G'
+  storage_size: 2Gi
+  resources:
+    requests:
+      memory: '2Gi'
+      cpu: '1'
+    limits:
+      memory: '4Gi'
+
+postgis:
+  fullnameOverride: 'ciroh-db'
+  postgres_user: 'postgres'
+  postgres_password: 'please_dont_use_default_passwords'
+  extra_config:
+    max_connections: '500'
+    shared_buffers: '512MB'
+    work_mem: '5MB'
+    autovacuum: 'on'
+  service:
+    type: ClusterIP
+    port: 5432
+  storage_size: 5Gi
+  resources:
+    requests:
+      cpu: 100m
+      memory: 128Mi
+    limits:
+      cpu: 2
+      memory: 4Gi
+  storageClass:
+    storageClassName: ''
+redis:
+  enabled: true
+  fullnameOverride: 'ciroh-redis'
+  architecture: standalone
+  auth:
+    enabled: false
+
+tethys:
+  services:
+    geoserver: 'ciroh-gs'
+    thredds: 'ciroh-tds'
+  workspace_size: ''
+  settings:
+    tethys_settings_flags: '--production, --overwrite'
+    enable_portal_open: ''
+    bypass_tethys_home_page: ''
+    channel_layers_backend: 'channels_redis.core.RedisChannelLayer'
+    portal_title: ''
+    primary_color: ''
+    secondary_color: ''
+    background_color: ''
+    hero_text: ''
+    blurb_text: ''
+    feature_1_heading: ''
+    feature_1_body: ''
+    feature_2_heading: ''
+    feature_2_body: ''
+    feature_3_heading: ''
+    feature_3_body: ''
+    client_max_body_size: ''
+    file_upload_max_memory_size: ''
+    nginx_read_time_out: ''
+    data_upload_max_memory_size: ''
+    copyright: ''
+  portal_config:
+    apps: {}
+    proxy_apps: {}
+  database:
+    tethys_db_name: 'tethys_platform'
+    tethys_db_username: 'tethys_default'
+    tethys_db_password: 'please_dont_use_default_passwords'
+    tethys_db_superuser: 'tethys_super'
+    tethys_db_superuser_pass: 'please_dont_use_default_passwords'
+    app_db_username: 'tethys_super'
+    app_db_password: 'please_dont_use_default_passwords'
+  super_user:
+    username: 'admin'
+    password: 'pass'
+    email: 'none@none.com'
+
+podAnnotations: {}
+
+podSecurityContext: {}
+securityContext: {}
+
+service:
+  type: ClusterIP
+  port: 80
+  annotations: {}
+
+# Note: The first host in the ingress field is used as TETHYS_PUBLIC_HOST, TETHYS_GS_HOST_PUB, and TETHYS_TDS_HOST_PUB.
+# This is true EVEN IF the ingress is not enabled!
+
+ingresses:
+  enabled: true
+  external:
+    enabled: true
+    className: ''
+    annotations: {}
+    hosts:
+      - host: ''
+    tls: []
+  static:
+    enabled: true
+    className: ''
+    annotations: {}
+    hosts:
+      - host: ''
+    tls: []
+
+resources:
+  requests:
+    cpu: 1
+    memory: 2Gi
+    ephemeral-storage: 3Gi
+  limits:
+    cpu: 2
+    memory: 3Gi
+    ephemeral-storage: 3Gi
+nodeSelector: {}
+tolerations: []
+affinity: {}
+
+storageClass:
+  provisioner: ''
+  createStorageClass: false
+  storageClassName: 'ciroh-storage'
+  annotations: {}
+  reclaimPolicy: Delete
+  parameters: {}
+  volumeBindingMode: ''
+  allowVolumeExpansion: ''
+  mountOptions: []
+
+namespace:
+  enabled: false
+  name: cirohportal
+  limits:
+    # cpu: '4'
+    # memory: 8Gi
+    ephemeral_storage: '5Gi'
+  requests:
+    # cpu: '4'
+    # memory: 8Gi
+    ephemeral_storage: '5Gi'

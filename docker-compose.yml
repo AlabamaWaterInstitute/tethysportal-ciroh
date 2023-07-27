@@ -13,7 +13,7 @@ services:
       - ./data/psql:/var/lib/postgresql/data
 
   thredds:
-    image: unidata/thredds-docker:4.6.20-SNAPSHOT
+    image: tethysplatformuploader/thredds-docker:4.6.20-SNAPSHOT
     restart: always
     networks:
       - 'internal'
@@ -30,7 +30,7 @@ services:
       - ./config/thredds/catalog.xml:/usr/local/tomcat/content/thredds/catalog.xml
       - ./config/thredds/threddsConfig.xml:/usr/local/tomcat/content/thredds/threddsConfig.xml
       - ./config/thredds/wmsPalettes/:/usr/local/tomcat/content/thredds/wmsPalettes/
-      - ./data/tethys/thredds_data/:/usr/local/tomcat/content/thredds/public
+      - ./data/tethys/thredds_data/:/usr/local/tomcat/content/thredds/public/thredds_data
 
   redis:
     image: redis:latest
@@ -59,7 +59,9 @@ services:
 
   web:
     image: tethys-portal-docker:latest
-    build: .
+    build: 
+      context: .
+      dockerfile: prod.Dockerfile
     restart: always
     depends_on:
       - 'db'
@@ -75,9 +77,9 @@ services:
     volumes:
       - ./data/tethys:/var/lib/tethys_persist
       - ./logs/tethys:/var/log/tethys
-      - ./config/tethys/asgi_supervisord.conf:/var/lib/tethys_persist/asgi_supervisord.conf
-      - ./config/tethys/supervisord.conf:/etc/supervisor/supervisord.conf
-      - ./config/tethys/conda_install.sh:/opt/conda/envs/tethys/lib/python3.10/site-packages/tethysapp/app_store/scripts/conda_install.sh
+      # - ./config/tethys/portal_changes.yml:/var/lib/tethys_persist/portal_changes.yml
+      - ./config/tethys/portal_changes.yml:/usr/lib/tethys/portal_changes.yml
+
 networks:
   internal:
     internal: true
