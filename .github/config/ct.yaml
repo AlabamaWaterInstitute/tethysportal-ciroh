@@ -6,4 +6,4 @@ helm-extra-args: --timeout 600s
 chart-repos:
   - bitnami=https://charts.bitnami.com/bitnami
   - misc-helm-chart=https://aquaveo.github.io/misc-helm-charts
-  - django-cms-quickstart=" https://aquaveo.github.io/django-cms-quickstart"
+  - django-cms-quickstart="https://aquaveo.github.io/django-cms-quickstart"
