@@ -6,10 +6,10 @@ type: application
 version: 0.1.6
 dependencies:
   - name: 'postgis'
-    repository: 'oci://ghcr.io/romer8'
+    repository: 'https://aquaveo.github.io/misc-helm-charts'
     version: '*'
   - name: 'geoserver'
-    repository: 'oci://ghcr.io/romer8/geoserver'
+    repository: 'https://aquaveo.github.io/misc-helm-charts'
     version: '*'
     condition: geoserver.enabled
   - name: 'thredds'
