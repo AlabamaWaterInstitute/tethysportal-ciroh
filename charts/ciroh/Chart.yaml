@@ -13,7 +13,7 @@ dependencies:
     version: '*'
     condition: geoserver.enabled
   - name: 'thredds'
-    repository: 'https://aquaveo.github.io/misc-helm-charts'
+    repository: 'oci://ghcr.io/aquaveo/thredds'
     version: '*'
     condition: thredds.enabled
   - name: 'redis'
