@@ -22,8 +22,9 @@ terraform {
 }
 
 
+
 module "ciroh_portal" {
-  source = "../modules/ciroh_portal"
+  source = "../modules/ciroh_portal2"
   # Input Varibles
   region              = "us-east-1"
   profile             = "456531024327"
@@ -33,7 +34,8 @@ module "ciroh_portal" {
   helm_repo           = "https://alabamawaterinstitute.github.io/tethysportal-ciroh"
   helm_values_file    = "../../charts/ciroh/ci/dev_aws_values.yaml"
   environment         = "dev"
-  use_elastic_ips  = false
-  single_nat_gate_way = true
-  eips = ["eipalloc-00e2c8d0238d62783","eipalloc-0f705f3b233b1d294"]
+  use_elastic_ips  = true
+  single_nat_gate_way = false
+  eips = ["eipalloc-0bddf4b861b62bcc8","eipalloc-0c0412087bd6483ba"]
+
 }
