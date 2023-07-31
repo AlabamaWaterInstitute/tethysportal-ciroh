@@ -1,13 +1,18 @@
-
 # CIROH Portal Deployment on AWS
 
 ## Prerequisites
+
 - AWS Client (https://docs.aws.amazon.com/cli/latest/userguide/getting-started-install.html)
 - AWS access to specific account/profile (https://docs.aws.amazon.com/cli/latest/userguide/cli-configure-files.html)
 - Terraform (https://developer.hashicorp.com/terraform/tutorials/aws-get-started/install-cli)
 
-## Variables (terraform.tfvars) Template
+## Features
 
+* Karpenter has been added to the cluster in order to save cost per EC2 instaces
+  * EKS managed nodes
+* EFS instead of the EBS in order to share filesystems between deployments
+
+## Variables (terraform.tfvars) Template
 
 ```yaml
 region = "aws_region"
@@ -17,6 +22,7 @@ app_name = "tethysportal"
 helm_chart = "./helm_package.tgz"  # add helm package to working directory
 helm_values_file = "./values.yaml"  # add custom values.yaml to working directory
 ```
+
 or
 
 ```yaml
@@ -97,4 +103,3 @@ Run `terraform destroy` again, if the problem ios still the same delete the vpc 
   - `Kubernetes cluster unreachable: invalid configuration: no configuration has been provided, try setting KUBERNETES_MASTER environment variable`
   - The following [Github Issue Comment](https://github.com/terraform-aws-modules/terraform-aws-eks/issues/1234#issuecomment-894998800) is helpful
   - The following [Medium Article](https://itnext.io/terraform-dont-use-kubernetes-provider-with-your-cluster-resource-d8ec5319d14a) is helpful as well
-

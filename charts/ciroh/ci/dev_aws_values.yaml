@@ -24,10 +24,11 @@ ingresses:
       alb.ingress.kubernetes.io/target-type: ip
       alb.ingress.kubernetes.io/scheme: internet-facing
       alb.ingress.kubernetes.io/listen-ports: '[{"HTTPS":443}, {"HTTP":80}]'
+      # alb.ingress.kubernetes.io/certificate-arn: arn:aws:acm:us-east-1:456531024327:certificate/7db78d8f-2148-4af2-a239-6e9a2445dbe7
       alb.ingress.kubernetes.io/load-balancer-attributes: idle_timeout.timeout_seconds=4000
       alb.ingress.kubernetes.io/ssl-redirect: '443'
     hosts:
-      - host: elkingio.com
+      - host: dev.elkingio.com
     tls: []
   static:
     enabled: true
@@ -38,14 +39,14 @@ ingresses:
       alb.ingress.kubernetes.io/listen-ports: '[{"HTTPS":443}, {"HTTP":80}]'
       alb.ingress.kubernetes.io/ssl-redirect: '443'
     hosts:
-      - host: elkingio.com
+      - host: dev.elkingio.com
     tls: []
 
 tethys:
   workspace_size: '16Gi'
   services:
     geoserver: 'ciroh-gs'
-    thredds: elkingio.com
+    thredds: dev.elkingio.com
   settings:
     prefix_url: 'tethys_platform'
     tethys_settings_flags: '--production, --overwrite'
@@ -92,7 +93,7 @@ tethys:
             earthdata_pass: byuGRACE1
             earthdata_username: byugrace
             global_output_directory: /usr/lib/tethys
-            grace_thredds_catalog: 'http://elkingio.com/thredds/catalog/ciroh_data/tethys/ggst_thredds_directory/catalog.xml'
+            grace_thredds_catalog: 'http://dev.elkingio.com/thredds/catalog/ciroh_data/tethys/ggst_thredds_directory/catalog.xml'
             grace_thredds_directory: /var/lib/tethys_persist/thredds_data/tethys/ggst_thredds_directory
       metdataexplorer:
         services:
@@ -117,7 +118,7 @@ tethys:
           custom_settings:
             gw_data_directory: /var/lib/tethys_persist/thredds_data/tethys/gwdm_data_directory
             gw_thredds_directory: /var/lib/tethys_persist/thredds_data/tethys/gwdm_thredds_directory
-            gw_thredds_catalog: 'http://elkingio.com/thredds/catalog/ciroh_data/tethys/gwdm_thredds_directory/catalog.xml'
+            gw_thredds_catalog: 'http://dev.elkingio.com/thredds/catalog/ciroh_data/tethys/gwdm_thredds_directory/catalog.xml'
           persistent:
             gwdb: tethys_postgis
           spatial:
@@ -198,7 +199,7 @@ djangocms:
     - name: SECURE_SSL_REDIRECT
       value: 'False'
     - name: DOMAIN
-      value: 'elkingio.com'
+      value: 'dev.elkingio.com'
     - name: STATIC_URL
       value: '/static_cms/'
     # - name: SKIP_CREATION_USER
@@ -643,8 +644,7 @@ postgis:
   storageClass:
     storageClassName: 'efs-pv'
 
-nodeSelector:
-  tethysPortalName: 'ciroh'
+nodeSelector: {}
 tolerations: []
 affinity: {}
 
@@ -659,7 +659,7 @@ storageClass:
   allowVolumeExpansion: true
   parameters:
     provisioningMode: efs-ap
-    # fileSystemId: fs-043056da9e8e2fb88
+    # fileSystemId: fs-08cfc45ec6beb3dd5
     directoryPerms: '777'
     gid: '0'
     uid: '0'

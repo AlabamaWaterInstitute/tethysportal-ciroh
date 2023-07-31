@@ -40,5 +40,5 @@ resource "helm_release" "tethysportal_helm_release" {
     value = aws_efs_file_system.efs.id
   }
 
-  depends_on = [kubernetes_annotations.default-storageclass, helm_release.ingress]
+   depends_on = [kubernetes_annotations.default-storageclass]
 }

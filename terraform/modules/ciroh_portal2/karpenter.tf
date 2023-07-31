@@ -31,7 +31,7 @@ resource "helm_release" "karpenter" {
   name       = "karpenter"
   repository = "oci://public.ecr.aws/karpenter"
   chart      = "karpenter"
-  version    = "v0.27.3"
+  version    = "v0.29.0"
 
   set {
     name  = "settings.aws.clusterName"
@@ -71,7 +71,7 @@ resource "kubectl_manifest" "karpenter_provisioner" {
         - key: "karpenter.k8s.aws/instance-category"
           operator: In
           values: ["c", "m", "t"]
-          
+
         - key: karpenter.k8s.aws/instance-size
           operator: In
           values:
@@ -113,9 +113,16 @@ resource "kubectl_manifest" "karpenter_node_template" {
         karpenter.sh/discovery: ${module.eks.cluster_name}
       tags:
         karpenter.sh/discovery: ${module.eks.cluster_name}
+      blockDeviceMappings:
+        - deviceName: /dev/xvda
+          ebs:
+            volumeType: gp3
+            volumeSize: 50Gi
+            deleteOnTermination: true        
   YAML
 
   depends_on = [
     helm_release.karpenter
   ]
 }
+

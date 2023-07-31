@@ -126,17 +126,17 @@ resource "aws_lb_listener" "nlb" {
 }
 
 
-# Listener rule for HTTPS traffic on each of the ALBs
-# It might help:https://medium.com/@sampark02/application-load-balancer-and-target-group-attachment-using-terraform-d212ce8a38a0
+# # Listener rule for HTTPS traffic on each of the ALBs
+# # It might help:https://medium.com/@sampark02/application-load-balancer-and-target-group-attachment-using-terraform-d212ce8a38a0
 resource "aws_lb_listener" "nlb_https" {
   load_balancer_arn = var.use_elastic_ips ? aws_lb.nlb[0].arn : aws_lb.nlb-dev[0].arn
   port              = "443"
-  protocol          = "TLS" 
-  ssl_policy       = "ELBSecurityPolicy-TLS13-1-2-2021-06"
-  certificate_arn   = "arn:aws:acm:us-east-1:456531024327:certificate/7db78d8f-2148-4af2-a239-6e9a2445dbe7"
+  protocol          = "TCP" 
+  # ssl_policy       = "ELBSecurityPolicy-TLS13-1-2-2021-06"
+  # certificate_arn   = "arn:aws:acm:us-east-1:456531024327:certificate/7db78d8f-2148-4af2-a239-6e9a2445dbe7"
   default_action {
      type             = "forward"
-     target_group_arn = aws_lb_target_group.nlb_tg_hhtps.arn
+     target_group_arn = aws_lb_target_group.nlb_tg_https.arn
   }
   depends_on = [helm_release.tethysportal_helm_release]
 }
@@ -180,7 +180,7 @@ resource "aws_lb_target_group" "nlb_tg" {
     healthy_threshold   = "3"
   }
 }
-resource "aws_lb_target_group" "nlb_tg_hhtps" {
+resource "aws_lb_target_group" "nlb_tg_https" {
   name        = "${var.app_name}-${var.environment}-alb-https"
   port        = 443
   protocol    = "TCP"
@@ -210,7 +210,7 @@ resource "aws_lb_target_group_attachment" "tg_attachment" {
 
 }
 resource "aws_lb_target_group_attachment" "tg_attachment_https" {
-  target_group_arn = aws_lb_target_group.nlb_tg_hhtps.arn
+  target_group_arn = aws_lb_target_group.nlb_tg_https.arn
   # attach the ALB to this target group
   target_id = data.aws_lb.alb_listener_details.arn
   #   target_id = data.aws_resourcegroupstaggingapi_resources.load_balancer.resource_tag_mapping_list[0].resource_arn
