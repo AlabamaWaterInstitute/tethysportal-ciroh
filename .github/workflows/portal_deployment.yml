@@ -9,7 +9,7 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
     env:
-      AWS_REGION: ${{ secrets.AWS_REGION }}
+      AWS_REGION: us-east-1
       CLUSTER_NAME: ciroh-portal-dev
     steps:
       - uses: actions/checkout@v3
