@@ -1,10 +1,8 @@
-global:
-  host: ''
 image:
   repository: 'gioelkin/tethysapp-ciroh-portal'
   # repository: 'ciroh/tethysapp-ciroh'
   # tag: dev_aea20c0fc2e159559e561b2b1bf9a3861542fb0b
-  tag: dev_06f441367d3083df9bc508441b627152e661850e
+  tag: dev_d40f0221e89460198dae10eaba7d3ec245b7207a
   pullPolicy: Always
 
 ingresses:
@@ -638,14 +636,3 @@ storageClass:
     storageclass.kubernetes.io/is-default-class: 'true'
   reclaimPolicy: Delete
   parameters: {}
-namespace:
-  enabled: false
-  name: cirohportal
-  limits:
-    # cpu: '4'
-    # memory: 8Gi
-    ephemeral_storage: '5Gi'
-  requests:
-    # cpu: '4'
-    # memory: 8Gi
-    ephemeral_storage: '5Gi'

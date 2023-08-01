@@ -56,5 +56,5 @@ jobs:
         if: steps.list-changed.outputs.changed == 'true'
 
       - name: Run chart-testing (install)
-        run: ct install --debug --config .github/config/ct.yaml
+        run: ct install --debug --config .github/config/ct.yaml --helm-extra-args="-f charts/ciroh/ci/values-dev.yaml"
         if: steps.list-changed.outputs.changed == 'true'
