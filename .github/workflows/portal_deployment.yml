@@ -38,4 +38,4 @@ jobs:
         env:
           KUBE_CONFIG_DATA: ${{ env.KUBE_CONFIG_DATA }}
         with:
-          command: helm upgrade cirohportal-dev tethysportal-ciroh/ciroh --install --wait tethysportal-ciroh/ciroh -f charts/ciroh/ci/dev_aws_values.yaml --set storageClass.parameters.fileSystemId=fs-08cfc45ec6beb3dd5
+          command: helm upgrade cirohportal-dev tethysportal-ciroh/ciroh --install --wait -f charts/ciroh/ci/dev_aws_values.yaml --set storageClass.parameters.fileSystemId=fs-08cfc45ec6beb3dd5 --namespace cirohportal
