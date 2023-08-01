@@ -1,0 +1,37 @@
+name: deploy
+
+on:
+  push:
+    branches:
+      - '**' # matches every branch
+      # - '!main' # excludes master
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    env:
+      AWS_REGION: ${{ secrets.AWS_REGION }}
+      CLUSTER_NAME: ciroh-portal-dev
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          role-to-assume: arn:aws:iam::${{ secrets.ACCOUNT_ID }}:role/github-actions
+          role-session-name: ci-run-${{ github.run_id }}
+          aws-region: ${{ env.AWS_REGION }}
+
+      - name: kubeconfig
+        run: |
+          aws eks update-kubeconfig --name ${{ env.CLUSTER_NAME }} --region ${{ env.AWS_REGION }} --profile ${{ secrets.ACCOUNT_ID }} --kubeconfig ./kubeconfig
+          echo 'KUBE_CONFIG_DATA<<EOF' >> $GITHUB_ENV
+          echo $(cat ./kubeconfig | base64) >> $GITHUB_ENV
+          echo 'EOF' >> $GITHUB_ENV
+
+      - name: helm deploy
+        uses: koslib/helm-eks-action@master
+        env:
+          KUBE_CONFIG_DATA: ${{ env.KUBE_CONFIG_DATA }}
+        with:
+          plugins: 'https://github.com/jkroepke/helm-secrets' # optional
+          command: helm secrets upgrade cirohportal-dev tethysportal-ciroh/ciroh --install --wait tethysportal-ciroh/ciroh -f charts/ciroh/ci/dev_aws_values.yaml --set storageClass.parameters.fileSystemId=fs-08cfc45ec6beb3dd5
