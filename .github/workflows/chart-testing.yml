@@ -49,12 +49,12 @@ jobs:
           rm -f ./ah
 
       # - name: Run chart-testing (lint)
-      #   run: ct lint --debug --config .github/config/ct.yaml --check-version-increment=false
+      #   run: ct lint --debug --config .github/config/ct.yaml
 
       - name: Create kind cluster
         uses: helm/kind-action@v1.5.0
         if: steps.list-changed.outputs.changed == 'true'
 
       - name: Run chart-testing (install)
-        run: ct install --debug --config .github/config/ct.yaml --helm-extra-args="-f charts/ciroh/ci/values-dev.yaml"
+        run: ct install --debug --config .github/config/ct.yaml
         if: steps.list-changed.outputs.changed == 'true'

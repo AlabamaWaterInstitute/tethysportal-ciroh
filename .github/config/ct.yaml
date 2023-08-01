@@ -3,6 +3,7 @@ target-branch: aws-portal
 chart-dirs:
   - charts
 helm-extra-args: --timeout 600s
+check-version-increment: false
 chart-repos:
   - bitnami=https://charts.bitnami.com/bitnami
   - misc-helm-charts=https://raw.githubusercontent.com/aquaveo/misc-helm-charts/master/docs/
