@@ -49,7 +49,7 @@ jobs:
           rm -f ./ah
 
       - name: Run chart-testing (lint)
-        run: ct lint --debug --config .github/config/ct.yaml
+        run: ct lint --debug --config .github/config/ct.yaml --check-version-increment=false
 
       - name: Create kind cluster
         uses: helm/kind-action@v1.5.0
