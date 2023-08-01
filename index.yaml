@@ -3,18 +3,18 @@ entries:
   ciroh:
   - apiVersion: v2
     appVersion: 0.0.1
-    created: "2023-07-24T02:00:09.483611262Z"
+    created: "2023-08-01T20:03:08.92944576Z"
     dependencies:
     - name: postgis
-      repository: oci://ghcr.io/romer8
+      repository: https://raw.githubusercontent.com/aquaveo/misc-helm-charts/master/docs
       version: '*'
     - condition: geoserver.enabled
       name: geoserver
-      repository: oci://ghcr.io/romer8
+      repository: https://raw.githubusercontent.com/aquaveo/misc-helm-charts/master/docs
       version: '*'
     - condition: thredds.enabled
       name: thredds
-      repository: oci://ghcr.io/aquaveo
+      repository: https://raw.githubusercontent.com/aquaveo/misc-helm-charts/master/docs
       version: '*'
     - condition: redis.enabled
       name: redis
@@ -22,13 +22,13 @@ entries:
       version: '*'
     - condition: djangocms.enabled
       name: djangocms
-      repository: oci://ghcr.io/romer8
+      repository: https://aquaveo.github.io/django-cms-quickstart
       version: '*'
     description: Tethys portal for CIROH
-    digest: b8df3086bcd58e3747c08df0454f31dbbfae25bfd82e51854e538bd9f30e3beb
+    digest: ebc30074a82f11a23a3ecc8044164c133c4fa3c9f8e5719054d7ca549f8b46a9
     name: ciroh
     type: application
     urls:
     - https://AlabamaWaterInstitute.github.io/tethysportal-ciroh/ciroh-0.1.6.tgz
     version: 0.1.6
-generated: "2023-07-24T02:00:09.472284594Z"
+generated: "2023-08-01T20:03:08.917907803Z"
