@@ -182,7 +182,7 @@ spec:
         {{- if .Values.thredds.data.init_default_config }}
         - name: thredds-persistent-storage
           persistentVolumeClaim:
-            claimName: {{ template "thredds.pvcname" .Subcharts.thredds }}
+            claimName: {{ .Values.thredds.persistentVolumeClaim.name }}
         {{- end }}
         - name: config-volume
           configMap:
