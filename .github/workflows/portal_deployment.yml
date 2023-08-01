@@ -8,6 +8,9 @@ on:
 jobs:
   deploy:
     runs-on: ubuntu-latest
+    permissions:
+      id-token: write # This is required for requesting the JWT
+      contents: read # This is required for actions/checkout
     env:
       AWS_REGION: us-east-1
       CLUSTER_NAME: ciroh-portal-dev
