@@ -6,14 +6,14 @@ type: application
 version: 0.1.6
 dependencies:
   - name: 'postgis'
-    repository: 'https://aquaveo.github.io/misc-helm-charts'
+    repository: 'https://raw.githubusercontent.com/aquaveo/misc-helm-charts/master/docs'
     version: '*'
   - name: 'geoserver'
-    repository: 'https://aquaveo.github.io/misc-helm-charts'
+    repository: 'https://raw.githubusercontent.com/aquaveo/misc-helm-charts/master/docs'
     version: '*'
     condition: geoserver.enabled
   - name: 'thredds'
-    repository: 'oci://ghcr.io/aquaveo/thredds'
+    repository: 'https://raw.githubusercontent.com/aquaveo/misc-helm-charts/master/docs'
     version: '*'
     condition: thredds.enabled
   - name: 'redis'
