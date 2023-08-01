@@ -56,6 +56,7 @@ resource "helm_release" "karpenter" {
     name  = "settings.aws.interruptionQueueName"
     value = module.karpenter.queue_name
   }
+
 }
 resource "kubectl_manifest" "karpenter_provisioner" {
   yaml_body = <<-YAML
@@ -78,7 +79,6 @@ resource "kubectl_manifest" "karpenter_provisioner" {
             - small
             - medium
             - large
-            - xlarge
         - key: "karpenter.sh/capacity-type" # If not included, the webhook for the AWS cloud provider will default to on-demand
           operator: In
           values: ["on-demand"]

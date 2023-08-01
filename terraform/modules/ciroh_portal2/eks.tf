@@ -36,15 +36,12 @@ module "eks" {
       # so we need to disable it to use the default template provided by the AWS EKS managed node group service
       use_custom_launch_template = false
       disk_size                  = 40
-      labels = {
-        "tethysPortalName"     = "ciroh"
-      }      
-    #   tags = {
-    #       # NOTE - if creating multiple security groups with this module, only tag the
-    #       # security group that Karpenter should utilize with the following tag
-    #       # (i.e. - at most, only one security group should have this tag in your account)
-    #       "karpenter.sh/discovery" = var.cluster_name
-    #     }
+      #   tags = {
+      #       # NOTE - if creating multiple security groups with this module, only tag the
+      #       # security group that Karpenter should utilize with the following tag
+      #       # (i.e. - at most, only one security group should have this tag in your account)
+      #       "karpenter.sh/discovery" = var.cluster_name
+      #     }
     }
 
 
