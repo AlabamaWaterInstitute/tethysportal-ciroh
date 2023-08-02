@@ -1,6 +1,6 @@
 image:
   repository: 'gioelkin/tethysapp-ciroh-portal'
-  tag: dev_22509df07955a88b7305f4cbc0f0dc27e213d199
+  tag: dev_959457350ff433770f89b2fd819e81af43ae26ea
   pullPolicy: Always
 
 ingresses:
@@ -604,7 +604,7 @@ thredds:
     limits:
       memory: '2Gi'
 geoserver:
-  enabled: true
+  enabled: false
   storage_size: 1Gi
   resources:
     requests:
