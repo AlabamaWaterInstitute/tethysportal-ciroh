@@ -27,7 +27,7 @@ djangocms:
   image:
     repository: gioelkin/django-cms
     tag: dev_c28f0585667b1b02cff3772e481bb7f2c8883bdf
-  enabled: true
+  enabled: false
   ingress:
     enabled: false
   fullnameOverride: 'ciroh-cms'
@@ -83,7 +83,7 @@ djangocms:
     name: 'djangocms-pv-claim'
 
 tethys:
-  workspace_size: '5Gi'
+  workspace_size: '2Gi'
   services:
     geoserver: 'ciroh-gs'
     thredds: 'ciroh-tds'
@@ -209,6 +209,7 @@ thredds:
   image:
     repository: tethysplatformuploader/thredds-docker
     tag: 4.6.20-SNAPSHOT
+  enabled: false
   fullnameOverride: 'ciroh-tds'
   thredds_tds_catalog: '/thredds/catalog/ciroh_data/thredds_data/catalog.xml'
   persistentVolumeClaim:
@@ -595,21 +596,23 @@ thredds:
                 password="tdm_pass"
                 roles="tdsConfig,tdsMonitor"/>
         </tomcat-users>
-  storage_size: '3Gi'
+  storage_size: '1Gi'
   resources:
     requests:
-      memory: '2Gi'
-      cpu: '2'
+      memory: 512Mi
+      cpu: 1
     limits:
       memory: '2Gi'
 geoserver:
-  storage_size: 2Gi
+  enabled: false
+  storage_size: 1Gi
   resources:
     requests:
-      memory: '2Gi'
-      cpu: '1'
+      memory: 512Mi
+      cpu: 1
     limits:
-      memory: '4Gi'
+      cpu: 2
+      memory: '2Gi'
 resources:
   requests:
     cpu: 1
