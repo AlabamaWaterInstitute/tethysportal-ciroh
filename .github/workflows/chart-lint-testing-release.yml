@@ -7,7 +7,8 @@ on:
   pull_request:
     paths:
       - 'charts/**'
-
+  release:
+    types: [published, created]
 jobs:
   lint-test:
     runs-on: ubuntu-latest
@@ -58,3 +59,14 @@ jobs:
       - name: Run chart-testing (install)
         run: ct install --debug --config .github/config/ct.yaml
         if: steps.list-changed.outputs.changed == 'true'
+
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Publish Helm charts
+        uses: stefanprodan/helm-gh-pages@master
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          charts_dir: charts
