@@ -209,14 +209,14 @@ thredds:
   image:
     repository: tethysplatformuploader/thredds-docker
     tag: 4.6.20-SNAPSHOT
-  enabled: true
+  enabled: false
   fullnameOverride: 'ciroh-tds'
   thredds_tds_catalog: '/thredds/catalog/ciroh_data/thredds_data/catalog.xml'
   persistentVolumeClaim:
     name: 'thredds-pv-claim'
   # Data to be used for the public folder and also for the wms palettes
   data:
-    init_default_config: true
+    init_default_config: false
     # an example of a data archive is the following https://example.com/some/web/thredds_data.tgz
     public:
       init_data: false
@@ -604,7 +604,7 @@ thredds:
     limits:
       memory: '2Gi'
 geoserver:
-  enabled: false
+  enabled: true
   storage_size: 1Gi
   resources:
     requests:
