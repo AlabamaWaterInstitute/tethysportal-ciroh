@@ -209,7 +209,7 @@ thredds:
   image:
     repository: tethysplatformuploader/thredds-docker
     tag: 4.6.20-SNAPSHOT
-  enabled: true
+  enabled: false
   fullnameOverride: 'ciroh-tds'
   thredds_tds_catalog: '/thredds/catalog/ciroh_data/thredds_data/catalog.xml'
   persistentVolumeClaim:
@@ -613,6 +613,9 @@ geoserver:
     limits:
       cpu: 2
       memory: '2Gi'
+redis:
+  enabled: false
+
 resources:
   requests:
     cpu: 1
