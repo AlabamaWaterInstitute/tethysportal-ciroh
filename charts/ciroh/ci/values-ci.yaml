@@ -1,6 +1,6 @@
 image:
   repository: 'gioelkin/tethysapp-ciroh-portal'
-  tag: dev_959457350ff433770f89b2fd819e81af43ae26ea
+  tag: dev_0f3754ce741c26054062ce7cad25aecf8c4bf276
   pullPolicy: Always
 
 ingresses:
@@ -209,14 +209,14 @@ thredds:
   image:
     repository: tethysplatformuploader/thredds-docker
     tag: 4.6.20-SNAPSHOT
-  enabled: false
+  enabled: true
   fullnameOverride: 'ciroh-tds'
   thredds_tds_catalog: '/thredds/catalog/ciroh_data/thredds_data/catalog.xml'
   persistentVolumeClaim:
     name: 'thredds-pv-claim'
   # Data to be used for the public folder and also for the wms palettes
   data:
-    init_default_config: false
+    init_default_config: true
     # an example of a data archive is the following https://example.com/some/web/thredds_data.tgz
     public:
       init_data: false
