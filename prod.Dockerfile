@@ -11,6 +11,7 @@ COPY ggst ${TETHYS_HOME}/apps/ggst
 COPY gwdm ${TETHYS_HOME}/apps/gwdm
 COPY tethysapp-swe ${TETHYS_HOME}/apps/tethysapp-swe
 COPY tethysapp-hydrocompute ${TETHYS_HOME}/apps/tethysapp-hydrocompute
+COPY snow-inspector ${TETHYS_HOME}/apps/snow-inspector
 
 COPY piprequirements.txt .
 COPY config/tethys/tmp_app_store_files/conda_install.sh ${TETHYS_HOME}
@@ -40,6 +41,8 @@ RUN pip install --no-cache-dir --quiet -r piprequirements.txt && \
     cd ${TETHYS_HOME}/apps/tethysapp-swe && tethys install -w -N -q && cp install.yml $PYTHON_SITE_PACKAGE_PATH/site-packages/swe.yml && \
     cd ${TETHYS_HOME}/apps/tethysapp-hydrocompute && tethys install -w -N -q && cp install.yml $PYTHON_SITE_PACKAGE_PATH/site-packages/hydrocompute.yml && \
     cd ${TETHYS_HOME}/apps/gwdm && tethys install -w -N -q && cp install.yml $PYTHON_SITE_PACKAGE_PATH/site-packages/gwdm.yml && \
+    cd ${TETHYS_HOME}/apps/snow-inspector && tethys install -w -N -q && cp install.yml $PYTHON_SITE_PACKAGE_PATH/site-packages/snow-inspector.yml && \
+
     rm -rf ${TETHYS_HOME}/extensions/* && \
     rm -rf ${TETHYS_HOME}/apps/* && \
     micromamba clean --all --yes && \ 
