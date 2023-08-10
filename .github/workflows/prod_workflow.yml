@@ -1,17 +1,71 @@
-name: Lint-Test-Release-Deploy Charts
+name: push_on_tag_prod_workflow
 
+# Push to docker hub if tag has been created.
 on:
   push:
-    branches:
-      - main
-  pull_request:
-    paths:
-      - 'charts/**'
-  release:
-    types: [published, created]
+    tags:
+      - '*'
+
+env:
+  DOCKER_HUB_ORG: gioelkin
+  # DOCKER_HUB_ORG: ciroh
+  DOCKER_REPO: tethysapp-ciroh-portal
+  # DOCKER_REPO: tethysapp-ciroh
+
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
+  # build image
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+      - uses: actions/checkout@v2
+        with:
+          submodules: 'true'
+      # Checks-out the hydrocompute extra submodule
+      - name: checkout Hydrocompute submodule
+        run: |
+          cd tethysapp-hydrocompute/tethysapp/hydrocompute/public/HydroCompute && git submodule update --init --recursive
+
+      - name: Set Tag
+        run: |
+          echo "TAG=${GITHUB_REF:10}" >> $GITHUB_ENV
+          echo "TAG_LATEST=latest" >> $GITHUB_ENV
+      - name: Test Tag
+        run: |
+          echo $TAG
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v2
+      - name: Login to Docker Hub
+        uses: docker/login-action@v2
+        with:
+          username: ${{ secrets.DOCKER_BUILDER_USERNAME }}
+          password: ${{ secrets.DOCKER_BUILDER_TOKEN }}
+
+      - name: build and push stable tag
+        uses: docker/build-push-action@v4
+        with:
+          context: .
+          file: ./prod.Dockerfile
+          push: true
+          tags: ${{ env.DOCKER_HUB_ORG }}/${{ env.DOCKER_REPO }}:${{ env.TAG }}
+          cache-from: type=registry,ref=${{ env.DOCKER_HUB_ORG }}/${{ env.DOCKER_REPO }}-cache:latest
+          cache-to: type=registry,ref=${{ env.DOCKER_HUB_ORG }}/${{ env.DOCKER_REPO }}-cache:latest,mode=max
+
+      - name: build and push latest tag
+        uses: docker/build-push-action@v4
+        with:
+          context: .
+          file: ./prod.Dockerfile
+          push: true
+          tags: ${{ env.DOCKER_HUB_ORG }}/${{ env.DOCKER_REPO }}:${{ env.TAG_LATEST }}
+          cache-from: type=registry,ref=${{ env.DOCKER_HUB_ORG }}/${{ env.DOCKER_REPO }}-cache:latest
+          cache-to: type=registry,ref=${{ env.DOCKER_HUB_ORG }}/${{ env.DOCKER_REPO }}-cache:latest,mode=max
+  # lint and test chart
   lint-test:
     runs-on: ubuntu-latest
+    needs: build
     steps:
       - name: Checkout
         uses: actions/checkout@v2
@@ -63,6 +117,7 @@ jobs:
       #   run: ct install --debug --config .github/config/ct.yaml
       #   if: steps.list-changed.outputs.changed == 'true'
 
+  # release chart
   release:
     runs-on: ubuntu-latest
     needs: lint-test
@@ -74,6 +129,8 @@ jobs:
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           charts_dir: charts
+
+  #deploy chart
   deploy:
     runs-on: ubuntu-latest
     needs: release
@@ -105,4 +162,4 @@ jobs:
         env:
           KUBE_CONFIG_DATA: ${{ env.KUBE_CONFIG_DATA }}
         with:
-          command: helm repo add tethysportal-ciroh https://alabamawaterinstitute.github.io/tethysportal-ciroh && helm upgrade cirohportal-dev tethysportal-ciroh/ciroh --install --wait -f charts/ciroh/ci/prod_aws_values.yaml --set storageClass.parameters.fileSystemId=${{ secrets.FILE_SYSTEM_ID }} --namespace cirohportal
+          command: helm repo add tethysportal-ciroh https://alabamawaterinstitute.github.io/tethysportal-ciroh && helm upgrade cirohportal-dev tethysportal-ciroh/ciroh --install --wait -f charts/ciroh/ci/prod_aws_values.yaml --set storageClass.parameters.fileSystemId=${{ secrets.FILE_SYSTEM_ID }} --set image.tag=${{ env.TAG }} --namespace cirohportal

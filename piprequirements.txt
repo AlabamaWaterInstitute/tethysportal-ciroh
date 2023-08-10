@@ -39,3 +39,5 @@ matplotlib
 sphinx_rtd_theme
 sphinx
 sphinxcontrib-napoleon
+see
+pypng
