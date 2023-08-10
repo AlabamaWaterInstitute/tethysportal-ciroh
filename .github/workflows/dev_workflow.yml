@@ -150,7 +150,7 @@ jobs:
     needs: [startup_test, conditional_chart_check_files]
     if: |
       always() &&
-      needs.conditional_chart_check_files.outputs.chart_files_changed == 'True'
+      needs.conditional_chart_check_files.outputs.chart_files_changed == 'True' &&
       !contains(needs.*.result, 'failure') &&
       !cancelled()
     steps:
