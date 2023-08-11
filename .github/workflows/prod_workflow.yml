@@ -206,6 +206,11 @@ jobs:
           echo $(cat ./kubeconfig | base64) >> $GITHUB_ENV
           echo 'EOF' >> $GITHUB_ENV
 
+      - name: Set Tag
+        run: |
+          echo "TAG=${GITHUB_REF:10}" >> $GITHUB_ENV
+          echo "TAG_LATEST=latest" >> $GITHUB_ENV
+
       - name: helm deploy
         uses: koslib/helm-eks-action@master
         env:
