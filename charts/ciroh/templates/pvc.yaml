@@ -7,7 +7,7 @@ metadata:
 spec:
   accessModes:
     - ReadWriteOnce
-  {{- if and .Values.storageClass.storageClassName .Values.storageClass.createStorageClass }}
+  {{- if and .Values.storageClass.storageClassName .Values.storageClass.enabled }}
   storageClassName: {{ .Values.storageClass.storageClassName | quote }}
   {{- end }}
   resources:

@@ -648,7 +648,8 @@ affinity: {}
 
 storageClass:
   provisioner: 'efs.csi.aws.com'
-  createStorageClass: true
+  createStorageClass: false
+  enabled: true
   storageClassName: 'efs-pv'
   annotations:
     storageclass.kubernetes.io/is-default-class: 'true'

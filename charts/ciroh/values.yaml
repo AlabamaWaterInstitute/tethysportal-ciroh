@@ -224,6 +224,7 @@ affinity: {}
 storageClass:
   provisioner: ''
   createStorageClass: false
+  enable: false
   storageClassName: 'ciroh-storage'
   annotations: {}
   reclaimPolicy: Delete
