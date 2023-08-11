@@ -22,7 +22,8 @@ jobs:
         with:
           # Checkout as many commits as needed for the diff
           fetch-depth: 2
-      - shell: pwsh
+          submodules: 'true'
+      - name: check_docker_file_changed_files
         id: check_docker_file_changed
         run: |
           # Diff HEAD with the previous commit
@@ -145,6 +146,7 @@ jobs:
           echo $TAG
           . .github/scripts/clean_up_docker_hub.sh '${{ secrets.DOCKER_BUILDER_USERNAME }}' '${{ secrets.DOCKER_BUILDER_TOKEN }}' '${{ env.DOCKER_HUB_ORG }}' '${{ env.DOCKER_REPO }}' '${{ env.MAX_NUMBER_IMAGE }}'
 
+  #https://stackoverflow.com/questions/70959792/how-to-run-github-action-job-after-all-conditional-jobs-even-its-didnt-ran
   lint-test:
     runs-on: ubuntu-latest
     needs: [startup_test, conditional_chart_check_files]
