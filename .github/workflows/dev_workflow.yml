@@ -10,6 +10,7 @@ on:
       - 'salt/**'
       - 'config/**'
       - '**.Dokerfile'
+      - '**.gitmodules'
 env:
   IMAGE_TAG: dev_${GITHUB_SHA}
   DOCKER_HUB_ORG: gioelkin
@@ -52,9 +53,9 @@ jobs:
           files_yaml: |
             docker:
               - salt/**
-              - ./prod.Dockerfile
+              - .prod.Dockerfile
               - config/**
-
+              - .gitmodules
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v2
       - name: Login to Docker Hub
@@ -104,8 +105,9 @@ jobs:
           files_yaml: |
             docker:
               - salt/**
-              - ./prod.Dockerfile
+              - prod.Dockerfile
               - config/**
+              - .gitmodules
 
       - name: Docker login
         if: steps.changed-files-yaml.outputs.docker_any_changed == 'true'
