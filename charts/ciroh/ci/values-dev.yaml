@@ -630,7 +630,7 @@ affinity: {}
 
 storageClass:
   provisioner: k8s.io/minikube-hostpath
-  createStorageClass: false
+  enabled: false
   storageClassName: 'ciroh-storage'
   annotations:
     storageclass.kubernetes.io/is-default-class: 'true'

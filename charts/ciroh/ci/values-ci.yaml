@@ -629,7 +629,7 @@ affinity: {}
 
 storageClass:
   provisioner: ''
-  createStorageClass: false
+  enabled: false
   storageClassName: 'ciroh-storage'
   annotations:
     storageclass.kubernetes.io/is-default-class: 'true'
