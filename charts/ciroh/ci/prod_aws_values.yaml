@@ -227,7 +227,7 @@ thredds:
     tag: 4.6.20-SNAPSHOT
     pullPolicy: 'IfNotPresent'
   persistentVolumeClaim:
-    name: ''
+    name: 'thredds-pv-claim'
   # Data to be used for the public folder and also for the wms palettes
   data:
     init_default_config: true
