@@ -25,6 +25,7 @@ ADD  tethysext-ciroh_theme/*.py ${TETHYS_HOME}/extensions/tethysext-ciroh_theme/
 # Activate tethys conda environment during build
 ARG MAMBA_DOCKERFILE_ACTIVATE=1
 
+
 #######################################
 # INSTALL EXTENSIONS and APPLICATIONS #
 #######################################

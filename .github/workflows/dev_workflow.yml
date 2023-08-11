@@ -10,7 +10,12 @@ on:
       - 'salt/**'
       - 'config/**'
       - '**.Dokerfile'
-
+env:
+  IMAGE_TAG: dev_${GITHUB_SHA}
+  DOCKER_HUB_ORG: gioelkin
+  # DOCKER_HUB_ORG: ciroh
+  DOCKER_REPO: tethysapp-ciroh-portal
+  MAX_NUMBER_IMAGE: 5
 jobs:
   build:
     # The type of runner that the job will run on
