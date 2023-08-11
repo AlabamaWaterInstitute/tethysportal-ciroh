@@ -1,10 +1,24 @@
-name: Lint-Test-Release-Deploy Charts
+name: push_on_tag_dev_workflow
 
 on:
   push:
     branches:
-      - main
+      - '!main'
+    paths:
+      - 'charts/**'
+      - 'salt/**'
+      - 'config/**'
+      - '**.Dokerfile'
+      - 'snow-inspector/**'
+      - 'tethysapp-hydrocompute/**'
+      - 'tethysapp-metdataexplorer/**'
+      - 'tethysapp-swe/**'
+      - 'tethysapp-tethys_app_store/**'
+      - 'tethysext-ciroh_theme/**'
+      - 'Water-Data-Explorer/**'
   pull_request:
+    branches:
+      - main
     paths:
       - 'charts/**'
       - 'salt/**'
@@ -60,7 +74,7 @@ jobs:
           files_yaml: |
             docker:
               - salt/**
-              - .prod.Dockerfile
+              - prod.Dockerfile
               - piprequirements.txt
               - config/**
               - .gitmodules

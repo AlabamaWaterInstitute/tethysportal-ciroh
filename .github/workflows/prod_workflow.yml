@@ -5,7 +5,18 @@ on:
   push:
     tags:
       - '*'
-
+    paths:
+      - 'charts/**'
+      - 'salt/**'
+      - 'config/**'
+      - '**.Dokerfile'
+      - 'snow-inspector/**'
+      - 'tethysapp-hydrocompute/**'
+      - 'tethysapp-metdataexplorer/**'
+      - 'tethysapp-swe/**'
+      - 'tethysapp-tethys_app_store/**'
+      - 'tethysext-ciroh_theme/**'
+      - 'Water-Data-Explorer/**'
 env:
   DOCKER_HUB_ORG: gioelkin
   # DOCKER_HUB_ORG: ciroh
@@ -43,7 +54,7 @@ jobs:
           files_yaml: |
             docker:
               - salt/**
-              - .prod.Dockerfile
+              - prod.Dockerfile
               - piprequirements.txt
               - config/**
               - .gitmodules
