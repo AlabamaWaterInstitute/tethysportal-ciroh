@@ -3,7 +3,7 @@ entries:
   ciroh:
   - apiVersion: v2
     appVersion: 0.0.1
-    created: "2023-08-11T17:14:38.036088991Z"
+    created: "2023-08-11T17:19:02.52033098Z"
     dependencies:
     - name: postgis
       repository: https://raw.githubusercontent.com/aquaveo/misc-helm-charts/master/docs
@@ -25,10 +25,10 @@ entries:
       repository: https://aquaveo.github.io/django-cms-quickstart
       version: '*'
     description: Tethys portal for CIROH
-    digest: 1bf67cd427ecd3a0a48da26a691ba6d8ae1b3140a33260e1e6e701e5e0a7fd90
+    digest: 15623bb9e3f8388c3563c79b2ead1b1ee8e77d3e9ef4c8b4c892be0491c07a52
     name: ciroh
     type: application
     urls:
     - https://AlabamaWaterInstitute.github.io/tethysportal-ciroh/ciroh-0.1.6.tgz
     version: 0.1.6
-generated: "2023-08-11T17:14:38.023847993Z"
+generated: "2023-08-11T17:19:02.508521446Z"
