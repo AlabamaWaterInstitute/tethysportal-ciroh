@@ -10,7 +10,14 @@ on:
       - 'salt/**'
       - 'config/**'
       - '**.Dokerfile'
-      - '**.gitmodules'
+      - 'snow-inspector/**'
+      - 'tethysapp-hydrocompute/**'
+      - 'tethysapp-metdataexplorer/**'
+      - 'tethysapp-swe/**'
+      - 'tethysapp-tethys_app_store/**'
+      - 'tethysext-ciroh_theme/**'
+      - 'Water-Data-Explorer/**'
+
 env:
   IMAGE_TAG: dev_${GITHUB_SHA}
   DOCKER_HUB_ORG: gioelkin
@@ -56,6 +63,14 @@ jobs:
               - .prod.Dockerfile
               - config/**
               - .gitmodules
+              - snow-inspector/**
+              - tethysapp-hydrocompute/**
+              - tethysapp-metdataexplorer/**
+              - tethysapp-swe/**
+              - tethysapp-tethys_app_store/**
+              - tethysext-ciroh_theme/**
+              - Water-Data-Explorer/**
+
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v2
       - name: Login to Docker Hub
@@ -108,6 +123,13 @@ jobs:
               - prod.Dockerfile
               - config/**
               - .gitmodules
+              - snow-inspector/**
+              - tethysapp-hydrocompute/**
+              - tethysapp-metdataexplorer/**
+              - tethysapp-swe/**
+              - tethysapp-tethys_app_store/**
+              - tethysext-ciroh_theme/**
+              - Water-Data-Explorer/**
 
       - name: Docker login
         if: steps.changed-files-yaml.outputs.docker_any_changed == 'true'
