@@ -122,7 +122,7 @@ you can rollback to a previous revision with:
 
 ```bash
 helm history <release> --namespace <namespace>
-
+helm rollback <release> <number_release> --namespace <namespace>
 ```
 
 More on this in the following [medium article](https://medium.com/nerd-for-tech/kubernetes-helm-error-upgrade-failed-another-operation-install-upgrade-rollback-is-in-progress-52ea2c6fcda9)
