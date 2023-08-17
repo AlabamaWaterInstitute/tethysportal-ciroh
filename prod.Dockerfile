@@ -1,4 +1,4 @@
-FROM gioelkin/tethys:dev as base
+FROM tethysplatform/tethys-core:latest as base
 
 
 #########################
@@ -63,7 +63,7 @@ RUN pip install --no-cache-dir --quiet -r piprequirements.txt && \
     find $PYTHON_SITE_PACKAGE_PATH/site-packages -name '*.pyx' -delete && \
     rm -rf $PYTHON_SITE_PACKAGE_PATH/uvloop/loop.c
 
-FROM gioelkin/tethys:dev as build
+FROM tethysplatform/tethys-core:latest as build
 ###########################
 # RUN SUPERVISORD AS ROOT #
 ###########################
