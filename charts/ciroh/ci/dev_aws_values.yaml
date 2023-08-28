@@ -48,7 +48,7 @@ tethys:
     geoserver: 'ciroh-gs'
     thredds: dev.elkingio.com
   settings:
-    prefix_url: 'tethys_platform'
+    prefix_url: 't'
     tethys_settings_flags: '--production, --overwrite'
     enable_portal_open: 'true'
     bypass_tethys_home_page: 'true'
@@ -129,7 +129,7 @@ tethys:
       owp_nwm_map_viewer:
         name: OWP NWM Map Viewer
         endpoint: https://water.noaa.gov/map
-        logo_url: /tethys_platform/static/ciroh_theme/images/owp.png
+        logo_url: /t/static/ciroh_theme/images/owp.png
         description: Proxy app for Office in Water Prediction
         tags: NOAA
         enabled: true
@@ -140,7 +140,7 @@ tethys:
       ciroh_jupyterhub:
         name: CIROH JupyterHub
         endpoint: https://jupyterhub.cuahsi.org/hub/login
-        logo_url: /tethys_platform/static/ciroh_theme/images/jupyterhub.png
+        logo_url: /t/static/ciroh_theme/images/jupyterhub.png
         description: Proxy app for the CIROH JupyterHub
         tags: CUAHSI
         enabled: true
@@ -151,7 +151,7 @@ tethys:
       hydroshare:
         name: HydroShare
         endpoint: https://www.hydroshare.org/home/
-        logo_url: /tethys_platform/static/ciroh_theme/images/HydroShare.png
+        logo_url: /t/static/ciroh_theme/images/HydroShare.png
         description: Proxy app for the Hydroshare app
         tags: CUAHSI
         enabled: true
