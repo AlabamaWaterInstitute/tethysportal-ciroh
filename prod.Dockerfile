@@ -61,6 +61,7 @@ RUN pip install --no-cache-dir --quiet -r piprequirements.txt && \
     rm -rf $PYTHON_SITE_PACKAGE_PATH/uvloop/loop.c
 
 FROM tethysplatform/tethys-core:4.1.3 as build
+
 ###########################
 # RUN SUPERVISORD AS ROOT #
 ###########################
@@ -78,12 +79,15 @@ COPY salt/ /srv/salt/
 ARG MAMBA_DOCKERFILE_ACTIVATE=1
 RUN rm -Rf ~/.cache/pip && \
     micromamba clean --all --yes
+
 #########
 # PORTS #
 #########
+
 EXPOSE 80
 
 #######
 # RUN #
 #######
+
 CMD bash run.sh
