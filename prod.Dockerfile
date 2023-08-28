@@ -80,14 +80,7 @@ ARG MAMBA_DOCKERFILE_ACTIVATE=1
 RUN rm -Rf ~/.cache/pip && \
     micromamba clean --all --yes
 
-#########
-# PORTS #
-#########
 
 EXPOSE 80
-
-#######
-# RUN #
-#######
 
 CMD bash run.sh
