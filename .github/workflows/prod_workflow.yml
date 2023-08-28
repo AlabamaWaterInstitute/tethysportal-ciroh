@@ -29,11 +29,25 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
+      # hack to get more space in virtual runner
+      - name: Maximize build space
+        uses: easimon/maximize-build-space@master
+        with:
+          root-reserve-mb: 512
+          swap-size-mb: 1024
+          remove-dotnet: 'true'
+
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v2
         with:
           fetch-depth: 0
           submodules: 'true'
+
+      - name: Build
+        run: |
+          echo "Free space:"
+          df -h
+
       # Checks-out the hydrocompute extra submodule
       - name: checkout Hydrocompute submodule
         run: |
