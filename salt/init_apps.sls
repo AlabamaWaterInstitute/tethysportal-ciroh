@@ -14,14 +14,15 @@ Pre_Apps_Settings:
     - name: cat {{ TETHYS_HOME }}/portal_config.yml
     - shell: /bin/bash
 
+# If we need to change more settings use this
 Set_Tethys_Settings_For_Apps:
   cmd.run:
     - name: >
+        
         tethys settings --set FILE_UPLOAD_MAX_MEMORY_SIZE {{ FILE_UPLOAD_MAX_MEMORY_SIZE }} &&
         tethys settings --set DATA_UPLOAD_MAX_MEMORY_SIZE {{ FILE_UPLOAD_MAX_MEMORY_SIZE }} &&
         tethys settings --set DATA_UPLOAD_MAX_NUMBER_FIELDS {{ FILE_UPLOAD_MAX_MEMORY_SIZE }} &&
         tethys settings --set PREFIX_URL {{ PREFIX_URL }}
-    - unless: /bin/bash -c "[ -f "${TETHYS_PERSIST}/init_apps_setup_complete" ];"
 
 Sync_Apps:
   cmd.run:
