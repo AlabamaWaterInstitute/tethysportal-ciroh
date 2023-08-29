@@ -2,7 +2,10 @@
 import sys
 import argparse
 from geo.Geoserver import Geoserver
+import logging
 
+logging.basicConfig(level=logging.ERROR, format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+logger = logging.getLogger(__name__)
 
 def creat_and_init_gwdm(argv):
     parser = argparse.ArgumentParser(
@@ -63,4 +66,8 @@ def creat_and_init_gwdm(argv):
 
 
 if __name__ == "__main__":
-    creat_and_init_gwdm(sys.argv)
+    try:
+        creat_and_init_gwdm(sys.argv)
+    except Exception as e:
+        logger.error('An error occurred', exc_info=True)
+
