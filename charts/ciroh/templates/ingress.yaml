@@ -91,7 +91,7 @@ spec:
       http:
     # - http:
         paths:
-          - path: "/tethys_platform/static"
+          - path: "/{{ $.Values.tethys.settings.prefix_url }}/static"
             pathType: Prefix
             backend:
               service:
