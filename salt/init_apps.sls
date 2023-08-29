@@ -28,6 +28,7 @@ Sync_Apps:
   cmd.run:
     - name: tethys db sync
     - shell: /bin/bash
+    - unless: /bin/bash -c "[ -f "{{ TETHYS_PERSIST }}/init_apps_setup_complete" ];"
 
 Update_Tethys_Apps:
   file.managed:
