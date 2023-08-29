@@ -62,9 +62,7 @@ RUN pip install --no-cache-dir --quiet -r piprequirements.txt && \
 
 FROM tethysplatform/tethys-core:4.1.3 as build
 
-###########################
-# RUN SUPERVISORD AS ROOT #
-###########################
+
 COPY --chown=www:www --from=base ${CONDA_HOME}/envs/${CONDA_ENV_NAME} ${CONDA_HOME}/envs/${CONDA_ENV_NAME}
 COPY config/tethys/asgi_supervisord.conf ${TETHYS_PERSIST}/asgi_supervisord.conf
 COPY config/tethys/supervisord.conf /etc/supervisor/supervisord.conf
