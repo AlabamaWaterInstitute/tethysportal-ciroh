@@ -28,7 +28,6 @@ Sync_Apps:
   cmd.run:
     - name: tethys db sync
     - shell: /bin/bash
-    - unless: /bin/bash -c "[ -f "{{ TETHYS_PERSIST }}/init_apps_setup_complete" ];"
 
 Update_Tethys_Apps:
   file.managed:
@@ -43,9 +42,3 @@ run_on_changes:
       - file: Update_Tethys_Apps
 
 # /srv/salt/my_file.sls
-
-Flag_Init_Apps_Setup_Complete:
-  cmd.run:
-    - name: touch {{ TETHYS_PERSIST }}/init_apps_setup_complete
-    - shell: /bin/bash
-    - unless: /bin/bash -c "[ -f "{{ TETHYS_PERSIST }}/init_apps_setup_complete" ];"
