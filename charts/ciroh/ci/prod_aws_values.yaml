@@ -161,7 +161,7 @@ tethys:
 djangocms:
   image:
     repository: gioelkin/django-cms
-    tag: dev_c28f0585667b1b02cff3772e481bb7f2c8883bdf
+    tag: dev_4e2d4deb320728e62b5534728f739287fcd4b669
     pullPolicy: 'IfNotPresent'
   enabled: true
   ingress:
