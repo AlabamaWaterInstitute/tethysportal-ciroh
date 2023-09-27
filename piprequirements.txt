@@ -41,3 +41,6 @@ sphinx
 sphinxcontrib-napoleon
 see
 pypng
+httpx
+nodejs
+geoalchemy2

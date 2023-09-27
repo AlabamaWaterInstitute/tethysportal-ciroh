@@ -16,6 +16,7 @@ on:
       - 'tethysapp-tethys_app_store/**'
       - 'tethysext-ciroh_theme/**'
       - 'Water-Data-Explorer/**'
+      - 'OWP/**'
   pull_request:
     branches:
       - main
@@ -31,6 +32,7 @@ on:
       - 'tethysapp-tethys_app_store/**'
       - 'tethysext-ciroh_theme/**'
       - 'Water-Data-Explorer/**'
+      - 'OWP/**'
 
 env:
   IMAGE_TAG: dev_${GITHUB_SHA}
