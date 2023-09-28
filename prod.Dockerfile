@@ -30,8 +30,11 @@ ARG MAMBA_DOCKERFILE_ACTIVATE=1
 # INSTALL EXTENSIONS and APPLICATIONS #
 #######################################
 RUN pip install --no-cache-dir --quiet -r piprequirements.txt && \
+
     micromamba install --yes -c conda-forge geoserver-rest && \
+
     conda install --yes -c conda-forge udunits2 && \
+
     # micromamba install --yes -c conda-forge --file requirements.txt --> problem installing with microbamba, but pip is working well but unstable
     export PYTHON_SITE_PACKAGE_PATH=$(${CONDA_HOME}/envs/${CONDA_ENV_NAME}/bin/python -m site | grep -a -m 1 "site-packages" | head -1 | sed 's/.$//' | sed -e 's/^\s*//' -e '/^$/d'| sed 's![^/]*$!!' | cut -c2-) &&\
     cd ${TETHYS_HOME}/extensions/tethysext-ciroh_theme && python setup.py install && \
@@ -47,6 +50,7 @@ RUN pip install --no-cache-dir --quiet -r piprequirements.txt && \
     rm -rf ${TETHYS_HOME}/extensions/* && \
     rm -rf ${TETHYS_HOME}/apps/* && \
     micromamba clean --all --yes && \ 
+
     conda clean --all --yes && \
     rm -rf /var/lib/apt/lists/* && \
     find -name '*.a' -delete && \
