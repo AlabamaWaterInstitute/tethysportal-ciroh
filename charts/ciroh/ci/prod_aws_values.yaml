@@ -162,7 +162,7 @@ djangocms:
   image:
     repository: gioelkin/django-cms
     tag: latest
-    pullPolicy: 'IfNotPresent'
+    pullPolicy: 'Always'
   enabled: true
   ingress:
     enabled: false
