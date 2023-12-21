@@ -30,3 +30,7 @@
 	path = snow-inspector
 	url = https://github.com/Aquaveo/snow-inspector
 	branch = tethys4_upgrade
+[submodule "OWP"]
+	path = OWP
+	url = git@github.com:Aquaveo/OWP.git
+	branch = main

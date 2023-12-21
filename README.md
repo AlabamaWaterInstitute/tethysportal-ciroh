@@ -22,9 +22,10 @@ The portal contains native Tethys Platform and Proxy applications:
 5. [Ground Water Mapper Application](https://github.com/Aquaveo/gwdm.git) (GWDM)
 6. [Ground Subsseting Tool](https://github.com/Aquaveo/ggst.git) (GGST)
 7. [Snow Inspector](https://github.com/BYU-Hydroinformatics/snow-inspector)
-8. [OWP NWM Map Viewer](https://water.noaa.gov/map) (Proxy App)
-9. [CIROH JupyterHub](https://jupyterhub.cuahsi.org/hub/login) (Proxy App)
-10. [HydroShare](https://www.hydroshare.org/home/) (Proxy App)
+8. [OWP Tethys App](https://github.com/Aquaveo/OWP)
+9. [OWP NWM Map Viewer](https://water.noaa.gov/map) (Proxy App)
+10. [CIROH JupyterHub](https://jupyterhub.cuahsi.org/hub/login) (Proxy App)
+11. [HydroShare](https://www.hydroshare.org/home/) (Proxy App)
 
 ## Installation with Cloud Providers
 
