@@ -116,7 +116,7 @@ jobs:
 
       - name: check_docker_file_changed_files
         id: changed-files-yaml
-        uses: tj-actions/changed-files@v37
+        uses: tj-actions/changed-files@v41
         with:
           files_yaml: |
             docker:
@@ -179,7 +179,7 @@ jobs:
 
       - name: check_docker_file_changed_files
         id: changed-files-yaml
-        uses: tj-actions/changed-files@v37
+        uses: tj-actions/changed-files@v41
         with:
           files_yaml: |
             docker:
@@ -237,7 +237,7 @@ jobs:
 
       - name: check_chart_file_changed_files
         id: changed-chart-files-yaml
-        uses: tj-actions/changed-files@v37
+        uses: tj-actions/changed-files@v41
         with:
           files_yaml: |
             charts:
