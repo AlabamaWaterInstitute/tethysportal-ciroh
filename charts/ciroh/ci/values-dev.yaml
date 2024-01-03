@@ -2,7 +2,7 @@ image:
   repository: 'gioelkin/tethysapp-ciroh-portal'
   # repository: 'ciroh/tethysapp-ciroh'
   # tag: dev_aea20c0fc2e159559e561b2b1bf9a3861542fb0b
-  tag: dev_d40f0221e89460198dae10eaba7d3ec245b7207a
+  tag: dev_b90471d81c7c8a35cd2cae5dc48af31ec634d5de
   pullPolicy: Always
 
 ingresses:
@@ -88,7 +88,7 @@ djangocms:
 tethys:
   workspace_size: '5Gi'
   services:
-    geoserver: 'ciroh-gs'
+    geoserver: 'geoserver'
     thredds: 'ciroh-tds'
   settings:
     prefix_url: 't'
@@ -607,14 +607,18 @@ thredds:
       cpu: '2'
     limits:
       memory: '2Gi'
-geoserver:
-  storage_size: 2Gi
-  resources:
-    requests:
-      memory: '2Gi'
-      cpu: '1'
-    limits:
-      memory: '4Gi'
+
+# geoserverCloud:
+
+# geoserver:
+
+#   storage_size: 2Gi
+#   resources:
+#     requests:
+#       memory: '2Gi'
+#       cpu: '1'
+#     limits:
+#       memory: '4Gi'
 resources:
   requests:
     cpu: 1

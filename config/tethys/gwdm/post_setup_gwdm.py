@@ -31,7 +31,7 @@ def creat_and_init_gwdm(argv):
     args = parser.parse_args(argv[1:])
 
     geo = Geoserver(
-        f'{args.gs_host}:{args.port}/geoserver',
+        f'{args.gs_host}:{args.port}',
         username=args.user,
         password=args.password,
     )
