@@ -21,8 +21,14 @@ Set_Tethys_Settings_For_Apps:
         
         tethys settings --set FILE_UPLOAD_MAX_MEMORY_SIZE {{ FILE_UPLOAD_MAX_MEMORY_SIZE }} &&
         tethys settings --set DATA_UPLOAD_MAX_MEMORY_SIZE {{ FILE_UPLOAD_MAX_MEMORY_SIZE }} &&
-        tethys settings --set DATA_UPLOAD_MAX_NUMBER_FIELDS {{ FILE_UPLOAD_MAX_MEMORY_SIZE }} &&
+        tethys settings --set DATA_UPLOAD_MAX_NUMBER_FIELDS {{ FILE_UPLOAD_MAX_MEMORY_SIZE }}
+
+{% if PREFIX_URL %}
+Set_Prefix_URL_Tethys_Settings:
+  cmd.run:
+    - name: >
         tethys settings --set PREFIX_URL {{ PREFIX_URL }}
+{% endif %}
 
 Sync_Apps:
   cmd.run:
@@ -42,4 +48,3 @@ run_on_changes:
     - onchanges:
       - file: Update_Tethys_Apps
 
-# /srv/salt/my_file.sls
