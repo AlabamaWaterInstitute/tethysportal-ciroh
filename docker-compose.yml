@@ -23,14 +23,19 @@ services:
     env_file:
       - ./env/thredds.env
     volumes:
-      - ./data/thredds/:/usr/local/tomcat/content/thredds
-      - ./logs/thredds/tomcat/:/usr/local/tomcat/logs/
-      - ./logs/thredds/thredds/:/usr/local/tomcat/content/thredds/logs/
-      - ./config/thredds/tomcat-users.xml:/usr/local/tomcat/conf/tomcat-users.xml
-      - ./config/thredds/catalog.xml:/usr/local/tomcat/content/thredds/catalog.xml
-      - ./config/thredds/threddsConfig.xml:/usr/local/tomcat/content/thredds/threddsConfig.xml
-      - ./config/thredds/wmsPalettes/:/usr/local/tomcat/content/thredds/wmsPalettes/
-      - ./data/tethys/thredds_data/:/usr/local/tomcat/content/thredds/public/thredds_data
+      - thredds_local_tomcat:/usr/local/tomcat
+      - type: bind
+        source: ./config/thredds/tomcat-users.xml
+        target: /usr/local/tomcat/conf/tomcat-users.xml
+      - type: bind
+        source: ./config/thredds/catalog.xml
+        target: /usr/local/tomcat/content/thredds/catalog.xml
+      - type: bind
+        source: ./config/thredds/threddsConfig.xml
+        target: /usr/local/tomcat/content/thredds/threddsConfig.xml
+      - type: bind
+        source: ./config/thredds/wmsPalettes
+        target: /usr/local/tomcat/content/thredds/wmsPalettes/
 
   redis:
     image: redis:latest
@@ -59,11 +64,11 @@ services:
     env_file:
       - ./env/web.env
     volumes:
-      - ./data/tethys:/var/lib/tethys_persist
-      - ./logs/tethys:/var/log/tethys
-      # - ./config/tethys/portal_changes.yml:/var/lib/tethys_persist/portal_changes.yml
-      - ./config/tethys/portal_changes.yml:/usr/lib/tethys/portal_changes.yml
-
+      - tethys_persist:/var/lib/tethys_persist
+      - tethys_logs:/var/log/tethys
+      - type: bind
+        source: ./config/tethys/portal_changes.yml
+        target: /usr/lib/tethys/portal_changes.yml
 
   rabbitmq:
     image: rabbitmq:3.9-management
@@ -305,3 +310,7 @@ volumes:
   postgresql_config_data: # volume for postgresql data, used to store the geoserver config through jdbcconfig
   rabbitmq_data: # volume for rabbitmq data, so it doesn't create an anonymous one on each container
   geowebcache_data: # used by gwc and web-ui to locate the default gwc tile cache directory
+  thredds_local_tomcat: # volume for thredds local tomcat directory
+  tethys_persist: # volume for tethys persist data
+  tethys_logs: # volume for tethys logs
+  
