@@ -142,3 +142,7 @@ More on this in the following [medium article](https://medium.com/nerd-for-tech/
 
 Monitoring cluster and deployments: [k9s](https://k9scli.io/)
 Visualizing dynamic node usage within a cluster: [eks-node-viewer](https://github.com/awslabs/eks-node-viewer)
+
+### 1.7 Development
+
+when updating git submodules the following can be useful: https://stackoverflow.com/questions/29882960/changing-an-existing-submodules-branch
