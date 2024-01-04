@@ -31,9 +31,6 @@ ARG MAMBA_DOCKERFILE_ACTIVATE=1
 #######################################
 # INSTALL EXTENSIONS and APPLICATIONS #
 #######################################
-# RUN pip install --no-cache-dir --quiet -r piprequirements.txt && \
-# micromamba install --yes -c conda-forge geoserver-rest && \
-# conda install --yes -c conda-forge udunits2 && \
 RUN micromamba install --yes -c conda-forge --file requirements.txt && \
     pip install --no-cache-dir --quiet -r piprequirements.txt && \
     micromamba clean --all --yes && \ 
