@@ -1,114 +1,151 @@
 import yaml
 import logging
 import os
-import re
-from typing import Any
-import psycopg2
+import subprocess
+
+logging.basicConfig(format="%(asctime)s - %(message)s", level=logging.INFO)
+
+script_dir = os.environ["TETHYS_PERSIST"]
+portal_change_path = os.path.join(script_dir, "portal_changes.yml")
 
 
-logging.basicConfig(format='%(asctime)s - %(message)s', level=logging.INFO)
-script_dir = os.environ['TETHYS_PERSIST']
-TETHYS_DB_HOST = os.environ['TETHYS_DB_HOST']
-TETHYS_DB_PORT = os.environ['TETHYS_DB_PORT']
-TETHYS_DB_NAME = os.environ['TETHYS_DB_NAME']
-POSTGRES_PASSWORD = os.environ['POSTGRES_PASSWORD']
+def add_proxy_app(proxy_app):
+    name = proxy_app.get("name")
+    endpoint = proxy_app.get("endpoint")
+    logo_url = proxy_app.get("logo_url", "")
+    description = proxy_app["description", ""]
+    tags = proxy_app.get("tags", "")
+    enabled = proxy_app.get("enabled", True)
+    show_in_apps_library = proxy_app.get("show_in_apps_library", True)
+    back_url = proxy_app.get("back_url", "")
+    open_in_new_tab = proxy_app.get("open_in_new_tab", True)
+    display_external_icon = proxy_app.get("display_external_icon", False)
+    order = proxy_app.get("order", 0)
+    try:
+        subprocess.run(
+            [
+                "tethys",
+                "proxyapp",
+                "add",
+                f"{name}",
+                f"{endpoint}",
+                f"{description}",
+                f"{logo_url}",
+                f"{tags}",
+                f"{enabled}",
+                f"{show_in_apps_library}",
+                f"{back_url}",
+                f"{open_in_new_tab}",
+                f"{open_in_new_tab}",
+                f"{display_external_icon}",
+                f"{order}",
+            ]
+        )
+        logging.info(f"proxy app {name} added successfully")
+    except Exception as e:
+        logging.error(f"proxy app {name} not added: {e}")
+        return False
 
-portal_change_path = os.path.join(script_dir, 'portal_changes.yml')
 
-_var_matcher = re.compile(r"\${([^}^{]+)}")
-_tag_matcher = re.compile(r"[^$]*\${([^}^{]+)}.*")
-
-
-def _path_constructor(_loader: Any, node: Any):
-    def replace_fn(match):
-        envparts = f"{match.group(1)}:".split(":")
-        return os.environ.get(envparts[0], envparts[1])
-    return _var_matcher.sub(replace_fn, node.value)
-
-def replace_last(string, delimiter, replacement):
-    start, _, end = string.rpartition(delimiter)
-    return start + replacement + end
-
-def create_sql_insert_query():
-    query = 'insert into tethys_apps_proxyapp (id,name,endpoint,logo_url,description,tags,enabled,show_in_apps_library,\"order\",back_url,open_in_new_tab) VALUES '
+def add_proxy_apps():
     try:
         with open(portal_change_path) as portal_changes:
             ymlportal_changes = yaml.safe_load(portal_changes)
-            proxy_apps = ymlportal_changes.get('proxy_apps',{})
-            counter_id = 1
+            proxy_apps = ymlportal_changes.get("proxy_apps", {})
             for proxy_app in proxy_apps:
-                app_name=proxy_apps[proxy_app]['name']
-                endpoint=proxy_apps[proxy_app]['endpoint']
-                logo_url=proxy_apps[proxy_app]['logo_url']
-                description=proxy_apps[proxy_app]['description']
-                tags=proxy_apps[proxy_app]['tags']
-                enabled=proxy_apps[proxy_app]['enabled']
-                show_in_apps_library=proxy_apps[proxy_app]['show_in_apps_library']
-                app_order=proxy_apps[proxy_app]['order']
-                back_url=proxy_apps[proxy_app]['back_url']
-                open_new_tab=proxy_apps[proxy_app]['open_in_new_tab']
+                add_proxy_app(proxy_apps[proxy_app])
 
-                query+=f"({counter_id}, '{app_name}', '{endpoint}', '{logo_url}', '{description}', '{tags}', '{enabled}', '{show_in_apps_library}', '{app_order}', '{back_url}', '{open_new_tab}'),"
-                counter_id+=1
-            if query != 'insert into tethys_apps_proxyapp (id,name,endpoint,logo_url,description,tags,enabled,show_in_apps_library,\"order\",back_url,open_in_new_tab) VALUES ':
-                query = replace_last(query,',',';')
-            else:
-                query = ''
+        logging.info(f"proxy apps added successfully")
+
     except Exception as e:
-        logging.error(f'{e}')
-    return query
+        logging.error(f"It was not possible to add all the proxy apps: {e}")
 
-def create_sql_update_query():
-    query = ''
+
+def update_proxy_app(proxy_app):
+    name = proxy_app.get("name")
+    endpoint = proxy_app.get("endpoint")
+    logo_url = proxy_app.get("logo_url", "")
+    description = proxy_app["description", ""]
+    tags = proxy_app.get("tags", "")
+    enabled = proxy_app.get("enabled", True)
+    show_in_apps_library = proxy_app.get("show_in_apps_library", True)
+    back_url = proxy_app.get("back_url", "")
+    open_in_new_tab = proxy_app.get("open_in_new_tab", True)
+    display_external_icon = proxy_app.get("display_external_icon", False)
+    order = proxy_app.get("order", 0)
+    try:
+        update_result = subprocess.run(
+            [
+                "tethys",
+                "proxyapp",
+                "update",
+                f"{name}",
+                "--set",
+                "name",
+                f"{name}",
+                "--set",
+                "endpoint",
+                f"{endpoint}",
+                "--set",
+                "description",
+                f"{description}",
+                "--set",
+                "logo_url",
+                f"{logo_url}",
+                "--set",
+                "back_url" f"{back_url}",
+                "--set",
+                "tags" f"{tags}",
+                "--set",
+                "enabled" f"{enabled}",
+                "--set",
+                "show_in_apps_library" f"{show_in_apps_library}",
+                "--set",
+                "open_in_new_tab" f"{open_in_new_tab}",
+                "--set",
+                "display_external_icon" f"{display_external_icon}",
+                "--set",
+                "order" f"{order}",
+            ],
+            capture_output=True,
+        )
+
+        if update_result.stdout in "Proxy app '{name}' was updated successfully":
+            logging.info(f"proxy app {name} was updated successfully")
+
+        if update_result.stdout in "Proxy app named '{name}' does not exist":
+            add_proxy_app(proxy_app)
+
+    except Exception as e:
+        logging.error(f"proxy app {name} not updated: {e}")
+        return False
+
+
+def update_proxy_apps():
     try:
         with open(portal_change_path) as portal_changes:
             ymlportal_changes = yaml.safe_load(portal_changes)
-            proxy_apps = ymlportal_changes.get('proxy_apps',{})
+            proxy_apps = ymlportal_changes.get("proxy_apps", {})
             for proxy_app in proxy_apps:
-                query += 'update tethys_apps_proxyapp set '
-                for setting in proxy_apps[proxy_app]:
-                    setting_to_update = proxy_apps[proxy_app].get(setting,{})
-                    if setting_to_update:
-                        if setting == 'order':
-                            query+=f"\"{setting}\" = '{setting_to_update}', "
-                        else:
-                            query+=f"{setting} = '{setting_to_update}', "
+                update_proxy_app(proxy_apps[proxy_app])
 
-                query = replace_last(query,',','')
-                query += f"where name = '{proxy_apps[proxy_app]['name']}';"
+        logging.info(f"proxy apps added successfully")
+
     except Exception as e:
-        logging.error(f'{e}')
-    return query
+        logging.error(f"It was not possible to add all the proxy apps: {e}")
 
-#check if there is already rows in tethys_apps_proxyapp table, so we can choose between update and insert records
-def check_for_proxy_apps(database):
-    database.execute("select exists(select * from information_schema.tables where table_name=%s)", ('tethys_apps_proxyapp',))
-    return database.fetchone()[0]
 
-def update_state(database):
-    is_first_time = check_for_proxy_apps(database)
-    query=''
-    if is_first_time:
-        query+=create_sql_insert_query()
+def list_pxoxy_apps():
+    list_pa = subprocess.run(["tethys", "proxyapp", "list"], capture_output=True)
+    if list_pa.stdout == "Proxy Apps:":
+        add_proxy_apps()
     else:
-        query+=create_sql_update_query()
+        update_proxy_apps()
 
-    logging.info(f'{query}')
-    try:
-        if query != '':
-            database.execute(query)
-    except Exception as e:
-        logging.error(f'{e}')
-    pass
 
 def main():
-    yaml.add_implicit_resolver("!envvar", _tag_matcher, None, yaml.SafeLoader)
-    yaml.add_constructor("!envvar", _path_constructor, yaml.SafeLoader)    
-    conn = psycopg2.connect(host=f'{TETHYS_DB_HOST}', port = f'{TETHYS_DB_PORT}', database=f'{TETHYS_DB_NAME}', user="postgres", password=f'{POSTGRES_PASSWORD}')
-    cur = conn.cursor()
-    update_state(cur)
-    conn.commit()
-    cur.close()
-    conn.close()
-if __name__ == '__main__':
+    add_proxy_apps()
+
+
+if __name__ == "__main__":
     main()

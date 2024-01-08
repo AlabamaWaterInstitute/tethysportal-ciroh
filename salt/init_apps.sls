@@ -48,3 +48,14 @@ run_on_changes:
     - onchanges:
       - file: Update_Tethys_Apps
 
+Manage_Proxy_Apps:
+  file.managed:
+    - name: {{ TETHYS_PERSIST }}/proxy_apps.yml
+    - source: {{ TETHYS_HOME }}/proxy_apps.yml
+
+run_on_changes:
+  cmd.run:
+    - name: python {{ TETHYS_HOME }}/add_proxy_apps.py
+    - shell: /bin/bash
+    - onchanges:
+      - file: Manage_Proxy_Apps

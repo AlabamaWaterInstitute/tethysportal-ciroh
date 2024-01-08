@@ -1,0 +1,34 @@
+proxy_apps:
+  owp_nwm_map_viewer:
+    name: OWP NWM Map Viewer
+    endpoint: https://water.noaa.gov/map
+    logo_url: /static/ciroh_theme/images/owp.png
+    description: Proxy app for Office in Water Prediction
+    tags: NOAA
+    enabled: true
+    show_in_apps_library: true
+    order: 0
+    back_url: web
+    open_in_new_tab: true
+  ciroh_jupyterhub:
+    name: CIROH JupyterHub
+    endpoint: https://jupyterhub.cuahsi.org/hub/login
+    logo_url: /static/ciroh_theme/images/jupyterhub.png
+    description: Proxy app for the CIROH JupyterHub
+    tags: CUAHSI
+    enabled: true
+    show_in_apps_library: true
+    order: 1
+    back_url: web
+    open_in_new_tab: true
+  hydroshare:
+    name: HydroShare
+    endpoint: https://www.hydroshare.org/home/
+    logo_url: /static/ciroh_theme/images/HydroShare.png
+    description: Proxy app for the Hydroshare app
+    tags: CUAHSI
+    enabled: true
+    show_in_apps_library: true
+    order: 2
+    back_url: web
+    open_in_new_tab: true
