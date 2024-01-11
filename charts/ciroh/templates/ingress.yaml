@@ -44,11 +44,11 @@ spec:
                   port:
                     number: {{ $.Values.djangocms.service.externalPort }}
 
-            - path: "/geoserver"
+            - path: "/geoserver-cloud"
               pathType: Prefix
               backend:
                 service:
-                  name: {{ $.Values.geoserver.fullnameOverride }}
+                  name: {{ $.Values.geoservercloud.geoserver.name }}-gsc-gateway
                   port: 
                     number: 8181
 

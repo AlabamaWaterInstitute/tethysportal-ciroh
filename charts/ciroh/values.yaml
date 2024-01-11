@@ -12,6 +12,16 @@ imagePullSecrets: []
 nameOverride: ''
 fullnameOverride: ''
 
+geoservercloud:
+  enabled: false
+  geoserver:
+    name: 'gs-cloud-ciroh'
+
+    adminCredentials:
+      secretConfig: your-secret-name
+      userKey: admin
+      passKey: geoserver
+
 djangocms:
   enabled: false
   fullnameOverride: 'ciroh-cms'
@@ -19,34 +29,6 @@ djangocms:
     enabled: false
   env: []
 
-geoserver:
-  enabled: true
-  fullnameOverride: 'ciroh-gs'
-  username: 'admin'
-  password: 'geoserver'
-  init_default_config: false
-  env:
-    - name: ENABLED_NODES
-      value: '4'
-    - name: REST_NODES
-      value: '1'
-    - name: MAX_MEMORY
-      value: '1024'
-    - name: MIN_MEMORY
-      value: '512'
-    - name: NUM_CORES
-      value: '8'
-    - name: MAX_TIMEOUT
-      value: '60'
-  storage_size: 2Gi
-  resources:
-    requests:
-      memory: '2Gi'
-      cpu: '2'
-    limits:
-      memory: '4Gi'
-  storageClass:
-    storageClassName: ''
 thredds:
   enabled: true
   fullnameOverride: 'ciroh-tds'

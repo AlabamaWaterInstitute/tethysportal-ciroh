@@ -85,9 +85,9 @@ spec:
             - name: APP_DB_PASSWORD
               value: {{ .Values.tethys.database.app_db_password | quote }}
             - name: TETHYS_GS_USERNAME
-              value: {{ .Values.geoserver.username | quote }}
+              value: {{ .Values.geoservercloud.geoserver.adminCredentials.userKey | quote }}
             - name: TETHYS_GS_PASSWORD
-              value: {{ .Values.geoserver.password | quote }}
+              value: {{ .Values.geoservercloud.geoserver.adminCredentials.passKey | quote }}
             - name: TETHYS_GS_PROTOCOL
               value: 'http'
             - name: TETHYS_GS_HOST
