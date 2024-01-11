@@ -48,9 +48,9 @@ spec:
               pathType: Prefix
               backend:
                 service:
-                  name: {{ $.Values.geoservercloud.geoserver.name }}-gsc-gateway
+                  name: {{ $fullName }}-geoserver-gateway
                   port: 
-                    number: 8181
+                    number: 8080
 
             - path: "/thredds"
               pathType: Prefix

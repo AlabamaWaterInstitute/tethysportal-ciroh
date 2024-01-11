@@ -2,7 +2,7 @@ image:
   repository: 'gioelkin/tethysapp-ciroh-portal'
   # repository: 'ciroh/tethysapp-ciroh'
   # tag: dev_aea20c0fc2e159559e561b2b1bf9a3861542fb0b
-  tag: dev_b90471d81c7c8a35cd2cae5dc48af31ec634d5de
+  tag: dev_6be25a935dad5c57f81920b29d4262d9c854d35e
   pullPolicy: Always
 
 ingresses:
@@ -88,7 +88,7 @@ djangocms:
 tethys:
   workspace_size: '5Gi'
   services:
-    geoserver: 'geoserver'
+    geoserver: 'geoserver-gateway'
     thredds: 'ciroh-tds'
   settings:
     prefix_url: 't'
