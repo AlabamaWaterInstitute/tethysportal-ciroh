@@ -10,7 +10,7 @@ data:
           enabled: true
           wait-for-it: true
           wait-timeout: 10
-          url: jdbc:postgresql://psql-dep:5432/ogscloud
+          url: jdbc:postgresql://{{ .Values.geoservercloud.postgresql.fullnameOverride }}:5432/ogscloud
           username: username
           password: password
           maximum-pool-size: 10
