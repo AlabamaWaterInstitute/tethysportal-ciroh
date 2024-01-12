@@ -26,7 +26,6 @@ scipy
 statsmodels
 simplejson
 pandarallel
-gstools
 thredds_crawler
 matplotlib
 sphinx_rtd_theme

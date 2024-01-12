@@ -3,3 +3,4 @@ cfbuild
 ncarrays
 see
 pywaterml
+gstools
