@@ -13,7 +13,7 @@ def add_proxy_app(proxy_app):
     name = proxy_app.get("name")
     endpoint = proxy_app.get("endpoint")
     logo_url = proxy_app.get("logo_url", "")
-    description = proxy_app["description", ""]
+    description = proxy_app.get("description", "")
     tags = proxy_app.get("tags", "")
     enabled = proxy_app.get("enabled", True)
     show_in_apps_library = proxy_app.get("show_in_apps_library", True)
@@ -27,11 +27,11 @@ def add_proxy_app(proxy_app):
                 "tethys",
                 "proxyapp",
                 "add",
-                f"{name}",
+                f'"{name}"',
                 f"{endpoint}",
-                f"{description}",
+                f'"{description}"',
                 f"{logo_url}",
-                f"{tags}",
+                f'"{tags}"',
                 f"{enabled}",
                 f"{show_in_apps_library}",
                 f"{back_url}",
@@ -65,7 +65,7 @@ def update_proxy_app(proxy_app):
     name = proxy_app.get("name")
     endpoint = proxy_app.get("endpoint")
     logo_url = proxy_app.get("logo_url", "")
-    description = proxy_app["description", ""]
+    description = proxy_app.get("description", "")
     tags = proxy_app.get("tags", "")
     enabled = proxy_app.get("enabled", True)
     show_in_apps_library = proxy_app.get("show_in_apps_library", True)
@@ -82,20 +82,20 @@ def update_proxy_app(proxy_app):
                 f"{name}",
                 "--set",
                 "name",
-                f"{name}",
+                f'"{name}"',
                 "--set",
                 "endpoint",
                 f"{endpoint}",
                 "--set",
                 "description",
-                f"{description}",
+                f'"{description}"',
                 "--set",
                 "logo_url",
                 f"{logo_url}",
                 "--set",
                 "back_url" f"{back_url}",
                 "--set",
-                "tags" f"{tags}",
+                "tags" f'"{tags}"',
                 "--set",
                 "enabled" f"{enabled}",
                 "--set",
@@ -135,16 +135,16 @@ def update_proxy_apps():
         logging.error(f"It was not possible to add all the proxy apps: {e}")
 
 
-def list_pxoxy_apps():
+def manage_proxy_apps():
     list_pa = subprocess.run(["tethys", "proxyapp", "list"], capture_output=True)
-    if list_pa.stdout == "Proxy Apps:":
+    if list_pa.stdout.decode("utf-8").split("\n") == "":
         add_proxy_apps()
     else:
         update_proxy_apps()
 
 
 def main():
-    add_proxy_apps()
+    manage_proxy_apps()
 
 
 if __name__ == "__main__":
