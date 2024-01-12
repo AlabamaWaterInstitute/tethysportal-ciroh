@@ -6,7 +6,7 @@ import subprocess
 logging.basicConfig(format="%(asctime)s - %(message)s", level=logging.INFO)
 
 script_dir = os.environ["TETHYS_PERSIST"]
-portal_change_path = os.path.join(script_dir, "portal_changes.yml")
+portal_change_path = os.path.join(script_dir, "proxy_apps.yml")
 
 
 def add_proxy_app(proxy_app):

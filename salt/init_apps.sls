@@ -41,7 +41,7 @@ Update_Tethys_Apps:
     - name: {{ TETHYS_PERSIST }}/portal_changes.yml
     - source: {{ TETHYS_HOME }}/portal_changes.yml
 
-run_on_changes:
+run_on_apps_hanges:
   cmd.run:
     - name: {{ TETHYS_HOME }}/update_state.sh 
     - shell: /bin/bash
@@ -53,9 +53,9 @@ Manage_Proxy_Apps:
     - name: {{ TETHYS_PERSIST }}/proxy_apps.yml
     - source: {{ TETHYS_HOME }}/proxy_apps.yml
 
-run_on_changes:
+run_on_proxy_apps_changes:
   cmd.run:
-    - name: python {{ TETHYS_HOME }}/add_proxy_apps.py
+    - name: python {{ TETHYS_HOME }}/update_proxy_apps.py
     - shell: /bin/bash
     - onchanges:
       - file: Manage_Proxy_Apps

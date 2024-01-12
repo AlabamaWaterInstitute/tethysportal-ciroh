@@ -69,7 +69,9 @@ services:
       - type: bind
         source: ./config/tethys/portal_changes.yml
         target: /usr/lib/tethys/portal_changes.yml
-
+      - type: bind
+        source: ./config/tethys/proxy_apps.yml
+        target: /usr/lib/tethys/proxy_apps.yml
   rabbitmq:
     image: rabbitmq:3.9-management
     user: 1000:1000 # set the userid:groupid the container runs as
