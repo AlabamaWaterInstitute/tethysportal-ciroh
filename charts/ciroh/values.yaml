@@ -16,9 +16,8 @@ geoservercloud:
   enabled: false
   geoserver:
     name: 'gs-cloud-ciroh'
-
     adminCredentials:
-      secretConfig: your-secret-name
+      secretConfig: portal-auth
       userKey: admin
       passKey: geoserver
 
@@ -144,9 +143,8 @@ tethys:
     nginx_read_time_out: ''
     data_upload_max_memory_size: ''
     copyright: ''
-  portal_config:
-    apps: {}
-    proxy_apps: {}
+  portal_changes: {}
+  proxy_apps: {}
   database:
     tethys_db_name: 'tethys_platform'
     tethys_db_username: 'tethys_default'

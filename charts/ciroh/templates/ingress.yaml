@@ -48,7 +48,7 @@ spec:
               pathType: Prefix
               backend:
                 service:
-                  name: {{ $fullName }}-geoserver-gateway
+                  name: {{ $.Values.tethys.services.geoserver }}
                   port: 
                     number: 8080
 
