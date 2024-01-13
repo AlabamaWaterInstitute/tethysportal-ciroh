@@ -1,3 +1,9 @@
+# before starting the docker compose create the following:
+# sudo mkdir -p <root_level>/data/tethys/thredds_data/tethys/ggst_thredds_directory
+# if needed to build new image
+# docker compose --compatibility up -d --build
+# if do not need to build new image
+# docker compose --compatibility up -d
 version: '3.8'
 services:
   db:
@@ -23,7 +29,13 @@ services:
     env_file:
       - ./env/thredds.env
     volumes:
-      - thredds_local_tomcat:/usr/local/tomcat
+      - thredds_tomcat_local_content:/usr/local/tomcat
+      - tomcat_logs:/usr/local/tomcat/logs/
+      - thredds_logs:/usr/local/tomcat/content/thredds/logs/
+      - type: bind
+        source: ./data/tethys/thredds_data/
+        target: /usr/local/tomcat/content/thredds/public/thredds_data
+
       - type: bind
         source: ./config/thredds/tomcat-users.xml
         target: /usr/local/tomcat/conf/tomcat-users.xml
@@ -66,6 +78,9 @@ services:
     volumes:
       - tethys_persist:/var/lib/tethys_persist
       - tethys_logs:/var/log/tethys
+      - type: bind
+        source: ./data/tethys/thredds_data
+        target: /var/lib/tethys_persist/thredds_data
       - type: bind
         source: ./config/tethys/portal_changes.yml
         target: /usr/lib/tethys/portal_changes.yml
@@ -312,7 +327,8 @@ volumes:
   postgresql_config_data: # volume for postgresql data, used to store the geoserver config through jdbcconfig
   rabbitmq_data: # volume for rabbitmq data, so it doesn't create an anonymous one on each container
   geowebcache_data: # used by gwc and web-ui to locate the default gwc tile cache directory
-  thredds_local_tomcat: # volume for thredds local tomcat directory
+  thredds_tomcat_local_content: # volume for thredds local tomcat directory
   tethys_persist: # volume for tethys persist data
   tethys_logs: # volume for tethys logs
-  
+  thredds_logs:
+  tomcat_logs:
