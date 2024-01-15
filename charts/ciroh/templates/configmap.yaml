@@ -8,4 +8,8 @@ data:
   portal_changes.yml: |
   {{- toYaml .Values.tethys.portal_changes | nindent 4 }}
   {{- end }}
-
+  
+  {{- if .Values.tethys.proxy_apps }}
+  proxy_apps.yml: |
+  {{- toYaml .Values.tethys.proxy_apps | nindent 4 }}
+  {{- end }}

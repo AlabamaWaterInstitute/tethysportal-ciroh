@@ -109,11 +109,11 @@ spec:
             - name: THREDDS_TDS_PRIVATE_PROTOCOL
               value: 'http'
             - name: THREDDS_TDS_PRIVATE_HOST
-              value: {{ .Values.tethys.services.thredds | quote }}
+              value: {{ .Values.thredds.fullnameOverride | quote }}
             - name: THREDDS_TDS_PRIVATE_PORT
               value: "8080"
             - name: THREDDS_TDS_PUBLIC_HOST
-              value: {{ .Values.tethys.services.thredds | quote }}
+              value: {{ .Values.thredds.fullnameOverride | quote }}
             - name: THREDDS_TDS_PUBLIC_PORT
               value: "{{ if $.Values.ingresses.external.tls }}443{{else}}80{{ end }}"
             - name: THREDDS_TDS_PUBLIC_PROTOCOL

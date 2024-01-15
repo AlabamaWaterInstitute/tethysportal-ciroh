@@ -1,20 +1,60 @@
-nfsserver: 'host.minikube.internal'
+nfsserver: ''
 nfs:
   raster:
     pvcname: gs-cloud-raster-nfs-claim
     pvname: gs-cloud-raster-nfs
-    path: /nfs/raster
+    pvcreation: rue
+    path: ''
     storage: 1Gi
+    storageClass:
+      enabled: false
+      storageClassName: ''
+    accessModes: 'ReadWriteOnce'
+    mountOptions: 'nfsvers=4.2'
+    persistentVolumeReclaimPolicy: 'retain'
   config:
     pvcname: gs-cloud-datadir-nfs-claim
     pvname: gs-cloud-datadir-nfs
+    pvcreation: true
     path: /nfs/datadir
     storage: 1Gi
+    storageClass:
+      enabled: false
+      storageClassName: ''
+    accessModes: 'ReadWriteOnce'
+    mountOptions: 'nfsvers=4.2'
+    persistentVolumeReclaimPolicy: 'retain'
   cache:
     pvcname: gs-cloud-gwc-cache-nfs-claim
     pvname: gs-cloud-gwc-cache-nfs
+    pvcreation: false
     path: /nfs/tiles
     storage: 1Gi
+    storageClass:
+      enabled: false
+      storageClassName: ''
+    accessModes: 'ReadWriteOnce'
+    mountOptions: 'nfsvers=4.2'
+    persistentVolumeReclaimPolicy: 'retain'
+
+configMaps:
+  jndi:
+    enabled: true
+    name: gs-cloud-cm-jndi-geodata
+    datasource:
+      name: geodata
+      wait_for_it: true
+      wait_timeout: 10
+      port: 5432
+      database: ogscloud
+      username: username
+      password: password
+      pool:
+        max_size: 10
+        min_idle: 2
+        connection_timeout: 250
+        idle_timeout: 60000
+
 postgresql:
   image:
     debug: true
@@ -34,6 +74,7 @@ postgresql:
           CREATE EXTENSION postgis;
           CREATE SCHEMA data;
           CREATE SCHEMA config;
+
 rabbitmq:
   enabled: true
   resources:
@@ -116,8 +157,7 @@ geoservercloud:
     #   runAsGroup: 1001
     #   fsGroup: 1001
     ingress:
-      annotations:
-        my-annotation: 'coucou'
+      annotations: {}
       enabled: true
       hostGroups:
         host1:
@@ -128,10 +168,8 @@ geoservercloud:
     services:
       gateway:
         service:
-          annotations:
-            my-custom-annotation: 'hello'
-          labels:
-            one-custom-label: 'my-label'
+          annotations: {}
+          labels: {}
         ingress:
           enabled: true
         <<: *additional-stuff

@@ -6,18 +6,18 @@ data:
   jndi.yml: |+
     jndi:
       datasources:
-        geodata:
-          enabled: true
-          wait-for-it: true
-          wait-timeout: 10
-          url: jdbc:postgresql://{{ .Values.geoservercloud.postgresql.fullnameOverride }}:5432/ogscloud
-          username: username
-          password: password
-          maximum-pool-size: 10
-          minimum-idle: 2
-          connection-timeout: 250
-          idle-timeout: 60000
+        {{ .Values.configMaps.jndi.datasource.name }}:
+          enabled: {{ .Values.configMaps.jndi.datasource.enabled }}
+          wait-for-it: {{ .Values.configMaps.jndi.datasource.wait_for_it }}
+          wait-timeout: {{ .Values.configMaps.jndi.datasource.wait_timeout }}
+          url: jdbc:postgresql://{{ .Values.configMaps.jndi.datasource.host }}:{{ .Values.configMaps.jndi.datasource.port }}/{{ .Values.configMaps.jndi.datasource.database }}
+          username: {{ .Values.configMaps.jndi.datasource.username }}
+          password: {{ .Values.configMaps.jndi.datasource.password }}
+          maximum-pool-size: {{ .Values.configMaps.jndi.datasource.pool.max_size }}
+          minimum-idle: {{ .Values.configMaps.jndi.datasource.pool.min_idle }}
+          connection-timeout: {{ .Values.configMaps.jndi.datasource.pool.connection_timeout }}
+          idle-timeout: {{ .Values.configMaps.jndi.datasource.pool.idle_timeout }}
 kind: ConfigMap
 metadata:
   creationTimestamp: null
-  name: cm-jndi-geodata
+  name: { { .Values.configMaps.jndi.name } }

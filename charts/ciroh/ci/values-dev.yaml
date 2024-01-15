@@ -610,16 +610,15 @@ thredds:
 
 geoservercloud:
   enabled: true
+  nfsserver: 'host.minikube.internal'
+  nfs:
+    raster:
+      path: /nfs/raster
+    config:
+      path: /nfs/datadir
+    cache:
+      path: /nfs/tiles
 
-# geoserver:
-
-#   storage_size: 2Gi
-#   resources:
-#     requests:
-#       memory: '2Gi'
-#       cpu: '1'
-#     limits:
-#       memory: '4Gi'
 resources:
   requests:
     cpu: 1
