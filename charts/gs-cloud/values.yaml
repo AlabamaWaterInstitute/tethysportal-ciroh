@@ -3,39 +3,39 @@ nfs:
   raster:
     pvcname: gs-cloud-raster-nfs-claim
     pvname: gs-cloud-raster-nfs
-    pvcreation: rue
+    pvcreation: true
     path: ''
     storage: 1Gi
     storageClass:
-      enabled: false
+      enabled: true
       storageClassName: ''
     accessModes: 'ReadWriteOnce'
     mountOptions: 'nfsvers=4.2'
-    persistentVolumeReclaimPolicy: 'retain'
+    persistentVolumeReclaimPolicy: 'Retain'
   config:
     pvcname: gs-cloud-datadir-nfs-claim
     pvname: gs-cloud-datadir-nfs
     pvcreation: true
-    path: /nfs/datadir
+    path: ''
     storage: 1Gi
     storageClass:
-      enabled: false
+      enabled: true
       storageClassName: ''
     accessModes: 'ReadWriteOnce'
     mountOptions: 'nfsvers=4.2'
-    persistentVolumeReclaimPolicy: 'retain'
+    persistentVolumeReclaimPolicy: 'Retain'
   cache:
     pvcname: gs-cloud-gwc-cache-nfs-claim
     pvname: gs-cloud-gwc-cache-nfs
-    pvcreation: false
-    path: /nfs/tiles
+    pvcreation: true
+    path: ''
     storage: 1Gi
     storageClass:
-      enabled: false
+      enabled: true
       storageClassName: ''
     accessModes: 'ReadWriteOnce'
     mountOptions: 'nfsvers=4.2'
-    persistentVolumeReclaimPolicy: 'retain'
+    persistentVolumeReclaimPolicy: 'Retain'
 
 configMaps:
   jndi:
