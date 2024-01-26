@@ -11,7 +11,7 @@ namespace:
     ephemeral_storage: '20Gi'
 image:
   repository: 'gioelkin/tethysapp-ciroh-portal'
-  tag: dev_b90471d81c7c8a35cd2cae5dc48af31ec634d5de
+  tag: v0.0.21-rc
   pullPolicy: 'IfNotPresent'
 ingresses:
   enabled: true
@@ -41,10 +41,53 @@ ingresses:
     tls: []
 
 tethys:
+  init-containers:
+    envs:
+      TETHYS_HOME:
+        value: ''
+      TETHYS_DB_HOST:
+        value: ''
+      TETHYS_DB_PORT:
+        value: ''
+      POSTGRES_PASSWORD:
+        value: ''
+      POSTGRES_USER:
+        value: ''
+      TETHYS_GS_HOST:
+        value: ''
+      TETHYS_GS_PASSWORD:
+        value: ''
+      TETHYS_GS_PORT:
+        value: ''
+      TETHYS_GS_USERNAME:
+        value: ''
+      TETHYS_GS_PROTOCOL:
+        value: ''
+      GWDM_WORKSPACE_NAME:
+        value: ''
+      GWDM_STORE_NAME:
+        value: ''
+      GWDM_TABLE_NAME:
+        value: ''
+      GWDM_REGION_LAYER_NAME:
+        value: ''
+      GWDM_AQUIFER_LAYER_NAME:
+        value: ''
+      GWDM_WELL_LAYER_NAME:
+        value: ''
+
   workspace_size: '16Gi'
   services:
-    geoserver: 'ciroh-gs'
-    thredds: portal.ciroh.org
+    # geoserver: 'ciroh-gs'
+    # geoserver: 'cirohportal-prod-geoserver'
+    # thredds: portal.ciroh.org
+
+    geoserver:
+      host: 'cirohportal-prod-geoserver-gateway'
+      port: 8080
+    thredds:
+      host: 'portal.ciroh.org'
+      port: 8080
   settings:
     prefix_url: 't'
     tethys_settings_flags: '--production, --overwrite'
@@ -123,40 +166,39 @@ tethys:
             primary_geoserver: tethys_geoserver
             primary_thredds: tethys_thredds
   proxy_apps:
-    proxy_apps:
-      owp_nwm_map_viewer:
-        name: OWP NWM Map Viewer
-        endpoint: https://water.noaa.gov/map
-        logo_url: /t/static/ciroh_theme/images/owp.png
-        description: Proxy app for Office in Water Prediction
-        tags: NOAA
-        enabled: true
-        show_in_apps_library: true
-        order: 0
-        back_url: web
-        open_in_new_tab: true
-      ciroh_jupyterhub:
-        name: CIROH JupyterHub
-        endpoint: https://jupyterhub.cuahsi.org/hub/login
-        logo_url: /t/static/ciroh_theme/images/jupyterhub.png
-        description: Proxy app for the CIROH JupyterHub
-        tags: CUAHSI
-        enabled: true
-        show_in_apps_library: true
-        order: 1
-        back_url: web
-        open_in_new_tab: true
-      hydroshare:
-        name: HydroShare
-        endpoint: https://www.hydroshare.org/home/
-        logo_url: /t/static/ciroh_theme/images/HydroShare.png
-        description: Proxy app for the Hydroshare app
-        tags: CUAHSI
-        enabled: true
-        show_in_apps_library: true
-        order: 2
-        back_url: web
-        open_in_new_tab: true
+    owp_nwm_map_viewer:
+      name: OWP NWM Map Viewer
+      endpoint: https://water.noaa.gov/map
+      logo_url: /t/static/ciroh_theme/images/owp.png
+      description: Proxy app for Office in Water Prediction
+      tags: NOAA
+      enabled: true
+      show_in_apps_library: true
+      order: 0
+      back_url: web
+      open_in_new_tab: true
+    ciroh_jupyterhub:
+      name: CIROH JupyterHub
+      endpoint: https://jupyterhub.cuahsi.org/hub/login
+      logo_url: /t/static/ciroh_theme/images/jupyterhub.png
+      description: Proxy app for the CIROH JupyterHub
+      tags: CUAHSI
+      enabled: true
+      show_in_apps_library: true
+      order: 1
+      back_url: web
+      open_in_new_tab: true
+    hydroshare:
+      name: HydroShare
+      endpoint: https://www.hydroshare.org/home/
+      logo_url: /t/static/ciroh_theme/images/HydroShare.png
+      description: Proxy app for the Hydroshare app
+      tags: CUAHSI
+      enabled: true
+      show_in_apps_library: true
+      order: 2
+      back_url: web
+      open_in_new_tab: true
 
 djangocms:
   image:
@@ -619,19 +661,151 @@ thredds:
       cpu: '1'
     limits:
       memory: '2Gi'
-geoserver:
-  image:
-    pullPolicy: 'IfNotPresent'
+# geoserver:
+#   image:
+#     pullPolicy: 'IfNotPresent'
+#   enabled: true
+#   storage_size: 5Gi
+#   resources:
+#     requests:
+#       memory: '8Gi'
+#       cpu: '4'
+#     limits:
+#       memory: '9Gi'
+#   storageClass:
+#     storageClassName: 'efs-pv'
+gs-cloud:
   enabled: true
-  storage_size: 5Gi
-  resources:
-    requests:
-      memory: '8Gi'
-      cpu: '4'
-    limits:
-      memory: '9Gi'
-  storageClass:
-    storageClassName: 'efs-pv'
+  persistent:
+    raster:
+      pvname: gs-cloud-raster-nfs
+      pvcname: gs-cloud-raster-nfs-claim
+      pvcreation: false
+      storageClass:
+        enabled: false
+        storageClassName: 'efs-pv'
+    config:
+      pvname: gs-cloud-datadir-nfs
+      pvcname: gs-cloud-datadir-nfs-claim
+      pvcreation: false
+      storageClass:
+        enabled: false
+        storageClassName: 'efs-pv'
+
+    cache:
+      pvname: gs-cloud-gwc-cache-nfs
+      pvcname: gs-cloud-gwc-cache-nfs-claim
+      pvcreation: false
+      storageClass:
+        enabled: false
+        storageClassName: 'efs-pv'
+
+  # this should make sure that the containers are started after the database is started
+  containers_additional_conf: &containers-additional-conf
+    livenessProbe:
+      initialDelaySeconds: 120
+      periodSeconds: 10
+    readinessProbe:
+      periodSeconds: 5
+      initialDelaySeconds: 120
+
+  # in order to override env values
+  env: &env-override
+    RABBITMQ_HOST:
+      value: 'cirohportal-prod-rabbitmq'
+    RABBITMQ_USER:
+      value: 'geoserver'
+    RABBITMQ_PASSWORD:
+      type: secret
+      name: 'cirohportal-prod-rabbitmq'
+      key: 'rabbitmq-password'
+
+  service: &common-service-definition
+    type: ClusterIP
+    servicePort: 8080
+    ports:
+      - name: gs-service
+        port: 8080
+        protocol: TCP
+        targetPort: 8080
+  geoservercloud:
+    geoserver:
+      ingress:
+        enabled: false
+        tls: []
+      services:
+        gateway:
+          service:
+            <<: *common-service-definition
+          ingress:
+            enabled: false
+          containers:
+            spring:
+              env:
+                <<: *env-override
+              <<: *containers-additional-conf
+        webui:
+          service:
+            <<: *common-service-definition
+          containers:
+            spring:
+              env:
+                <<: *env-override
+              <<: *containers-additional-conf
+        rest:
+          service:
+            <<: *common-service-definition
+          containers:
+            spring:
+              env:
+                <<: *env-override
+              <<: *containers-additional-conf
+        wms:
+          service:
+            <<: *common-service-definition
+          containers:
+            spring:
+              env:
+                <<: *env-override
+              <<: *containers-additional-conf
+        wcs:
+          service:
+            <<: *common-service-definition
+          containers:
+            spring:
+              env:
+                <<: *env-override
+              <<: *containers-additional-conf
+        wfs:
+          service:
+            <<: *common-service-definition
+          containers:
+            spring:
+              env:
+                <<: *env-override
+              <<: *containers-additional-conf
+        gwc:
+          service:
+            <<: *common-service-definition
+          containers:
+            spring:
+              env:
+                <<: *env-override
+              <<: *containers-additional-conf
+
+  postgresql:
+    global:
+      storageClass: 'efs-pv'
+    volumePermissions:
+      enabled: true
+    primary:
+      persistence:
+        storageClass: 'efs-pv'
+      livenessProbe:
+        initialDelaySeconds: 600
+      readinessProbe:
+        initialDelaySeconds: 600
+
 redis:
   enabled: true
   global:

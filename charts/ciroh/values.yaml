@@ -12,14 +12,15 @@ imagePullSecrets: []
 nameOverride: ''
 fullnameOverride: ''
 
-geoservercloud:
+gs-cloud:
   enabled: false
-  geoserver:
-    name: 'gs-cloud-ciroh'
-    adminCredentials:
-      secretConfig: portal-auth
-      userKey: admin
-      passKey: geoserver
+  geoservercloud:
+    geoserver:
+      name: 'gs-cloud-ciroh'
+      adminCredentials:
+        secretConfig: portal-auth
+        userKey: admin
+        passKey: geoserver
 
 djangocms:
   enabled: false
@@ -117,9 +118,15 @@ redis:
     enabled: false
 
 tethys:
+  init-containers:
+    envs: {}
   services:
-    geoserver: 'ciroh-gs'
-    thredds: 'ciroh-tds'
+    geoserver:
+      host: 'ciroh-gs'
+      port: 8181
+    thredds:
+      host: 'ciroh-tds'
+      port: 8080
   workspace_size: ''
   settings:
     tethys_settings_flags: '--production, --overwrite'

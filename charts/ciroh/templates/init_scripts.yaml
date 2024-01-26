@@ -1,0 +1,10 @@
+{{- $fullName := include "ciroh.fullname" . -}}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: "{{ $fullName }}-extra-config"
+data:
+  {{- range $path, $_ :=  .Files.Glob  "extra_config/**.yaml" }}    
+  {{ $path | trimPrefix "extra_config/" }}: |- 
+{{ $.Files.Get $path | indent 4 }}
+  {{ end }}

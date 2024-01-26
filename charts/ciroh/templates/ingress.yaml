@@ -48,9 +48,10 @@ spec:
               pathType: Prefix
               backend:
                 service:
-                  name: {{ $.Values.tethys.services.geoserver }}
+                  name: {{ $.Values.tethys.services.geoserver.host }}
                   port: 
-                    number: 8080
+                    number: {{ $.Values.tethys.services.geoserver.port }}
+                    # number: 8090
 
             - path: "/thredds"
               pathType: Prefix
@@ -58,7 +59,8 @@ spec:
                 service:
                   name: {{ $.Values.thredds.fullnameOverride }}
                   port: 
-                    number: 8080    
+                    number: {{ $.Values.tethys.services.thredds.port }}
+                    # number: 8080    
 
   {{- end }}
 ---

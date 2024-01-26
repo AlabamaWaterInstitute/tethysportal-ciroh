@@ -11,9 +11,7 @@ namespace:
     ephemeral_storage: '20Gi'
 image:
   repository: 'gioelkin/tethysapp-ciroh-portal'
-  tag: dev_d40f0221e89460198dae10eaba7d3ec245b7207a
-  # repository: 'ciroh/tethysapp-ciroh'
-  # tag: dev_b197ec4e84d613a26e754293bd877f9a4d0a718b
+  tag: v0.0.21-rc
   pullPolicy: 'IfNotPresent'
 ingresses:
   enabled: true
