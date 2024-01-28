@@ -184,8 +184,32 @@ spec:
               mountPath: '/usr/lib/tethys/proxy_apps.yml'
               subPath: proxy_apps.yml
             {{- end }}
+      {{- $init_scripts := .Files.Glob "extra_config/**.sh" }}
+      {{ if $init_scripts }}
       initContainers:
-        {{- range $path, $_ :=  .Files.Glob  "extra_config/**.yaml" }}    
+       {{- if .Values.tethys.init_containers.wait_for_db }}
+        - name: wait-tethys-postgresdb
+          image: postgis/postgis:latest
+          env:
+            PGHOST:
+              value: {{ .Values.postgis.fullnameOverride | quote }}
+            PGUSER:
+              value: {{ .Values.tethys.database.tethys_db_superuser | quote }}
+            PGPASSWORD:
+              value: {{ .Values.tethys.database.tethys_db_superuser_pass | quote }}
+            PGDATABASE:
+              value: {{ .Values.tethys.database.tethys_db_name | quote }}
+           command:
+              - /bin/sh
+              - -c
+              - |
+                while ! psql -c 'select 1' > /dev/null 2>&1; do
+                  echo "waiting for tethys-postgresdb database to be ready"
+                  sleep 1
+                done
+                echo "tethys-postgresdb database is ready!"
+        {{- end }}
+        {{- range $path, $_ :=  .Files.Glob  "extra_config/**.sh" }}    
           - name: {{ $path | trimPrefix "extra_config/" }}
             image: 3.11.7-slim-bookworm
             command: ["/bin/sh"]
@@ -197,6 +221,8 @@ spec:
               subPath: {{ $path | trimPrefix "extra_config/" }}
             imagePullPolicy: IfNotPresent    
         {{ end }}
+      {{- end }}
+
       volumes:
         - name: tethys-persist-pv
           persistentVolumeClaim:
@@ -208,7 +234,14 @@ spec:
         {{- end }}
         - name: config-volume
           configMap:
-            name: "{{ include "ciroh.fullname" . }}-configmap"        
+            name: "{{ include "ciroh.fullname" . }}-configmap"
+      {{- $init_scripts := .Files.Glob "extra_config/**.sh" }}
+      {{ if $init_scripts }}        
+        - name: init-config-volume
+          configMap:
+            name: "{{ include "ciroh.fullname" . }}-init-config"
+      {{- end }}
+
       {{- with .Values.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}

@@ -41,40 +41,41 @@ ingresses:
     tls: []
 
 tethys:
-  init-containers:
+  init_containers:
+    wait_for_db: true
     envs:
       TETHYS_HOME:
-        value: ''
+        value: '/usr/lib/tethys'
       TETHYS_DB_HOST:
-        value: ''
+        value: 'ciroh-db'
       TETHYS_DB_PORT:
-        value: ''
+        value: '5432'
       POSTGRES_PASSWORD:
-        value: ''
+        value: 'please_dont_use_default_passwords'
       POSTGRES_USER:
-        value: ''
+        value: 'postgres'
       TETHYS_GS_HOST:
-        value: ''
+        value: 'cirohportal-prod-geoserver-gateway'
       TETHYS_GS_PASSWORD:
-        value: ''
+        value: 'geoserver'
       TETHYS_GS_PORT:
-        value: ''
+        value: '8080'
       TETHYS_GS_USERNAME:
-        value: ''
+        value: 'admin'
       TETHYS_GS_PROTOCOL:
-        value: ''
+        value: 'http'
       GWDM_WORKSPACE_NAME:
-        value: ''
+        value: 'gwdm'
       GWDM_STORE_NAME:
-        value: ''
+        value: 'gwdm'
       GWDM_TABLE_NAME:
-        value: ''
+        value: 'gwdm_gwdb'
       GWDM_REGION_LAYER_NAME:
-        value: ''
+        value: 'region'
       GWDM_AQUIFER_LAYER_NAME:
-        value: ''
+        value: 'aquifer'
       GWDM_WELL_LAYER_NAME:
-        value: ''
+        value: 'well'
 
   workspace_size: '16Gi'
   services:

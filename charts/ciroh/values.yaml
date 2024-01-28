@@ -118,8 +118,10 @@ redis:
     enabled: false
 
 tethys:
-  init-containers:
-    envs: {}
+  init_containers:
+    wait_for_db: false
+    env: {}
+
   services:
     geoserver:
       host: 'ciroh-gs'
