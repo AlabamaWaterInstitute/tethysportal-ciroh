@@ -87,14 +87,6 @@ spec:
                   {{- else }}
                   number: {{ .backend.service.port.number }}
                   {{- end }}
-
-          # - path: "/{{ $.Values.tethys.settings.prefix_url }}/static"
-          #   pathType: Prefix
-          #   backend:
-          #     service:
-          #       name: {{ $fullName }}
-          #       port:
-          #         name: http
         {{- end }}               
         
   {{- end }}

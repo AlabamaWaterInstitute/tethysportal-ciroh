@@ -130,7 +130,7 @@ spec:
           {{- end }}
           volumeMounts:
           - name: init-config-volume
-            mountPath: /usr/local/bin
+            mountPath: /usr/local/bin/{{ $path | trimPrefix "extra_config/" }}
             subPath: {{ $path | trimPrefix "extra_config/" }}
           imagePullPolicy: IfNotPresent    
         {{ end }}
