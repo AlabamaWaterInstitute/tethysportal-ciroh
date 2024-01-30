@@ -27,6 +27,42 @@ ingresses:
 
     hosts:
       - host: portal.ciroh.org
+        paths:
+          - path: '/t'
+            pathType: Prefix
+            backend:
+              service:
+                # @fullnameOverride
+                name: cirohportal-prod
+                port:
+                  name: http
+          - path: '/'
+            pathType: Prefix
+            backend:
+              service:
+                # @djangocms.fullnameOverride
+                name: ciroh-cms
+                port:
+                  # @djangocms.service.externalPort
+                  number: 80
+          - path: '/geoserver-cloud'
+            pathType: Prefix
+            backend:
+              service:
+                # @gs-cloud.geoservercloud.geoserver.services.gateway.service.name
+                name: cirohportal-prod-geoserver-gateway
+                port:
+                  # @gs-cloud.geoservercloud.geoserver.services.gateway.service.0.port
+                  number: 8080
+          - path: '/thredds'
+            pathType: Prefix
+            backend:
+              service:
+                # @thredds.fullnameOverride
+                name: ciroh-tds
+                port:
+                  # @thredds.service.ports.0.port
+                  number: 8080
     tls: []
   static:
     enabled: true
@@ -38,12 +74,21 @@ ingresses:
       alb.ingress.kubernetes.io/listen-ports: '[{"HTTP":80}]'
     hosts:
       - host: portal.ciroh.org
+        paths:
+          - path: '/t/static'
+            pathType: Prefix
+            backend:
+              service:
+                # @fullnameOverride
+                name: cirohportal-prod
+                port:
+                  name: http
     tls: []
 
 tethys:
   init_containers:
     wait_for_db: true
-    envs:
+    env:
       TETHYS_HOME:
         value: '/usr/lib/tethys'
       TETHYS_DB_HOST:
@@ -76,50 +121,88 @@ tethys:
         value: 'aquifer'
       GWDM_WELL_LAYER_NAME:
         value: 'well'
+  volumeMounts:
+    - name: tethys-persist-pv
+      mountPath: '/var/lib/tethys_persist'
+    - name: thredds-persistent-storage
+      mountPath: '/var/lib/tethys_persist/thredds_data/tethys'
+      subPath: 'tethys'
+    - name: config-volume
+      mountPath: '/usr/lib/tethys/portal_changes.yml'
+      subPath: portal_changes.yml
+    - name: config-volume
+      mountPath: '/usr/lib/tethys/proxy_apps.yml'
+      subPath: proxy_apps.yml
+  volumes:
+    - name: tethys-persist-pv
+      persistentVolumeClaim:
+        claimName: tethys-persist-pvc
+    - name: thredds-persistent-storage
+      persistentVolumeClaim:
+        claimName: thredds-pvc
+    - name: config-volume
+      configMap:
+        name: 'cirohportal-prod-configmap'
+  env:
+    # gwdm settings
+    GWDM_WORKSPACE_NAME:
+      value: 'gwdm'
+    GWDM_STORE_NAME:
+      value: 'gwdm'
+    GWDM_TABLE_NAME:
+      value: 'gwdm_gwdb'
+    GWDM_REGION_LAYER_NAME:
+      value: 'region'
+    GWDM_AQUIFER_LAYER_NAME:
+      value: 'aquifer'
+    GWDM_WELL_LAYER_NAME:
+      value: 'well'
+    # Tethys settings
+    PREFIX_URL:
+      value: 't'
+    CLIENT_MAX_BODY_SIZE:
+      value: 1G
+    DATA_UPLOAD_MAX_MEMORY_SIZE:
+      value: 1073741824
+    FILE_UPLOAD_MAX_MEMORY_SIZE:
+      value: 1073741824
+    NGINX_READ_TIME_OUT:
+      value: 1800
+    SITE_TITLE:
+      value: 'CIROH Portal'
+    BRAND_TEXT:
+      value: 'CIROH Portal'
+    PRIMARY_COLOR:
+      value: '#256291'
+    SECONDARY_COLOR:
+      value: '#7C99AC'
+    BACKGROUND_COLOR:
+      value: '#D7D3C7'
+    HERO_TEXT:
+      value: 'Welcome to the CIROH Portal'
+    BLURB_TEXT:
+      value: 'CIROH Tethys platform provides access to a suite of pre-built applications commonly used by the Cooperative Institute for Research to Operations in Hydrology (CIROH) research community. CIROH is a national consortium of science and services partnered with the National Oceanic and Atmospheric Administration’s (NOAA) National Water Center. It aims to advance water prediction – the forecasting of streamflow, extreme events such as floods and droughts, and water quality – and enhance the communitys ability to deal with water-related challenges. This platform works through Amazon Web Services'
+    FEATURE_1_HEADING:
+      value: 'Tethys Platform'
+    FEATURE_1_BODY:
+      value: 'Tethys was piloted by implementing web portals for partners of the CIROH and Brigham Young University (BYU). It includes a suite of free, open-source software and is powered by the Django Python web framework.'
+    FEATURE_2_HEADING:
+      value: Applications
+    FEATURE_2_BODY:
+      value: 'Tethys is a mega-platform that hosts applications for hydrological and meteorological forecasting, discovery, visualization and download of data related to hydrometeorological variables.'
+    FEATURE_3_HEADING:
+      value: 'Terms of Use'
+    FEATURE_3_BODY:
+      value: 'The use of the portal will be carried out under the sole and exclusive responsibility of the user.'
+    COPYRIGHT:
+      value: 'Copyright © 2024 CIROH'
 
   workspace_size: '16Gi'
-  services:
-    # geoserver: 'ciroh-gs'
-    # geoserver: 'cirohportal-prod-geoserver'
-    # thredds: portal.ciroh.org
 
-    geoserver:
-      host: 'cirohportal-prod-geoserver-gateway'
-      port: 8080
-    thredds:
-      host: 'portal.ciroh.org'
-      port: 8080
   settings:
-    prefix_url: 't'
-    tethys_settings_flags: '--production, --overwrite'
-    enable_portal_open: 'true'
-    bypass_tethys_home_page: 'true'
-    channel_layers_backend: 'channels_redis.core.RedisChannelLayer'
-    portal_title: 'CIROH Portal'
-    primary_color: '#256291'
-    secondary_color: '#7C99AC'
-    background_color: '#D7D3C7'
-    hero_text: 'Welcome to the CIROH Portal'
-    blurb_text: 'CIROH Tethys platform provides access to a suite of pre-built applications commonly used by the Cooperative Institute for Research to Operations in Hydrology (CIROH) research community. CIROH is a national consortium of science and services partnered with the National Oceanic and Atmospheric Administration’s (NOAA) National Water Center. It aims to advance water prediction – the forecasting of streamflow, extreme events such as floods and droughts, and water quality – and enhance the communitys ability to deal with water-related challenges. This platform works through Amazon Web Services'
-    feature_1_heading: 'Tethys Platform'
-    feature_1_body: 'Tethys was piloted by implementing web portals for partners of the CIROH and Brigham Young University (BYU). It includes a suite of free, open-source software and is powered by the Django Python web framework.'
-    feature_2_heading: 'Applications'
-    feature_2_body: 'Tethys is a mega-platform that hosts applications for hydrological and meteorological forecasting, discovery, visualization and download of data related to hydrometeorological variables.'
-    feature_3_heading: 'Terms of Use'
-    feature_3_body: 'The use of the portal will be carried out under the sole and exclusive responsibility of the user.'
-    client_max_body_size: '1G'
-    file_upload_max_memory_size: '1073741824'
-    nginx_read_time_out: '1800'
-    data_upload_max_memory_size: '1073741824'
-    copyright: 'Copyright © 2023 CIROH'
-    gwdm_workspace_name: 'gwdm'
-    gwdm_store_name: 'gwdm'
-    gwdm_table_name: 'gwdm_gwdb'
-    gwdm_region_layer_name: 'region'
-    gwdm_aquifer_layer_name: 'aquifer'
-    gwdm_well_layer_name: 'well'
-    postgres_user: 'postgres'
-    thredds_data_relative_path: '/thredds_data/tethys'
+    prefix_url:
+      enabled: true
+      path: 't'
 
   portal_changes:
     apps:
@@ -662,21 +745,12 @@ thredds:
       cpu: '1'
     limits:
       memory: '2Gi'
-# geoserver:
-#   image:
-#     pullPolicy: 'IfNotPresent'
-#   enabled: true
-#   storage_size: 5Gi
-#   resources:
-#     requests:
-#       memory: '8Gi'
-#       cpu: '4'
-#     limits:
-#       memory: '9Gi'
-#   storageClass:
-#     storageClassName: 'efs-pv'
+
 gs-cloud:
   enabled: true
+  envVariables:
+    SERVICE_GATEWAY_NAME:
+      value: cirohportal-prod-geoserver
   persistent:
     raster:
       pvname: gs-cloud-raster-nfs
@@ -737,6 +811,7 @@ gs-cloud:
       services:
         gateway:
           service:
+            name: 'cirohportal-prod-geoserver-gateway'
             <<: *common-service-definition
           ingress:
             enabled: false
