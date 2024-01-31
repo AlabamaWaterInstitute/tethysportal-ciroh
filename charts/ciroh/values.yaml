@@ -2,7 +2,8 @@ global:
   host: ''
 
 replicaCount: 1
-
+strategy: 'Recreate'
+# timestamp
 image:
   repository: 'ciroh/tethysapp-ciroh'
   tag: latest
