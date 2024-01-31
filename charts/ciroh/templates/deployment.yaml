@@ -7,6 +7,8 @@ metadata:
 
 spec:
   replicas: {{ .Values.replicaCount }}
+  strategy:
+    type: {{ .Values.strategy }}  # Use the Recreate update strategy
   selector:
     matchLabels:
       app.kubernetes.io/name: {{ include "ciroh.name" . }}
@@ -16,6 +18,9 @@ spec:
       labels:
         app.kubernetes.io/name: {{ include "ciroh.name" . }}
         app.kubernetes.io/instance: {{ .Release.Name }}
+      annotations:
+        # https://github.com/helm/helm/issues/5218
+        timstamp: "{{ date "20060102150405" .Release.Time }}"
     spec:
     {{- with .Values.imagePullSecrets }}
         imagePullSecrets:
@@ -33,6 +38,8 @@ spec:
               value: {{ .Values.postgis.fullnameOverride | quote }}
             - name: POSTGRES_USER
               value: {{ .Values.postgis.postgres_user | quote }}
+            - name: POSTGRES_PASSWORD
+              value: {{ .Values.postgis.postgres_password | quote }}             
             # Tethys settings defined outside the env
             - name: ALLOWED_HOSTS
               value: "\"[{{- range .Values.ingresses.external.hosts }}{{ .host }},{{- end }}]\""
@@ -76,7 +83,7 @@ spec:
             # extra env v
             {{- range $key, $value :=  .Values.tethys.env }}
             - name: {{ quote $key }}
-              value: {{ quote $value }}
+              value: {{ quote $value.value }}
             {{- end }}
           ports:
             - name: http
@@ -120,13 +127,13 @@ spec:
         {{- end }}
         {{- range $path, $_ :=  .Files.Glob  "extra_config/**.sh" }}    
         - name: {{ $path | trimPrefix "extra_config/" | trimSuffix ".sh" }}
-          image: python:3.9.18-slim
+          image: python:3.12.1-slim-bullseye
           command: ["/bin/sh","/etc/mount/{{ $path | trimPrefix "extra_config/" }}"]
           
           env: 
           {{- range $key, $value :=  $.Values.tethys.init_containers.env }}
             - name: {{ quote $key }}
-              value: {{ quote $value }}
+              value: {{ quote $value.value }}
           {{- end }}
           volumeMounts:
           - name: init-config-volume

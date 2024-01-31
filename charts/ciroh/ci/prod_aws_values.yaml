@@ -199,11 +199,6 @@ tethys:
 
   workspace_size: '16Gi'
 
-  settings:
-    prefix_url:
-      enabled: true
-      path: 't'
-
   portal_changes:
     apps:
       app_store:
@@ -779,7 +774,7 @@ gs-cloud:
   resources: &common-resources
     requests:
       memory: 512Mi
-      cpu: 0.5
+      cpu: 0.1
     limits:
       memory: 4Gi
       cpu: 4.0
