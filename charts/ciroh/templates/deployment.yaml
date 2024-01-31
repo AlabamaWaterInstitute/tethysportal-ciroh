@@ -119,10 +119,10 @@ spec:
               echo "tethys-postgresdb database is ready!"
         {{- end }}
         {{- range $path, $_ :=  .Files.Glob  "extra_config/**.sh" }}    
-        - name: {{ $path | trimPrefix "extra_config/" }}
-          image: 3.11.7-slim-bookworm
-          command: ["/bin/sh"]
-          args: ["{{ $path | trimPrefix "extra_config/" }}" ]
+        - name: {{ $path | trimPrefix "extra_config/" | trimSuffix ".sh" }}
+          image: python:3.9.18-slim
+          command: ["/bin/sh","/etc/mount/{{ $path | trimPrefix "extra_config/" }}"]
+          
           env: 
           {{- range $key, $value :=  $.Values.tethys.init_containers.env }}
             - name: {{ quote $key }}
@@ -130,9 +130,9 @@ spec:
           {{- end }}
           volumeMounts:
           - name: init-config-volume
-            mountPath: /usr/local/bin/{{ $path | trimPrefix "extra_config/" }}
+            mountPath: /etc/mount/{{ $path | trimPrefix "extra_config/" }}
             subPath: {{ $path | trimPrefix "extra_config/" }}
-          imagePullPolicy: IfNotPresent    
+          imagePullPolicy: IfNotPresent
         {{ end }}
       {{- end }}
 

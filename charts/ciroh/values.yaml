@@ -123,7 +123,7 @@ tethys:
     env: {}
   volumeMounts: []
   volumes: []
-
+  configMaps: {}
   workspace_size: ''
 
   env:

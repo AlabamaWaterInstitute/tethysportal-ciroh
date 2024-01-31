@@ -1,6 +1,13 @@
 #!/bin/bash
 
+# install gdal etc
+add-apt-repository ppa:ubuntugis/ppa && apt-get update
+apt-get install -y  gdal-bin
+apt-get install -y  libgdal-dev
+# export CPLUS_INCLUDE_PATH=/usr/include/gdal
+# export C_INCLUDE_PATH=/usr/include/gdal
 # install dependencies for python script
+pip install --upgrade pip
 pip install geoserver-rest
 
 

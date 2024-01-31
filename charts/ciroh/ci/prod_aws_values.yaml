@@ -11,7 +11,7 @@ namespace:
     ephemeral_storage: '20Gi'
 image:
   repository: 'gioelkin/tethysapp-ciroh-portal'
-  tag: v0.0.21-rc
+  tag: v0.0.21-rc2
   pullPolicy: 'IfNotPresent'
 ingresses:
   enabled: true
@@ -139,7 +139,7 @@ tethys:
         claimName: tethys-persist-pvc
     - name: thredds-persistent-storage
       persistentVolumeClaim:
-        claimName: thredds-pvc
+        claimName: thredds-pv-claim
     - name: config-volume
       configMap:
         name: 'cirohportal-prod-configmap'
@@ -775,14 +775,25 @@ gs-cloud:
         enabled: false
         storageClassName: 'efs-pv'
 
+  # tweak the resources here
+  resources: &common-resources
+    requests:
+      memory: 512Mi
+      cpu: 0.5
+    limits:
+      memory: 4Gi
+      cpu: 4.0
+
   # this should make sure that the containers are started after the database is started
   containers_additional_conf: &containers-additional-conf
+    resources:
+      <<: *common-resources
     livenessProbe:
-      initialDelaySeconds: 120
+      initialDelaySeconds: 200
       periodSeconds: 10
     readinessProbe:
       periodSeconds: 5
-      initialDelaySeconds: 120
+      initialDelaySeconds: 200
 
   # in order to override env values
   env: &env-override
