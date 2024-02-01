@@ -37,3 +37,5 @@ nodejs
 geoalchemy2
 udunits2
 geoserver-rest
+boto3
+scikit-learn

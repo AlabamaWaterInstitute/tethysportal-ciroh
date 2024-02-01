@@ -4,3 +4,4 @@ ncarrays
 see
 pywaterml
 gstools
+hydroeval
