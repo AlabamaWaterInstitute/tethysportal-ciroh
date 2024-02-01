@@ -1,6 +1,6 @@
 image:
   repository: 'gioelkin/tethysapp-ciroh-portal'
-  tag: dev_0f3754ce741c26054062ce7cad25aecf8c4bf276
+  tag: v0.0.21-rc
   pullPolicy: Always
 
 ingresses:

@@ -21,3 +21,4 @@ terraform.rc
 *.yaml
 *.yml
 *.tgz
+.pluralith

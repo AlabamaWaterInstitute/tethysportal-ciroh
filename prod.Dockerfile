@@ -15,6 +15,7 @@ COPY snow-inspector ${TETHYS_HOME}/apps/snow-inspector
 COPY OWP ${TETHYS_HOME}/apps/OWP
 
 COPY piprequirements.txt .
+COPY requirements.txt .
 COPY config/tethys/tmp_app_store_files/conda_install.sh ${TETHYS_HOME}
 
 ###################
@@ -30,13 +31,11 @@ ARG MAMBA_DOCKERFILE_ACTIVATE=1
 #######################################
 # INSTALL EXTENSIONS and APPLICATIONS #
 #######################################
-RUN pip install --no-cache-dir --quiet -r piprequirements.txt && \
-    micromamba install --yes -c conda-forge geoserver-rest && \
-    conda install --yes -c conda-forge udunits2 && \
-    # micromamba install --yes -c conda-forge --file requirements.txt --> problem installing with microbamba, but pip is working well but unstable
+RUN micromamba install --yes -c conda-forge --file requirements.txt && \
+    pip install --no-cache-dir --quiet -r piprequirements.txt && \
+    micromamba clean --all --yes && \ 
     export PYTHON_SITE_PACKAGE_PATH=$(${CONDA_HOME}/envs/${CONDA_ENV_NAME}/bin/python -m site | grep -a -m 1 "site-packages" | head -1 | sed 's/.$//' | sed -e 's/^\s*//' -e '/^$/d'| sed 's![^/]*$!!' | cut -c2-) &&\
     cd ${TETHYS_HOME}/extensions/tethysext-ciroh_theme && python setup.py install && \
-
     cd ${TETHYS_HOME}/apps/Water-Data-Explorer && tethys install -w -N -q && cp install.yml $PYTHON_SITE_PACKAGE_PATH/site-packages/water_data_explorer.yml && \
     cd ${TETHYS_HOME}/apps/tethysapp-tethys_app_store && tethys install -w -N -q && cp install.yml $PYTHON_SITE_PACKAGE_PATH/site-packages/app_store.yml && \
     cd ${TETHYS_HOME}/apps/ggst && tethys install -w -N -q && cp install.yml $PYTHON_SITE_PACKAGE_PATH/site-packages/ggst.yml && \
@@ -46,11 +45,8 @@ RUN pip install --no-cache-dir --quiet -r piprequirements.txt && \
     cd ${TETHYS_HOME}/apps/gwdm && tethys install -w -N -q && cp install.yml $PYTHON_SITE_PACKAGE_PATH/site-packages/gwdm.yml && \
     cd ${TETHYS_HOME}/apps/snow-inspector && tethys install -w -N -q && cp install.yml $PYTHON_SITE_PACKAGE_PATH/site-packages/snow-inspector.yml && \
     cd ${TETHYS_HOME}/apps/OWP && tethys install -w -N -q && cp install.yml $PYTHON_SITE_PACKAGE_PATH/site-packages/OWP.yml && \
-
     rm -rf ${TETHYS_HOME}/extensions/* && \
     rm -rf ${TETHYS_HOME}/apps/* && \
-    micromamba clean --all --yes && \ 
-    conda clean --all --yes && \
     rm -rf /var/lib/apt/lists/* && \
     find -name '*.a' -delete && \
     mv -f ${TETHYS_HOME}/conda_install.sh $PYTHON_SITE_PACKAGE_PATH/site-packages/tethysapp/app_store/scripts/conda_install.sh &&\
@@ -68,7 +64,7 @@ FROM tethysplatform/tethys-core:dev as build
 
 
 COPY --chown=www:www --from=base ${CONDA_HOME}/envs/${CONDA_ENV_NAME} ${CONDA_HOME}/envs/${CONDA_ENV_NAME}
-COPY config/tethys/asgi_supervisord.conf ${TETHYS_PERSIST}/asgi_supervisord.conf
+COPY config/tethys/asgi_supervisord.conf ${TETHYS_HOME}/asgi_supervisord.conf
 COPY config/tethys/supervisord.conf /etc/supervisor/supervisord.conf
 COPY config/tethys/update_tethys_apps.py ${TETHYS_HOME}
 COPY config/tethys/update_proxy_apps.py ${TETHYS_HOME}
