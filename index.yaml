@@ -3,6 +3,32 @@ entries:
   ciroh:
   - apiVersion: v2
     appVersion: 0.0.1
+    created: "2025-05-18T16:32:23.297333382Z"
+    dependencies:
+    - name: postgis
+      repository: https://romer8.github.io/misc-helm-charts
+      version: '*'
+    - condition: gs-cloud.enabled
+      name: gs-cloud
+      repository: https://romer8.github.io/misc-helm-charts
+      version: 0.1.3
+    - condition: thredds.enabled
+      name: thredds
+      repository: https://romer8.github.io/misc-helm-charts
+      version: '*'
+    - condition: redis.enabled
+      name: redis
+      repository: https://charts.bitnami.com/bitnami
+      version: '*'
+    description: Tethys portal for CIROH
+    digest: 6423c6de3be3e6208602be74eee721065d58bfab4964bb0dc443ef90c333a3f5
+    name: ciroh
+    type: application
+    urls:
+    - https://AlabamaWaterInstitute.github.io/tethysportal-ciroh/ciroh-0.1.7.tgz
+    version: 0.1.7
+  - apiVersion: v2
+    appVersion: 0.0.1
     created: "2023-08-29T21:41:33.697917132Z"
     dependencies:
     - name: postgis
@@ -31,4 +57,4 @@ entries:
     urls:
     - https://AlabamaWaterInstitute.github.io/tethysportal-ciroh/ciroh-0.1.6.tgz
     version: 0.1.6
-generated: "2023-08-29T21:41:33.685689304Z"
+generated: "2025-05-18T16:32:23.26860396Z"
