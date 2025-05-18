@@ -6,13 +6,12 @@ namespace:
     memory: 16Gi
     ephemeral_storage: '10Gi'
   requests:
-    cpu: '8'
     memory: 16Gi
     ephemeral_storage: '20Gi'
 image:
-  repository: 'gioelkin/tethysapp-ciroh-portal'
-  tag: dev_b90471d81c7c8a35cd2cae5dc48af31ec634d5de
-  pullPolicy: 'IfNotPresent'
+  repository: 'awiciroh/tethysapp-ciroh-portal'
+  tag: dev_latest
+  pullPolicy: 'Always'
 ingresses:
   enabled: true
   external:
@@ -22,11 +21,39 @@ ingresses:
       alb.ingress.kubernetes.io/target-type: ip
       alb.ingress.kubernetes.io/scheme: internet-facing
       alb.ingress.kubernetes.io/backend-protocol: HTTP
-      alb.ingress.kubernetes.io/listen-ports: '[{"HTTP":80}]'
+      alb.ingress.kubernetes.io/listen-ports: '[{"HTTPS":443}, {"HTTP":80}]'
+      alb.ingress.kubernetes.io/ssl-redirect: '443'
       alb.ingress.kubernetes.io/load-balancer-attributes: idle_timeout.timeout_seconds=4000
 
     hosts:
-      - host: portal.ciroh.org
+      - host: tethys.ciroh.org
+        paths:
+          - path: '/'
+            pathType: Prefix
+            backend:
+              service:
+                # @fullnameOverride
+                name: cirohportal-prod
+                port:
+                  name: http
+          - path: '/geoserver-cloud'
+            pathType: Prefix
+            backend:
+              service:
+                # @gs-cloud.geoservercloud.geoserver.services.gateway.service.name
+                name: cirohportal-prod-geoserver-gateway
+                port:
+                  # @gs-cloud.geoservercloud.geoserver.services.gateway.service.0.port
+                  number: 8080
+          - path: '/thredds'
+            pathType: Prefix
+            backend:
+              service:
+                # @thredds.fullnameOverride
+                name: ciroh-tds
+                port:
+                  # @thredds.service.ports.0.port
+                  number: 8080
     tls: []
   static:
     enabled: true
@@ -35,197 +62,176 @@ ingresses:
       alb.ingress.kubernetes.io/target-type: ip
       alb.ingress.kubernetes.io/scheme: internal
       alb.ingress.kubernetes.io/backend-protocol: HTTP
-      alb.ingress.kubernetes.io/listen-ports: '[{"HTTP":80}]'
+      alb.ingress.kubernetes.io/listen-ports: '[{"HTTPS":443}, {"HTTP":80}]'
+      alb.ingress.kubernetes.io/ssl-redirect: '443'
     hosts:
-      - host: portal.ciroh.org
+      - host: tethys.ciroh.org
+        paths:
+          - path: /static
+            pathType: Prefix
+            backend:
+              service:
+                name: cirohportal-prod
+                port:
+                  name: http
     tls: []
 
 tethys:
-  workspace_size: '16Gi'
-  services:
-    geoserver: 'ciroh-gs'
-    thredds: portal.ciroh.org
-  settings:
-    prefix_url: 't'
-    tethys_settings_flags: '--production, --overwrite'
-    enable_portal_open: 'true'
-    bypass_tethys_home_page: 'true'
-    channel_layers_backend: 'channels_redis.core.RedisChannelLayer'
-    portal_title: 'CIROH Portal'
-    primary_color: '#256291'
-    secondary_color: '#7C99AC'
-    background_color: '#D7D3C7'
-    hero_text: 'Welcome to the CIROH Portal'
-    blurb_text: 'CIROH Tethys platform provides access to a suite of pre-built applications commonly used by the Cooperative Institute for Research to Operations in Hydrology (CIROH) research community. CIROH is a national consortium of science and services partnered with the National Oceanic and Atmospheric Administration’s (NOAA) National Water Center. It aims to advance water prediction – the forecasting of streamflow, extreme events such as floods and droughts, and water quality – and enhance the communitys ability to deal with water-related challenges. This platform works through Amazon Web Services'
-    feature_1_heading: 'Tethys Platform'
-    feature_1_body: 'Tethys was piloted by implementing web portals for partners of the CIROH and Brigham Young University (BYU). It includes a suite of free, open-source software and is powered by the Django Python web framework.'
-    feature_2_heading: 'Applications'
-    feature_2_body: 'Tethys is a mega-platform that hosts applications for hydrological and meteorological forecasting, discovery, visualization and download of data related to hydrometeorological variables.'
-    feature_3_heading: 'Terms of Use'
-    feature_3_body: 'The use of the portal will be carried out under the sole and exclusive responsibility of the user.'
-    client_max_body_size: '1G'
-    file_upload_max_memory_size: '1073741824'
-    nginx_read_time_out: '1800'
-    data_upload_max_memory_size: '1073741824'
-    copyright: 'Copyright © 2023 CIROH'
-    gwdm_workspace_name: 'gwdm'
-    gwdm_store_name: 'gwdm'
-    gwdm_table_name: 'gwdm_gwdb'
-    gwdm_region_layer_name: 'region'
-    gwdm_aquifer_layer_name: 'aquifer'
-    gwdm_well_layer_name: 'well'
-    postgres_user: 'postgres'
-    thredds_data_relative_path: '/thredds_data/tethys'
-
-  portal_changes:
-    apps:
-      app_store:
-        services:
-          custom_settings:
-            encryption_key: c8LvIviJtq_1Raxjz7NnfGjxWx9DPXfO3fjpkJZ7P1I=
-            stores_settings: '{"stores":[{"default":true,"conda_labels":["main","dev"],"github_token":"gAAAAABj-CqGQzM2cZga_ISIPgyOFcR-uxHxtfqnqSs96XN210wAP4dPgKHWueKphMu3cXqMaIOpx49VzEblsJVkwhgUbphZ9WaSIKqEmqk2Bi_mf_hLgDX4EnvIpKqs5iDxOqo25vXi","conda_channel":"tethysapp","github_organization":"tethysapp"},{"default":false,"conda_labels":["main","dev"],"github_token":"gAAAAABj_jTAaNDK1OAxfswFwQwpoYDd4NZzVgpV1H4ol2Zh2zrg9hPXtGHkKPfjHBRayw9wEkb3ByJwbOgk3Xj7iPJl_QC_VPxtoRuPIESl_jYuohoGlBbIdaU9tEH347Wqp9-7fg4i","conda_channel":"elkingio","github_organization":"lost-melancholic-tribe"},{"default":false,"conda_labels":["main","dev","test"],"github_token":"gAAAAABkWrCzDnvIxtM2aWqvZTW7pKLbJuaEmci75hwiTllom58AvvbIKBE5mKz85mTcJ3hLd6YY45EmHm2cmjeZ_3ZFbubKZ5GJZbIvbTbBryvMxIA_M09ek7C7ZZG_8j3BFAZuTYLT","conda_channel":"NOAA-CIROH","github_organization":"NOAA-CIROH"}]}'
-      ggst:
-        services:
-          custom_settings:
-            conda_python_path: /opt/conda/envs/tethys/bin/python
-            earthdata_pass: byuGRACE1
-            earthdata_username: byugrace
-            global_output_directory: /usr/lib/tethys
-            grace_thredds_catalog: 'http://portal.ciroh.org/thredds/catalog/ciroh_data/tethys/ggst_thredds_directory/catalog.xml'
-            grace_thredds_directory: /var/lib/tethys_persist/thredds_data/tethys/ggst_thredds_directory
-      metdataexplorer:
-        services:
-          custom_settings:
-            disclaimer_header: GIO TERMS OF SERVICE 4
-            disclaimer_message: The MDE is a happy tethys application
-          persistent:
-            thredds_db: tethys_postgis
-      swe:
-        services:
-          custom_settings: {}
-          spatial:
-            thredds_service: tethys_thredds
-
-      water_data_explorer:
-        services:
-          custom_settings: {}
-          persistent:
-            catalog_db: tethys_postgis
-      gwdm:
-        services:
-          custom_settings:
-            gw_data_directory: /var/lib/tethys_persist/thredds_data/tethys/gwdm_data_directory
-            gw_thredds_directory: /var/lib/tethys_persist/thredds_data/tethys/gwdm_thredds_directory
-            gw_thredds_catalog: 'http://portal.ciroh.org/thredds/catalog/ciroh_data/tethys/gwdm_thredds_directory/catalog.xml'
-          persistent:
-            gwdb: tethys_postgis
-          spatial:
-            primary_geoserver: tethys_geoserver
-            primary_thredds: tethys_thredds
-
-    proxy_apps:
-      owp_nwm_map_viewer:
-        name: OWP NWM Map Viewer
-        endpoint: https://water.noaa.gov/map
-        logo_url: /t/static/ciroh_theme/images/owp.png
-        description: Proxy app for Office in Water Prediction
-        tags: NOAA
-        enabled: true
-        show_in_apps_library: true
-        order: 0
-        back_url: web
-        open_in_new_tab: true
-      ciroh_jupyterhub:
-        name: CIROH JupyterHub
-        endpoint: https://jupyterhub.cuahsi.org/hub/login
-        logo_url: /t/static/ciroh_theme/images/jupyterhub.png
-        description: Proxy app for the CIROH JupyterHub
-        tags: CUAHSI
-        enabled: true
-        show_in_apps_library: true
-        order: 1
-        back_url: web
-        open_in_new_tab: true
-      hydroshare:
-        name: HydroShare
-        endpoint: https://www.hydroshare.org/home/
-        logo_url: /t/static/ciroh_theme/images/HydroShare.png
-        description: Proxy app for the Hydroshare app
-        tags: CUAHSI
-        enabled: true
-        show_in_apps_library: true
-        order: 2
-        back_url: web
-        open_in_new_tab: true
-
-djangocms:
-  image:
-    repository: gioelkin/django-cms
-    tag: latest
-    pullPolicy: 'Always'
-  enabled: true
-  ingress:
-    enabled: false
-  fullnameOverride: 'ciroh-cms'
-  storageClass:
-    storageClassName: 'efs-pv'
+  init_containers:
+    wait_for_db: true
+    env:
+      TETHYS_HOME:
+        value: '/usr/lib/tethys'
+      TETHYS_DB_HOST:
+        value: 'ciroh-db'
+      TETHYS_DB_PORT:
+        value: '5432'
+      TETHYS_GS_HOST:
+        value: 'cirohportal-prod-geoserver-gateway'
+      TETHYS_GS_PORT:
+        value: '8080'
+      TETHYS_GS_PROTOCOL:
+        value: 'http'
+      GWDM_WORKSPACE_NAME:
+        value: 'gwdm'
+      GWDM_STORE_NAME:
+        value: 'gwdm'
+      GWDM_TABLE_NAME:
+        value: 'gwdm_gwdb'
+      GWDM_REGION_LAYER_NAME:
+        value: 'region'
+      GWDM_AQUIFER_LAYER_NAME:
+        value: 'aquifer'
+      GWDM_WELL_LAYER_NAME:
+        value: 'well'
+     
+  volumeMounts:
+    - name: tethys-persist-pv
+      mountPath: '/var/lib/tethys_persist'
+    - name: thredds-persistent-storage
+      mountPath: '/var/lib/tethys_persist/thredds_data/tethys'
+      subPath: 'tethys'
+  volumes:
+    - name: tethys-persist-pv
+      persistentVolumeClaim:
+        claimName: tethys-persist-pvc
+    - name: thredds-persistent-storage
+      persistentVolumeClaim:
+        claimName: thredds-pv-claim
+    - name: config-volume
+      configMap:
+        name: 'cirohportal-prod-configmap'
   env:
-    - name: SECRET_KEY
-      value: 'ztw%%f050)x2=t+2y+td#xfl$%i35g=s0!^%w7@pqo8z6w7(mz'
-    - name: DJANGOCMS_DB_NAME
-      value: 'djangocms'
-    - name: DJANGOCMS_DB_USER
-      value: 'djangocmsadmin'
-    - name: DJANGOCMS_DB_PWD
-      value: 'pass'
-    - name: DJANGOCMS_DB_HOST
-      value: 'ciroh-db'
-    - name: DJANGOCMS_DB_PORT
-      value: '5432'
-    - name: DJANGO_SUPERUSER_USERNAME
-      value: 'admin'
-    - name: DJANGO_SUPERUSER_EMAIL
-      value: 'example@gmail.com'
-    - name: DJANGO_SUPERUSER_PASSWORD
-      value: 'pass'
-    - name: DJANGOCMS_ADMIN_DB_USER
-      value: 'postgres'
-    - name: DJANGOCMS_ADMIN_DB_PWD
-      value: 'please_dont_use_default_passwords'
-    - name: DEBUG
-      value: 'True'
-    - name: SECURE_SSL_REDIRECT
-      value: 'False'
-    - name: DOMAIN
-      value: 'portal.ciroh.org'
-    - name: STATIC_URL
-      value: '/static_cms/'
-    # - name: SKIP_CREATION_USER
-    #   value: 'done'
-  service:
-    type: ClusterIP
-    externalPort: 80
-    internalPort: 80
-  storage_size: 3Gi
-  resources:
-    requests:
-      cpu: 100m
-      memory: 128Mi
-    limits:
-      cpu: 2
-      memory: 1Gi
-  persistentVolumeClaim:
-    name: 'djangocms-pv-claim'
+    PUBLIC_PORTAL_PROTOCOL:
+      value: 'https'
+    TETHYS_DB_ENGINE:
+      value: 'django.db.backends.postgresql'
+    SKIP_DB_SETUP:
+      value: true
+    #tethysdash env
+    TETHYSDASH_DB_NAME:
+      value: tethysdash_primary_db      
+    # gwdm envs
+    GWDM_WORKSPACE_NAME:
+      value: 'gwdm'
+    GWDM_STORE_NAME:
+      value: 'gwdm'
+    GWDM_TABLE_NAME:
+      value: 'gwdm_gwdb'
+    GWDM_REGION_LAYER_NAME:
+      value: 'region'
+    GWDM_AQUIFER_LAYER_NAME:
+      value: 'aquifer'
+    GWDM_WELL_LAYER_NAME:
+      value: 'well'
+    GWDM_CS_DATA_DIRECTORY:
+      value: /var/lib/tethys_persist/thredds_data/tethys/gwdm_data_directory
+    GWDM_CS_THREDDS_DIRECTORY:
+      value: /var/lib/tethys_persist/thredds_data/tethys/gwdm_thredds_directory
+    GWDM_CS_THREDDS_CATALOG:
+      value: 'http://tethys.ciroh.org/thredds/catalog/ciroh_data/tethys/gwdm_thredds_directory/catalog.xml'
+    # ggst envs
+    GGST_CS_THREDDS_DIRECTORY:
+      value: '/var/lib/tethys_persist/thredds_data/tethys/ggst_thredds_directory'
+    GGST_CS_THREDDS_CATALOG:
+      value: 'http://tethys.ciroh.org/thredds/catalog/ciroh_data/tethys/ggst_thredds_directory/catalog.xml'
+    GGST_CS_GLOBAL_OUTPUT_DIRECTORY:
+      value: /usr/lib/tethys
+    GGST_CS_EARTHDATA_USERNAME:
+      value: byugrace
+    GGST_CS_CONDA_PYTHON_PATH:
+      value: /opt/conda/envs/tethys/bin/python
+    # mde envs
+    MDE_CS_DISCLAIMER_HEADER:
+      value: 'CIROH Met Data Explorer'
+    MDE_CS_DISCLAIMER_MESSAGE:
+      value: 'The CIROH Met Data Explorer is provided as a tool for accessing and exploring meteorological datasets. While we strive to ensure the accuracy and reliability of the information presented, data sourced from third-party providers may contain errors or omissions. Users are responsible for independently verifying any information obtained through the app before making decisions based on it'
+    # Tethys settings
+    CLIENT_MAX_BODY_SIZE:
+      value: 1G
+    DATA_UPLOAD_MAX_MEMORY_SIZE:
+      value: 1073741824
+    FILE_UPLOAD_MAX_MEMORY_SIZE:
+      value: 1073741824
+    NGINX_READ_TIME_OUT:
+      value: 1800
+    SITE_TITLE:
+      value: 'CIROH Portal'
+    BRAND_TEXT:
+      value: 'CIROH Portal'
+    PRIMARY_COLOR:
+      value: '#256291'
+    SECONDARY_COLOR:
+      value: '#7C99AC'
+    BACKGROUND_COLOR:
+      value: '#D7D3C7'
+    HERO_TEXT:
+      value: 'Welcome to the CIROH Portal'
+    BLURB_TEXT:
+      value: 'CIROH Tethys platform provides access to a suite of pre-built applications commonly used by the Cooperative Institute for Research to Operations in Hydrology (CIROH) research community. CIROH is a national consortium of science and services partnered with the National Oceanic and Atmospheric Administration’s (NOAA) National Water Center. It aims to advance water prediction – the forecasting of streamflow, extreme events such as floods and droughts, and water quality – and enhance the communitys ability to deal with water-related challenges. This platform works through Amazon Web Services'
+    FEATURE_1_HEADING:
+      value: 'Tethys Platform'
+    FEATURE_1_BODY:
+      value: 'Tethys was piloted by implementing web portals for partners of the CIROH and Brigham Young University (BYU). It includes a suite of free, open-source software and is powered by the Django Python web framework.'
+    FEATURE_2_HEADING:
+      value: Applications
+    FEATURE_2_BODY:
+      value: 'Tethys is a mega-platform that hosts applications for hydrological and meteorological forecasting, discovery, visualization and download of data related to hydrometeorological variables.'
+    FEATURE_3_HEADING:
+      value: 'Terms of Use'
+    FEATURE_3_BODY:
+      value: 'The use of the portal will be carried out under the sole and exclusive responsibility of the user.'
+    COPYRIGHT:
+      value: 'Copyright © 2024 CIROH'
+    HYDROSHARE_CLIENT_ID:
+      value: '811ONYIWyMlsDdo82vP5LjdHOm1PGnIEVnykbTO1'
+    AUTHENTICATION_BACKENDS:
+      value: '"[tethys_services.backends.hydroshare.HydroShareOAuth2]"'
+    SOCIAL_AUTH_LOGIN_REDIRECT_URL:
+      value: '/t/apps/'
+    PKCE_REQUIRED:
+      value: 'true'
+    OIDC_ENABLED:
+      value: 'true'
+    SCOPES_OPENID:
+      value: 'OpenID Connect scope'
+    OIDC_RSA_PRIVATE_KEY:
+      value: ''
+    ASGI_PROCESSES:
+      value: '8'
+
+  workspace_size: '16Gi'
+
 thredds:
   fullnameOverride: 'ciroh-tds'
-  thredds_tds_catalog: '/thredds/catalog/ciroh_data/tethys/swe/catalog.xml'
+  thredds_tds_catalog: '/thredds/catalog/ciroh_data/tethys/catalog.xml'
   storageClass:
     storageClassName: 'efs-pv'
 
   image:
-    repository: tethysplatformuploader/thredds-docker
-    tag: 4.6.20-SNAPSHOT
-    pullPolicy: 'IfNotPresent'
+    repository: unidata/thredds-docker
+    tag: 5.6
+    pullPolicy: 'Always'
   persistentVolumeClaim:
     name: 'thredds-pv-claim'
   # Data to be used for the public folder and also for the wms palettes
@@ -239,7 +245,7 @@ thredds:
       subpath: 'tethys'
     wms_palettes:
       # an example of a wmsPalettes archive is the following https://example.com/some/web/wmsPalettes.tgz
-      init_data: true
+      init_data: false
       data_archive: 'https://init-service-data.s3.amazonaws.com/wmsPalettes.tar.gz'
       subpath: 'wmsPalettes'
 
@@ -487,8 +493,9 @@ thredds:
           -->
           
           <NetcdfSubsetService>
-            <scour>15 min</scour>
-            <maxAge>30 min</maxAge>
+            <allow>true</allow>
+            <scour>10 min</scour>
+            <maxAge>-1 min</maxAge>
           </NetcdfSubsetService>
 
           <!--
@@ -509,13 +516,14 @@ thredds:
           <!--
           The WCS Service is on by default.
           Also, off by default (and encouraged) is operating on a remote dataset.
+          -->
+
           <WCS>
             <allow>true</allow>
             <allowRemote>false</allowRemote>
             <scour>15 min</scour>
             <maxAge>30 min</maxAge>
           </WCS>
-          -->
 
           
           <WMS>
@@ -523,18 +531,16 @@ thredds:
             <allowRemote>true</allowRemote>
             <maxImageWidth>2048</maxImageWidth>
             <maxImageHeight>2048</maxImageHeight>
-            <paletteLocationDir>/usr/local/tomcat/content/thredds/wmsPalettes</paletteLocationDir>
-            <!-- <paletteLocationDir>/usr/local/tomcat/content/thredds/palettes</paletteLocationDir> -->
           </WMS>
           
 
-          <!--
+          
           <NCISO>
             <ncmlAllow>true</ncmlAllow>
             <uddcAllow>true</uddcAllow>
             <isoAllow>true</isoAllow>
           </NCISO>
-          -->
+
 
           <!--
           <NCSOS>
@@ -589,6 +595,7 @@ thredds:
           </Netcdf4Clibrary>
           -->
         </threddsConfig>
+
     wms_config:
       init_file: false
       file_content: ''
@@ -612,26 +619,177 @@ thredds:
                 password="tdm_pass"
                 roles="tdsConfig,tdsMonitor"/>
         </tomcat-users>
-  storage_size: '5Gi'
+  storage_size: '10Gi'
   resources:
     requests:
-      memory: '2Gi'
-      cpu: '1'
+      memory: '5Gi'
+      cpu: '2'
     limits:
-      memory: '2Gi'
-geoserver:
-  image:
-    pullPolicy: 'IfNotPresent'
-  enabled: true
-  storage_size: 5Gi
-  resources:
+      memory: '5Gi'
+
+gs-cloud:
+  enabled: false
+  envVariables:
+    SERVICE_GATEWAY_NAME:
+      value: cirohportal-prod-geoserver
+  persistent:
+    raster:
+      pvname: gs-cloud-raster-nfs
+      pvcname: gs-cloud-raster-nfs-claim
+      pvcreation: false
+      storageClass:
+        enabled: false
+        storageClassName: 'efs-pv'
+    config:
+      pvname: gs-cloud-datadir-nfs
+      pvcname: gs-cloud-datadir-nfs-claim
+      pvcreation: false
+      storageClass:
+        enabled: false
+        storageClassName: 'efs-pv'
+
+    cache:
+      pvname: gs-cloud-gwc-cache-nfs
+      pvcname: gs-cloud-gwc-cache-nfs-claim
+      pvcreation: false
+      storageClass:
+        enabled: false
+        storageClassName: 'efs-pv'
+
+  pdb: &common-pdb
+    enabled: false
+
+  # tweak the resources here
+  resources: &common-resources
     requests:
-      memory: '8Gi'
-      cpu: '4'
+      memory: 512Mi
+      cpu: 0.1
     limits:
-      memory: '9Gi'
-  storageClass:
-    storageClassName: 'efs-pv'
+      memory: 4Gi
+      cpu: 4.0
+
+  # this should make sure that the containers are started after the database is started
+  containers_additional_conf: &containers-additional-conf
+    resources:
+      <<: *common-resources
+    livenessProbe:
+      initialDelaySeconds: 200
+      periodSeconds: 10
+    readinessProbe:
+      periodSeconds: 5
+      initialDelaySeconds: 200
+
+  # in order to override env values
+  env: &env-override
+    RABBITMQ_HOST:
+      value: 'cirohportal-prod-rabbitmq'
+    RABBITMQ_PASSWORD:
+      type: secret
+      name: 'cirohportal-prod-rabbitmq'
+      key: 'rabbitmq-password'
+
+  service: &common-service-definition
+    type: ClusterIP
+    servicePort: 8080
+    ports:
+      - name: gs-service
+        port: 8080
+        protocol: TCP
+        targetPort: 8080
+  geoservercloud:
+    geoserver:
+      ingress:
+        enabled: false
+        # tls: []
+      services:
+        gateway:
+          pdb:
+            enabled: false
+            # <<: *common-pdb
+          service:
+            name: 'cirohportal-prod-geoserver-gateway'
+            <<: *common-service-definition
+          ingress:
+            enabled: false
+          containers:
+            spring:
+              env:
+                <<: *env-override
+              <<: *containers-additional-conf
+        webui:
+          pdb:
+            <<: *common-pdb
+          service:
+            <<: *common-service-definition
+          containers:
+            spring:
+              env:
+                <<: *env-override
+              <<: *containers-additional-conf
+        rest:
+          pdb:
+            <<: *common-pdb
+          service:
+            <<: *common-service-definition
+          containers:
+            spring:
+              env:
+                <<: *env-override
+              <<: *containers-additional-conf
+        wms:
+          pdb:
+            <<: *common-pdb
+          service:
+            <<: *common-service-definition
+          containers:
+            spring:
+              env:
+                <<: *env-override
+              <<: *containers-additional-conf
+        wcs:
+          pdb:
+            <<: *common-pdb
+          service:
+            <<: *common-service-definition
+          containers:
+            spring:
+              env:
+                <<: *env-override
+              <<: *containers-additional-conf
+        wfs:
+          pdb:
+            <<: *common-pdb
+          service:
+            <<: *common-service-definition
+          containers:
+            spring:
+              env:
+                <<: *env-override
+              <<: *containers-additional-conf
+        gwc:
+          pdb:
+            <<: *common-pdb
+          service:
+            <<: *common-service-definition
+          containers:
+            spring:
+              env:
+                <<: *env-override
+              <<: *containers-additional-conf
+
+  postgresql:
+    global:
+      storageClass: 'efs-pv'
+    volumePermissions:
+      enabled: true
+    primary:
+      persistence:
+        storageClass: 'efs-pv'
+      livenessProbe:
+        initialDelaySeconds: 600
+      readinessProbe:
+        initialDelaySeconds: 600
+
 redis:
   enabled: true
   global:
@@ -641,6 +799,8 @@ postgis:
     pullPolicy: 'IfNotPresent'
   storageClass:
     storageClassName: 'efs-pv'
+  PersistentVolumeClaim:
+    name: django-postgis-pv-claim
 
 nodeSelector: {}
 tolerations: []

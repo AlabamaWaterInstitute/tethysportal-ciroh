@@ -10,7 +10,7 @@ The Ciroh Tethys Portal is composed of the following micro-services:
 
 1. Django CMS
 2. Tethys Platform
-3. Geoserver
+3. Geoserver Cloud (Geoserver Cloud Native)
 4. Thredds Server
 
 The portal contains native Tethys Platform and Proxy applications:
@@ -18,14 +18,15 @@ The portal contains native Tethys Platform and Proxy applications:
 1. [Water Data Explorer](https://github.com/BYU-Hydroinformatics/Water-Data-Explorer.git)
 2. [Met Data Explorer](https://github.com/BYU-Hydroinformatics/tethysapp-metdataexplorer.git)
 3. [HydroCompute &amp;&amp; HydroLang Tethys Application Demo](https://github.com/tethysplatform/tethysapp-hydrocompute.git)
-4. [SWE](https://github.com/Aquaveo/tethysapp-swe.git)
+4. [SWEML](https://github.com/karnesh/tethysapp-sweml)
 5. [Ground Water Mapper Application](https://github.com/Aquaveo/gwdm.git) (GWDM)
 6. [Ground Subsseting Tool](https://github.com/Aquaveo/ggst.git) (GGST)
 7. [Snow Inspector](https://github.com/BYU-Hydroinformatics/snow-inspector)
 8. [OWP Tethys App](https://github.com/Aquaveo/OWP)
-9. [OWP NWM Map Viewer](https://water.noaa.gov/map) (Proxy App)
-10. [CIROH JupyterHub](https://jupyterhub.cuahsi.org/hub/login) (Proxy App)
-11. [HydroShare](https://www.hydroshare.org/home/) (Proxy App)
+9. [Community Streamflow Evaluation System (CSES) - Tethys Web Application](https://github.com/whitelightning450/Tethys-CSES)
+10. [OWP NWM Map Viewer](https://water.noaa.gov/map) (Proxy App)
+11. [CIROH JupyterHub](https://jupyterhub.cuahsi.org/hub/login) (Proxy App)
+12. [HydroShare](https://www.hydroshare.org/home/) (Proxy App)
 
 ## Installation with Cloud Providers
 
@@ -142,3 +143,7 @@ More on this in the following [medium article](https://medium.com/nerd-for-tech/
 
 Monitoring cluster and deployments: [k9s](https://k9scli.io/)
 Visualizing dynamic node usage within a cluster: [eks-node-viewer](https://github.com/awslabs/eks-node-viewer)
+
+### 1.7 Development
+
+when updating git submodules the following can be useful: https://stackoverflow.com/questions/29882960/changing-an-existing-submodules-branch

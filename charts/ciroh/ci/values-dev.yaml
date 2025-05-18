@@ -1,8 +1,6 @@
 image:
-  repository: 'gioelkin/tethysapp-ciroh-portal'
-  # repository: 'ciroh/tethysapp-ciroh'
-  # tag: dev_aea20c0fc2e159559e561b2b1bf9a3861542fb0b
-  tag: dev_d40f0221e89460198dae10eaba7d3ec245b7207a
+  repository: 'awiciroh/tethysapp-ciroh-portal'
+  tag: dev_latest
   pullPolicy: Always
 
 ingresses:
@@ -25,73 +23,12 @@ ingresses:
       - host: localhost
     tls: []
 
-djangocms:
-  image:
-    repository: gioelkin/django-cms
-    tag: latest
-  enabled: true
-  ingress:
-    enabled: false
-  fullnameOverride: 'ciroh-cms'
-  env:
-    - name: SECRET_KEY
-      value: 'ztw%%f050)x2=t+2y+td#xfl$%i35g=s0!^%w7@pqo8z6w7(mz'
-    - name: DJANGOCMS_DB_NAME
-      value: 'djangocms'
-    - name: DJANGOCMS_DB_USER
-      value: 'djangocmsadmin'
-    - name: DJANGOCMS_DB_PWD
-      value: 'pass'
-    - name: DJANGOCMS_DB_HOST
-      value: 'ciroh-db'
-    - name: DJANGOCMS_DB_PORT
-      value: '5432'
-    - name: DJANGO_SUPERUSER_USERNAME
-      value: 'admin'
-    - name: DJANGO_SUPERUSER_EMAIL
-      value: 'example@gmail.com'
-    - name: DJANGO_SUPERUSER_PASSWORD
-      value: 'pass'
-    - name: DJANGOCMS_ADMIN_DB_USER
-      value: 'postgres'
-    - name: DJANGOCMS_ADMIN_DB_PWD
-      value: 'please_dont_use_default_passwords'
-    - name: DEFAULT_STORAGE_DSN
-      value: '=file:///data/media/?url=%2Fmedia%2F'
-    - name: DEBUG
-      value: 'True'
-    - name: DOMAIN_ALIASES
-      value: 'localhost, 127.0.0.1'
-    - name: SECURE_SSL_REDIRECT
-      value: 'False'
-    - name: DOMAIN
-      value: 'localhost'
-    - name: STATIC_URL
-      value: '/static_cms/'
-    # - name: SKIP_CREATION_USER
-    #   value: 'done'
-  service:
-    type: ClusterIP
-    externalPort: 3000
-    internalPort: 80
-  storage_size: 3Gi
-  resources:
-    requests:
-      cpu: 100m
-      memory: 128Mi
-    limits:
-      cpu: 2
-      memory: 2Gi
-  persistentVolumeClaim:
-    name: 'djangocms-pv-claim'
-
 tethys:
   workspace_size: '5Gi'
   services:
-    geoserver: 'ciroh-gs'
+    geoserver: 'ciroh-geoserver-gateway'
     thredds: 'ciroh-tds'
   settings:
-    prefix_url: 't'
     tethys_settings_flags: '--production, --overwrite'
     enable_portal_open: 'true'
     bypass_tethys_home_page: 'true'
@@ -109,9 +46,9 @@ tethys:
     feature_3_heading: 'Terms of Use'
     feature_3_body: 'The use of the portal will be carried out under the sole and exclusive responsibility of the user.'
     client_max_body_size: '1G'
-    file_upload_max_memory_size: '1073741824'
+    file_upload_max_memory_size: 1073741824
     nginx_read_time_out: '1800'
-    data_upload_max_memory_size: '1073741824'
+    data_upload_max_memory_size: 1073741824
     copyright: 'Copyright © 2023 CIROH'
     gwdm_workspace_name: 'gwdm'
     gwdm_store_name: 'gwdm'
@@ -173,40 +110,40 @@ tethys:
           spatial:
             primary_geoserver: tethys_geoserver
             primary_thredds: tethys_thredds
-    proxy_apps:
-      owp_nwm_map_viewer:
-        name: OWP NWM Map Viewer
-        endpoint: https://water.noaa.gov/map
-        logo_url: /t/static/ciroh_theme/images/owp.png
-        description: Proxy app for Office in Water Prediction
-        tags: NOAA
-        enabled: true
-        show_in_apps_library: true
-        order: 0
-        back_url: web
-        open_in_new_tab: true
-      ciroh_jupyterhub:
-        name: CIROH JupyterHub
-        endpoint: https://jupyterhub.cuahsi.org/hub/login
-        logo_url: /t/static/ciroh_theme/images/jupyterhub.png
-        description: Proxy app for the CIROH JupyterHub
-        tags: CUAHSI
-        enabled: true
-        show_in_apps_library: true
-        order: 1
-        back_url: web
-        open_in_new_tab: true
-      hydroshare:
-        name: HydroShare
-        endpoint: https://www.hydroshare.org/home/
-        logo_url: /t/static/ciroh_theme/images/HydroShare.png
-        description: Proxy app for the Hydroshare app
-        tags: CUAHSI
-        enabled: true
-        show_in_apps_library: true
-        order: 2
-        back_url: web
-        open_in_new_tab: true
+  proxy_apps:
+    CIROH JupyterHub:
+      back_url: web
+      description: Proxy app for the CIROH JupyterHub
+      enabled: true
+      endpoint: https://jupyterhub.cuahsi.org/hub/login
+      logo_url: /static/ciroh_theme/images/jupyterhub.png
+      name: CIROH JupyterHub
+      open_in_new_tab: true
+      order: 1
+      show_in_apps_library: true
+      tags: CUAHSI
+    HydroShare:
+      back_url: web
+      description: Proxy app for the Hydroshare app
+      enabled: true
+      endpoint: https://www.hydroshare.org/home/
+      logo_url: /static/ciroh_theme/images/HydroShare.png
+      name: HydroShare
+      open_in_new_tab: true
+      order: 2
+      show_in_apps_library: true
+      tags: CUAHSI
+    OWP NWM Map Viewer:
+      back_url: web
+      description: Proxy app for Office in Water Prediction
+      enabled: true
+      endpoint: https://water.noaa.gov/map
+      logo_url: /static/ciroh_theme/images/owp.png
+      name: OWP NWM Map Viewer
+      open_in_new_tab: true
+      order: 0
+      show_in_apps_library: true
+      tags: '"NOAA", "Ciroh", "Office of Water Prediction"'
 
 thredds:
   image:
@@ -607,14 +544,26 @@ thredds:
       cpu: '2'
     limits:
       memory: '2Gi'
-geoserver:
-  storage_size: 2Gi
-  resources:
-    requests:
-      memory: '2Gi'
-      cpu: '1'
-    limits:
-      memory: '4Gi'
+
+gs-cloud:
+  enabled: true
+  nfsserver: 'host.minikube.internal'
+  nfs:
+    raster:
+      path: /nfs/raster
+      storageClass:
+        enabled: true
+        storageClassName: 'standard'
+    config:
+      path: /nfs/datadir
+      storageClass:
+        enabled: true
+        storageClassName: 'standard'
+    cache:
+      path: /nfs/tiles
+      storageClass:
+        enabled: true
+        storageClassName: 'standard'
 resources:
   requests:
     cpu: 1

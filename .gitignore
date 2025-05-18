@@ -8,10 +8,12 @@
 *.sqlite
 *.DS_Store
 .idea/
+.vscode
 data/*
 keys/*
 logs/*
 public_data/*
-charts/ciroh/ci/aws_values.yaml
 charts/ciroh/*.lock
 charts/ciroh/charts
+# charts/ciroh/ci/.sops.yaml
+charts/ciroh/ci/secrets-dec.yaml
